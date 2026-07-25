@@ -1,0 +1,256 @@
+/* =========================================
+   DRIFT SCENE
+========================================= */
+
+.drift-section {
+  position: relative;
+  height: 400vh;
+  background: #f7f3ec;
+}
+
+.drift-sticky {
+  position: sticky;
+  top: 0;
+
+  width: 100%;
+  height: 100vh;
+
+  overflow: hidden;
+
+  isolation: isolate;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #f7f3ec;
+}
+
+
+/* =========================================
+   ROOM
+========================================= */
+
+.room {
+  position: absolute;
+  inset: 0;
+
+  overflow: hidden;
+}
+
+
+/* =========================================
+   WALL
+========================================= */
+
+.wall {
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      to bottom,
+      #fbf8f2,
+      #f4efe7
+    );
+}
+
+
+/* =========================================
+   FLOOR
+========================================= */
+
+.floor {
+  position: absolute;
+
+  bottom: -12%;
+
+  left: 50%;
+
+  transform:
+    translateX(-50%)
+    perspective(1600px)
+    rotateX(82deg);
+
+  width: 220vw;
+
+  height: 70vh;
+
+  background:
+    linear-gradient(
+      to bottom,
+      #b58a5b,
+      #8f653f
+    );
+
+  border-radius: 120px;
+}
+
+
+/* =========================================
+   SUNLIGHT
+========================================= */
+
+.sunlight {
+  position: absolute;
+
+  left: -10%;
+
+  top: -20%;
+
+  width: 60vw;
+
+  height: 120vh;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255,225,165,.55),
+      transparent 70%
+    );
+
+  filter: blur(90px);
+
+  pointer-events: none;
+}
+
+
+/* =========================================
+   VIGNETTE
+========================================= */
+
+.vignette {
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    radial-gradient(
+      circle,
+      transparent 55%,
+      rgba(0,0,0,.12)
+    );
+
+  pointer-events: none;
+}
+
+
+/* =========================================
+   DESK SHADOW
+========================================= */
+
+.desk-shadow {
+
+  position: absolute;
+
+  bottom: 14%;
+
+  left: 50%;
+
+  width: 600px;
+
+  height: 100px;
+
+  transform: translateX(-50%);
+
+  border-radius: 999px;
+
+  background: rgba(0,0,0,.18);
+
+  filter: blur(45px);
+}
+
+
+/* =========================================
+   PHONE SHADOW
+========================================= */
+
+.phone-shadow {
+
+  position: absolute;
+
+  bottom: 13%;
+
+  left: 50%;
+
+  width: 240px;
+
+  height: 60px;
+
+  transform: translateX(-50%);
+
+  border-radius: 999px;
+
+  background: rgba(0,0,0,.28);
+
+  filter: blur(24px);
+}
+
+
+/* =========================================
+   TEXT LAYER
+========================================= */
+
+.story-layer {
+
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  pointer-events: none;
+
+  z-index: 40;
+}
+
+
+/* =========================================
+   TIMELINE
+========================================= */
+
+.timeline {
+
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 30;
+}
+
+
+/* =========================================
+   DUST
+========================================= */
+
+.dust-layer {
+
+  position: absolute;
+
+  inset: 0;
+
+  overflow: hidden;
+
+  pointer-events: none;
+}
+
+
+/* =========================================
+   PERFORMANCE
+========================================= */
+
+.room,
+.floor,
+.sunlight,
+.story-layer,
+.timeline {
+
+  will-change:
+    transform,
+    opacity;
+}

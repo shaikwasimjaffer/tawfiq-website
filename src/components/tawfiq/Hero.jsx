@@ -1,24 +1,178 @@
-import React, { useState } from "react";
-import { motion } from "framer-motion";
-import ComingSoon from "./ComingSoon";
+import React, { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 export default function Hero() {
-  const [isDemoOpen, setIsDemoOpen] = useState(false);
+  const containerRef = useRef(null);
+
+  // 900vh timeline provides a leisurely, cinematic scroll pacing
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
+
+  // --- 1. POLISHED STONE FLOOR & MORNING LIGHT BEAM (0% -> 22%) ---
+  const floorOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.12, 0.22],
+    [0.35, 0.35, 0],
+  );
+  const lightBeamOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.15, 0.25],
+    [0.85, 0.85, 0],
+  );
+  const floorScale = useTransform(scrollYProgress, [0, 0.22], [1, 1.05]);
+
+  // --- 2. STAGE 1: HERO HEADLINE (0% -> 15%) ---
+  const heroTextOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.08, 0.15],
+    [1, 1, 0],
+  );
+  const heroTextY = useTransform(scrollYProgress, [0, 0.15], [0, -30]);
+
+  // --- 3. STAGE 2: THE REFLECTION & EXTENDED HOLD (18% -> 37%) ---
+  const philosophyOpacity = useTransform(
+    scrollYProgress,
+    [0.18, 0.21, 0.34, 0.37],
+    [0, 1, 1, 0],
+  );
+  const philosophyY = useTransform(
+    scrollYProgress,
+    [0.18, 0.21, 0.34, 0.37],
+    [30, 0, 0, -20],
+  );
+
+  const goldRevealMask = useTransform(
+    scrollYProgress,
+    [0.21, 0.28],
+    ["inset(0 100% 0 0)", "inset(0 0% 0 0)"],
+  );
+
+  // --- 4. STAGE 3: THE RETURN CASCADE (38% -> 72%) ---
+  const cascadeItems = [
+    { text: "One Prayer.", isHighlight: false, start: 0.38, end: 0.43 },
+    { text: "One Step.", isHighlight: false, start: 0.44, end: 0.49 },
+    { text: "One Day.", isHighlight: false, start: 0.5, end: 0.55 },
+    { text: "One Habit.", isHighlight: false, start: 0.56, end: 0.61 },
+    { text: "Consistency.", isHighlight: true, start: 0.62, end: 0.67 },
+    { text: "Closeness.", isHighlight: true, start: 0.68, end: 0.73 },
+  ];
+
+  const cascadeOpacities = cascadeItems.map((item) =>
+    useTransform(
+      scrollYProgress,
+      [item.start, item.start + 0.02, item.end, item.end + 0.03],
+      [0, 1, 1, 0.2],
+    ),
+  );
+
+  const cascadeScales = cascadeItems.map((item) =>
+    useTransform(scrollYProgress, [item.start, item.end], [0.96, 1]),
+  );
+
+  const cascadeContainerOpacity = useTransform(
+    scrollYProgress,
+    [0.72, 0.75],
+    [1, 0],
+  );
+
+  // --- 5. STAGE 4: ARABIC BISMILLAH HERO & EXTENDED HOLD (74% -> 90%) ---
+  const bismillahTransMask = useTransform(
+    scrollYProgress,
+    [0.76, 0.81],
+    ["inset(0 100% 0 0)", "inset(0 0% 0 0)"],
+  );
+
+  const bismillahOpacity = useTransform(
+    scrollYProgress,
+    [0.74, 0.77, 0.87, 0.9],
+    [0, 1, 1, 0],
+  );
+  const bismillahScale = useTransform(
+    scrollYProgress,
+    [0.74, 0.8, 0.9],
+    [0.94, 1, 1.03],
+  );
+
+  // --- 6. STAGE 5: GRAND FINALE "INTRODUCING TAWFIQ." (91% -> 100%) ---
+  const introTawfiqOpacity = useTransform(
+    scrollYProgress,
+    [0.91, 0.95, 1],
+    [0, 1, 1],
+  );
+  const introTawfiqScale = useTransform(
+    scrollYProgress,
+    [0.91, 0.96, 1],
+    [0.95, 1, 1.02],
+  );
 
   return (
-    <>
-      <section className="relative min-h-[92svh] lg:min-h-screen bg-[#F7F5F1] overflow-hidden flex items-center">
-        {/* Single source of natural light */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background:
-              "radial-gradient(ellipse 80% 60% at 15% 0%, rgba(253,247,237,1) 0%, rgba(247,245,241,0) 55%)",
-          }}
-        />
+    <section ref={containerRef} className="relative h-[900vh] bg-[#F7F5F1]">
+      {/* Sticky Fullscreen Canvas */}
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
+        {/* --- MORNING SUNLIGHT BEAM & LONG SHADOWS --- */}
+        <motion.div
+          style={{ opacity: lightBeamOpacity }}
+          className="absolute inset-0 pointer-events-none z-0"
+        >
+          <div
+            className="w-full h-full"
+            style={{
+              background:
+                "linear-gradient(135deg, rgba(245, 230, 205, 0.45) 0%, rgba(247, 245, 241, 0) 70%), radial-gradient(ellipse 80% 60% at 20% 10%, rgba(235, 205, 160, 0.35) 0%, rgba(247, 245, 241, 0) 75%)",
+            }}
+          />
+        </motion.div>
 
-        {/* Hairline architectural lines */}
-        <div className="absolute inset-0 flex justify-center pointer-events-none opacity-[0.035]">
+        {/* --- POLISHED STONE FLOOR TEXTURE & TILES --- */}
+        <motion.div
+          style={{ opacity: floorOpacity, scale: floorScale }}
+          className="absolute inset-0 pointer-events-none flex items-center justify-center z-0 overflow-hidden"
+        >
+          <svg
+            viewBox="0 0 1200 800"
+            className="w-full h-full max-w-[1600px] text-stone-400 fill-current"
+            preserveAspectRatio="xMidYMid slice"
+          >
+            <defs>
+              <pattern
+                id="stoneFloor"
+                x="0"
+                y="0"
+                width="200"
+                height="100"
+                patternUnits="userSpaceOnUse"
+              >
+                {/* Subtle minimalist stone slab grid lines for mosque floor */}
+                <rect
+                  width="200"
+                  height="100"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="0.75"
+                  className="opacity-25"
+                />
+                <line
+                  x1="100"
+                  y1="0"
+                  x2="100"
+                  y2="100"
+                  stroke="currentColor"
+                  strokeWidth="0.5"
+                  className="opacity-15"
+                />
+              </pattern>
+            </defs>
+            <rect width="1200" height="800" fill="url(#stoneFloor)" />
+          </svg>
+
+          {/* Ambient soft shadow gradients simulating morning light filtering across stone */}
+          <div className="absolute inset-0 bg-gradient-to-t from-stone-900/10 via-transparent to-transparent pointer-events-none" />
+        </motion.div>
+
+        {/* Minimal Grid Overlay */}
+        <div className="absolute inset-0 flex justify-center pointer-events-none opacity-[0.025] z-0">
           <div className="w-full max-w-[1400px] grid grid-cols-6 h-full">
             {Array.from({ length: 6 }).map((_, i) => (
               <div
@@ -29,192 +183,133 @@ export default function Hero() {
           </div>
         </div>
 
-        <div
-          className="
-    relative
-    max-w-[1400px]
-    mx-auto
-    w-full
-
-    px-6
-    sm:px-8
-    lg:px-10
-
-    pt-24
-    pb-10
-
-    sm:pt-28
-    sm:pb-14
-
-    lg:pt-24
-    lg:pb-16
-  "
+        {/* ==================================================================== */}
+        {/* STAGE 1: HERO HEADLINE (REFLECTIVE QUESTION) */}
+        {/* ==================================================================== */}
+        <motion.div
+          style={{ opacity: heroTextOpacity, y: heroTextY }}
+          className="relative z-10 max-w-[1200px] w-full px-6 text-center flex flex-col items-center"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-9 lg:gap-5 items-center">
-            {/* Left — Text Section */}
-            <div className="lg:col-span-6 xl:col-span-5 order-1 lg:order-1 lg:pr-6 z-10">
-              {/* Eyebrow text with the MOVING Tag */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1.5, delay: 0.3 }}
-                className="
-flex
-flex-wrap
-items-center
-gap-3
-sm:gap-4
-mb-6
-"
+          <h1 className="font-serif text-[3.2rem] sm:text-[4.8rem] md:text-[6.2rem] lg:text-[7.2rem] leading-[0.95] tracking-[-0.03em] text-stone-900 max-w-[18ch]">
+            <span className="block font-normal">How long has it been</span>
+            <span className="block font-light text-stone-500 mt-2">
+              since your{" "}
+              <span className="italic font-normal text-[#C6A26B]">
+                last prayer?
+              </span>
+            </span>
+          </h1>
+        </motion.div>
+
+        {/* ==================================================================== */}
+        {/* STAGE 2: STATEMENT WITH EXTENDED HOLD */}
+        {/* ==================================================================== */}
+        <motion.div
+          style={{ opacity: philosophyOpacity, y: philosophyY }}
+          className="absolute z-10 max-w-5xl w-full px-6 text-center"
+        >
+          <h2 className="font-serif text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-stone-900 leading-[1.2] font-light">
+            <span className="block font-light">
+              No matter how many prayers you've missed...
+            </span>
+
+            {/* Write-on mask reveal with reading hold */}
+            <span className="block mt-2 sm:mt-3">
+              <motion.span
+                style={{ clipPath: goldRevealMask }}
+                className="inline-block italic text-[#C6A26B] font-normal"
               >
-                <p className="text-[10px] sm:text-[11px] font-sans tracking-[0.25em] uppercase text-stone-400 mt-1">
-                  Built for Muslims seeking consistency.
-                </p>
+                The next one still matters.
+              </motion.span>
+            </span>
+          </h2>
+        </motion.div>
 
-                <div className="relative inline-flex overflow-hidden rounded-full p-[1px] border border-[#E7DDCF]">
-                  {/* The continuously spinning gold light */}
-                  <span className="absolute inset-[-1000%] animate-[spin_12s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,rgba(198,162,107,0.1)_0%,rgba(198,162,107,0.8)_50%,rgba(198,162,107,0.1)_100%)]" />
-
-                  {/* The inner pill */}
-                  <div className="relative inline-flex items-center gap-2 h-full w-full bg-[#FDFCFB] px-3 py-1.5 rounded-full">
-                    {/* Tiny pulsing dot for extra aliveness */}
-                    <span className="relative flex h-1.5 w-1.5 ml-0.5">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C6A26B] opacity-60"></span>
-                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#C6A26B]"></span>
-                    </span>
-
-                    <span className="text-[8px] sm:text-[9px] font-sans tracking-[0.15em] uppercase text-stone-500 font-medium mt-[1px] mr-1">
-                      Currently Evolving
-                    </span>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: 1.2,
-                  ease: [0.22, 1, 0.36, 1],
-                  delay: 0.15,
+        {/* ==================================================================== */}
+        {/* STAGE 3: THE RETURN CASCADE */}
+        {/* ==================================================================== */}
+        <motion.div
+          style={{ opacity: cascadeContainerOpacity }}
+          className="absolute z-20 flex flex-col items-center justify-center text-center px-6 max-w-lg w-full space-y-6"
+        >
+          {cascadeItems.map((item, index) => (
+            <React.Fragment key={index}>
+              {/* Word Element */}
+              <motion.div
+                style={{
+                  opacity: cascadeOpacities[index],
+                  scale: cascadeScales[index],
                 }}
-                className="font-serif text-[3.6rem]
-sm:text-[4.5rem]
-md:text-[5.5rem]
-lg:text-[clamp(5rem,7vw,7.8rem)]leading-[0.92] tracking-[-0.03em] text-stone-900"
+                className="transition-all duration-300"
               >
-                <span className="block">Become consistent.</span>
-                <span className="block italic font-light text-stone-500">
-                  Stay close
-                </span>
-                <span className="block italic font-light text-stone-500">
-                  to Allah.
-                </span>
-              </motion.h1>
-
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1.5, delay: 0.7 }}
-                className="
-mt-6
-max-w-[34ch]
-text-[15px]
-sm:text-[16px]
-lg:text-[17px]
-font-sans
-text-stone-500
-leading-relaxed
-"
-              >
-                Track every prayer, reduce your Qaza, read the Quran, learn
-                Islam, and grow closer to Allah with one calm, beautiful
-                companion.
-              </motion.p>
-
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1.5, delay: 1 }}
-                className=" flex flex-wrap items-center gap-8"
-              >
-                {/* Primary CTA */}
-                <a
-                  href="https://tawfiq-official.github.io/Tawfiq/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative inline-flex items-center gap-3 py-2 transition-all duration-500"
+                <p
+                  className={`font-serif text-3xl sm:text-4xl md:text-5xl tracking-tight ${
+                    item.isHighlight
+                      ? "text-[#C6A26B] font-normal italic"
+                      : "text-stone-800 font-light"
+                  }`}
                 >
-                  <span className="w-0 group-hover:w-5 h-px bg-stone-900 transition-all duration-500" />
-                  <svg
-                    viewBox="0 0 24 24"
-                    width="17"
-                    height="17"
-                    fill="none"
-                    className="text-stone-900 transition-all duration-500 group-hover:translate-x-1 group-hover:text-[#6B4F37]"
-                  >
-                    <circle
-                      cx="12"
-                      cy="12"
-                      r="9.5"
-                      stroke="currentColor"
-                      strokeWidth="1.2"
-                    />
-                    <path
-                      d="M12 5 L14.5 12 L12 14.5 L9.5 12 Z"
-                      fill="currentColor"
-                    />
-                    <path
-                      d="M12 19 L14.5 12 L12 14.5 L9.5 12 Z"
-                      stroke="currentColor"
-                      strokeWidth="1.2"
-                      strokeLinejoin="round"
-                    />
-                    <circle cx="12" cy="12" r="0.7" fill="currentColor" />
-                  </svg>
-                  <span className="relative font-serif text-[20px] md:text-[22px] font-medium tracking-tight text-stone-900 transition-colors duration-500 group-hover:text-[#6B4F37]">
-                    Start with Bismillah
-                    <span className="absolute left-0 -bottom-1 h-[1.5px] w-0 bg-[#6B4F37] transition-all duration-500 group-hover:w-full" />
-                  </span>
-                  <span className="w-0 group-hover:w-5 h-px bg-stone-900 transition-all duration-500" />
-                </a>
-
-                {/* Watch Demo Button */}
-                <button
-                  onClick={() => setIsDemoOpen(true)}
-                  className="group relative flex items-center h-12 pl-1 pr-6 rounded-full cursor-pointer transition-all duration-500 focus:outline-none"
-                >
-                  {/* Expanding Gold Background */}
-                  <div className="absolute left-0 top-0 bottom-0 w-12 bg-[#C6A26B] rounded-full opacity-0 transition-all duration-500 ease-[0.22,1,0.36,1] group-hover:w-full group-hover:opacity-100" />
-
-                  {/* Static Border */}
-                  <div className="absolute left-1 top-1 w-10 h-10 border border-stone-300 rounded-full transition-all duration-500 group-hover:opacity-0 group-hover:scale-75" />
-
-                  {/* Play Icon */}
-                  <div className="relative z-10 flex items-center justify-center w-10 h-10 text-stone-500 transition-colors duration-500 group-hover:text-[#FDFCFB]">
-                    <svg
-                      viewBox="0 0 24 24"
-                      width="14"
-                      height="14"
-                      fill="currentColor"
-                      className="ml-0.5"
-                    >
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                  </div>
-
-                  {/* Text */}
-                  <span className="relative z-10 ml-2 font-sans text-[15px] tracking-wide text-stone-500 transition-colors duration-500 group-hover:text-[#FDFCFB]">
-                    Watch Demo
-                  </span>
-                </button>
+                  {item.text}
+                </p>
               </motion.div>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      <ComingSoon isOpen={isDemoOpen} onClose={() => setIsDemoOpen(false)} />
-    </>
+              {/* Downward Arrow */}
+              {index < cascadeItems.length - 1 && (
+                <motion.span
+                  style={{ opacity: cascadeOpacities[index] }}
+                  className="text-stone-400 font-sans text-xs tracking-widest my-1 block"
+                >
+                  ↓
+                </motion.span>
+              )}
+            </React.Fragment>
+          ))}
+        </motion.div>
+
+        {/* ==================================================================== */}
+        {/* STAGE 4: ARABIC BISMILLAH HERO WITH EXTENDED HOLD */}
+        {/* ==================================================================== */}
+        <motion.div
+          style={{ opacity: bismillahOpacity, scale: bismillahScale }}
+          className="absolute z-30 text-center px-6 max-w-[100vw] overflow-hidden flex flex-col items-center"
+        >
+          {/* Main Arabic Hero */}
+          <h2
+            dir="rtl"
+            className="font-serif text-[5.5rem] sm:text-[9rem] md:text-[12rem] lg:text-[14rem] text-stone-900 font-normal tracking-normal leading-none select-none"
+          >
+            بِسْمِ ٱللَّٰهِ
+          </h2>
+
+          {/* English Translation with Mask Reveal & Reading Hold */}
+          <div className="mt-3 sm:mt-6 overflow-hidden">
+            <motion.p
+              style={{ clipPath: bismillahTransMask }}
+              className="inline-block font-serif text-2xl sm:text-4xl md:text-5xl text-[#C6A26B] font-light italic tracking-wide"
+            >
+              In the Name of Allah
+            </motion.p>
+          </div>
+
+          {/* Meaning Subtext */}
+          <span className="mt-6 sm:mt-8 block font-sans text-[10px] sm:text-[12px] uppercase tracking-[0.35em] text-stone-500 font-medium">
+            Every meaningful journey begins here.
+          </span>
+        </motion.div>
+
+        {/* ==================================================================== */}
+        {/* STAGE 5: GRAND FINALE "INTRODUCING TAWFIQ." */}
+        {/* ==================================================================== */}
+        <motion.div
+          style={{ opacity: introTawfiqOpacity, scale: introTawfiqScale }}
+          className="absolute z-35 text-center px-6 max-w-[100vw] overflow-hidden"
+        >
+          <h2 className="font-serif text-[4rem] sm:text-[7rem] md:text-[9.5rem] lg:text-[11.5rem] text-stone-900 font-light tracking-[-0.03em] leading-none select-none">
+            Introducing{" "}
+            <span className="italic font-normal text-[#C6A26B]">Tawfiq.</span>
+          </h2>
+        </motion.div>
+      </div>
+    </section>
   );
 }

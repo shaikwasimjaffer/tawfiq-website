@@ -66,8 +66,10 @@ module.exports = {
         body: ["var(--font-body)"],
         display: ["var(--font-display)"],
         mono: ["var(--font-mono)"],
+        // Playfair Display is set for serif
         serif: ['"Playfair Display"', "Georgia", "serif"],
-        sans: ['"Plus Jakarta Sans"', "system-ui", "sans-serif"],
+        // Updated sans to Inter to match the Hero component design
+        sans: ['"Inter"', "system-ui", "sans-serif"],
         arabic: ['"Amiri"', '"Playfair Display"', "serif"],
       },
       keyframes: {
