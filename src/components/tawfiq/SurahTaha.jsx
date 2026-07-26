@@ -2,9 +2,9 @@ import React from "react";
 import { motion } from "framer-motion";
 
 // A pause — not a feature section.
-// Surah Ash-Sharh 94:5–6. Generous whitespace, no cards, no buttons. Simple fade animations.
+// Al-Baqarah 2:286 (or corresponding verse). Generous whitespace, no cards, no buttons. Simple fade animations.
 
-export default function SurahAshSharh() {
+export default function SurahPause() {
   return (
     <section className="relative bg-[#F7F5F1] py-40 md:py-56 overflow-hidden">
       <div className="relative max-w-3xl mx-auto px-6 text-center">
@@ -16,7 +16,7 @@ export default function SurahAshSharh() {
           transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
           className="text-[11px] font-sans tracking-[0.25em] uppercase text-[#A6A6A6] mb-16 md:mb-20"
         >
-          Surah Ash-Sharh · 94:5–6
+          Al-Baqarah · 2:286
         </motion.p>
 
         {/* Arabic Text */}
@@ -28,7 +28,7 @@ export default function SurahAshSharh() {
           className="font-arabic text-[clamp(2rem,6vw,4.25rem)] leading-[1.9] text-[#1a1a1a]"
           dir="rtl"
         >
-          فَإِنَّ مَعَ الْعُسْرِ يُسْرًا . إِنَّ مَعَ الْعُسْرِ يُسْرًا
+          لَا يُكَلِّفُ ٱللَّٰهُ نَفْسًا إِلَّا وُسْعَهَا
         </motion.p>
 
         {/* English Translation */}
@@ -39,7 +39,7 @@ export default function SurahAshSharh() {
           transition={{ duration: 1.8, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
           className="font-serif text-xl md:text-2xl italic font-light text-[#8C8C8C] leading-relaxed mt-16 md:mt-20"
         >
-          “Indeed, with hardship comes ease.”
+          “Allah does not burden a soul beyond what it can bear.”
         </motion.p>
       </div>
     </section>

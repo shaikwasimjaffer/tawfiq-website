@@ -108,7 +108,7 @@ export default function Navbar() {
         }`}
       >
         {/* Navbar Container */}
-        <nav className="relative max-w-[1400px] mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
+        <nav className="relative max-w-[1400px] mx-auto px-6 lg:px-10 h-14 md:h-20 flex items-center justify-between">
           {/* =========================================
               MOBILE LEFT: Premium Editorial Menu Icon 
               ========================================= */}

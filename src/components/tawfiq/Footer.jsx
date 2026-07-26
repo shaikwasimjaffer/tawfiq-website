@@ -57,7 +57,7 @@ export default function Footer() {
           transition={{ duration: 1.2 }}
           className="font-serif italic font-light text-xl md:text-3xl text-[#786B63]"
         >
-          Every prayer is a step home.
+          Closer with every sajdah.
         </motion.p>
 
         <motion.div

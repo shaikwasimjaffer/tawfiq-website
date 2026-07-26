@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence, animate } from "framer-motion";
 
-const NAV_ITEMS = ["Qaza", "Quran", "Academy"];
 const ACCENT = "#C89A52";
 
 // Premium Number Animation Hook
@@ -29,8 +28,6 @@ function AnimatedNumber({ value }) {
 }
 
 export default function Qaza() {
-  const [activeTab, setActiveTab] = useState(null);
-
   // App State
   const [hasEstimated, setHasEstimated] = useState(false);
   const [totalOwed, setTotalOwed] = useState(0);
@@ -40,24 +37,21 @@ export default function Qaza() {
   const [modalStep, setModalStep] = useState(1);
 
   const [gender, setGender] = useState("");
+  const [currentAge, setCurrentAge] = useState(25);
   const [pubertyAge, setPubertyAge] = useState(12);
   const [prayingAge, setPrayingAge] = useState(18);
   const [subtractMenses, setSubtractMenses] = useState(false);
   const [frequency, setFrequency] = useState("rarely");
 
-  // Handle Scroll Spy Navigation
+  // Keep dependent sliders safely bounded when currentAge changes
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 80) {
-        setActiveTab("Qaza");
-      } else {
-        setActiveTab(null);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    if (pubertyAge > currentAge) {
+      setPubertyAge(currentAge);
+    }
+    if (prayingAge > currentAge) {
+      setPrayingAge(currentAge);
+    }
+  }, [currentAge]);
 
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -74,8 +68,8 @@ export default function Qaza() {
   // --- Core Calculation Logic ---
   const getCalculatedDays = () => {
     const pAge = parseInt(pubertyAge) || 12;
-    const currentAge = parseInt(prayingAge) || pAge;
-    const yearsMissed = Math.max(0, currentAge - pAge);
+    const cAge = parseInt(prayingAge) || pAge;
+    const yearsMissed = Math.max(0, cAge - pAge);
 
     const shouldSubtractMenses = gender === "female" && subtractMenses;
     const daysPerYear = shouldSubtractMenses ? 281 : 365;
@@ -115,6 +109,7 @@ export default function Qaza() {
 
   const resetCalculator = () => {
     setGender("");
+    setCurrentAge(25);
     setPubertyAge(12);
     setPrayingAge(18);
     setSubtractMenses(false);
@@ -163,14 +158,11 @@ export default function Qaza() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
-            className="font-serif text-[clamp(2.5rem,6vw,5rem)] leading-[1.05] tracking-[-0.01em] text-[#1a1a1a]"
+            className="font-serif text-[clamp(2.5rem,5.5vw,4.8rem)] leading-[1.1] tracking-[-0.01em] text-[#1a1a1a]"
           >
-            Every missed prayer.
-            <br />
-            Now part of your journey.
-            <br />
-            <span className="italic font-light text-[#8a8a8a]">
-              Always remembered.
+            Missed prayers don't have to stay <br />
+            <span className="italic font-normal text-[#C6A26B]">
+              unfinished.
             </span>
           </motion.h2>
 
@@ -178,14 +170,10 @@ export default function Qaza() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.2 }}
-            className="mt-10 md:mt-12 max-w-xl pl-5 border-l-[1.5px] border-[#e0e0e0]"
+            className="mt-10 md:mt-12 max-w-xl pl-5"
           >
             <p className="font-serif text-[1.1rem] md:text-[1.2rem] text-[#1a1a1a] leading-[1.6]">
-              Restore what was missed with Tawfiq.
-            </p>
-            <p className="font-serif text-[15px] text-[#8a8a8a] mt-2 leading-[1.6]">
-              Calculate, organize, and complete your Qaza journey at your own
-              pace.
+              Recover your Qaza with clarity, structure, and consistency.
             </p>
 
             <button
@@ -230,14 +218,14 @@ export default function Qaza() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              {/* Functional Horizon moved perfectly below the big number */}
+              {/* Functional Horizon - Big and Readable without vertical divider line */}
               <div className="mb-16 text-center">
-                <p className="font-serif text-[1.1rem] md:text-[1.25rem] text-[#8a8a8a] leading-relaxed max-w-md mx-auto italic">
-                  At your current pace, you will complete this journey
-                  <br />
-                  in {calculateHorizon()}.
+                <p className="font-serif text-[1.35rem] sm:text-[1.75rem] md:text-[2rem] text-[#1a1a1a] leading-[1.4] max-w-xl mx-auto">
+                  At your current pace, you will complete this journey in{" "}
+                  <span className="italic font-normal text-[#C6A26B] block mt-1 sm:inline sm:mt-0">
+                    {calculateHorizon()}.
+                  </span>
                 </p>
-                <div className="w-px h-12 bg-[#e0e0e0] mx-auto mt-10" />
               </div>
             </motion.div>
           )}
@@ -334,29 +322,85 @@ export default function Qaza() {
                           </div>
                         </div>
 
+                        {/* Tactile Slider: Current Age */}
                         <div>
-                          <label className="block font-serif text-[1.1rem] text-[#1a1a1a] mb-3">
-                            When did you reach puberty?
-                          </label>
+                          <div className="flex justify-between items-center mb-3">
+                            <label className="font-serif text-[1.1rem] text-[#1a1a1a]">
+                              Current Age?
+                            </label>
+                            <span className="font-serif text-lg font-medium text-[#C89A52]">
+                              {currentAge}
+                            </span>
+                          </div>
                           <input
-                            type="number"
-                            value={pubertyAge}
-                            onChange={(e) => setPubertyAge(e.target.value)}
-                            className="w-full bg-white/50 border border-[#e0e0e0] px-4 py-3 font-serif text-xl text-[#1a1a1a] focus:outline-none focus:border-[#C89A52] transition-colors"
+                            type="range"
+                            min="9"
+                            max="90"
+                            step="1"
+                            value={currentAge}
+                            onChange={(e) =>
+                              setCurrentAge(Number(e.target.value))
+                            }
+                            className="w-full accent-[#C89A52] bg-stone-200 h-1.5 rounded-lg cursor-pointer"
                           />
+                          <div className="flex justify-between text-[10px] text-stone-400 font-sans mt-1.5 tracking-wider">
+                            <span>9</span>
+                            <span>90</span>
+                          </div>
                         </div>
 
+                        {/* Tactile Slider: Puberty Age */}
                         <div>
-                          <label className="block font-serif text-[1.1rem] text-[#1a1a1a] mb-3">
-                            At what age did you begin praying the five daily
-                            prayers consistently?
-                          </label>
+                          <div className="flex justify-between items-center mb-3">
+                            <label className="font-serif text-[1.1rem] text-[#1a1a1a]">
+                              When did you reach puberty?
+                            </label>
+                            <span className="font-serif text-lg font-medium text-[#C89A52]">
+                              {pubertyAge}
+                            </span>
+                          </div>
                           <input
-                            type="number"
-                            value={prayingAge}
-                            onChange={(e) => setPrayingAge(e.target.value)}
-                            className="w-full bg-white/50 border border-[#e0e0e0] px-4 py-3 font-serif text-xl text-[#1a1a1a] focus:outline-none focus:border-[#C89A52] transition-colors"
+                            type="range"
+                            min="9"
+                            max={currentAge}
+                            step="1"
+                            value={pubertyAge}
+                            onChange={(e) =>
+                              setPubertyAge(Number(e.target.value))
+                            }
+                            className="w-full accent-[#C89A52] bg-stone-200 h-1.5 rounded-lg cursor-pointer"
                           />
+                          <div className="flex justify-between text-[10px] text-stone-400 font-sans mt-1.5 tracking-wider">
+                            <span>9</span>
+                            <span>{currentAge}</span>
+                          </div>
+                        </div>
+
+                        {/* Tactile Slider: Praying Age */}
+                        <div>
+                          <div className="flex justify-between items-center mb-3">
+                            <label className="font-serif text-[1.1rem] text-[#1a1a1a]">
+                              When did you begin praying consistently?
+                            </label>
+                            <span className="font-serif text-lg font-medium text-[#C89A52]">
+                              {prayingAge}
+                            </span>
+                          </div>
+                          <input
+                            type="range"
+                            min="9"
+                            max={currentAge}
+                            step="1"
+                            value={prayingAge}
+                            onChange={(e) =>
+                              setPrayingAge(Number(e.target.value))
+                            }
+                            className="w-full accent-[#C89A52] bg-stone-200 h-1.5 rounded-lg cursor-pointer"
+                          />
+                          <div className="flex justify-between text-[10px] text-stone-400 font-sans mt-1.5 tracking-wider">
+                            <span>9</span>
+                            <span>{currentAge}</span>
+                          </div>
                         </div>
 
                         <div>
