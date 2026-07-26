@@ -59,6 +59,10 @@ export default function Qaza() {
   const [pubertyAge, setPubertyAge] = useState(12);
   const [subtractMenses, setSubtractMenses] = useState(false);
 
+  // Consistency State
+  const [prayerStatus, setPrayerStatus] = useState("consistent"); // 'consistent' | 'never'
+  const [prayingAge, setPrayingAge] = useState(18);
+
   // Estimation State
   const [scholarMode, setScholarMode] = useState("moderate");
   const [showScholarInfo, setShowScholarInfo] = useState(false);
@@ -70,7 +74,7 @@ export default function Qaza() {
     {
       id: 1,
       startAge: 12,
-      endAge: 25,
+      endAge: 18,
       prayers: {
         Fajr: "Never",
         Dhuhr: "Never",
@@ -83,23 +87,27 @@ export default function Qaza() {
 
   // --- Core Validation & Dependency Logic ---
 
-  // 1. Ensure Puberty Age never exceeds Current Age
+  // 1. Ensure Puberty Age & Praying Age never exceed Current Age logically
   useEffect(() => {
-    if (pubertyAge > currentAge) {
-      setPubertyAge(currentAge);
-    }
-  }, [currentAge, pubertyAge]);
+    if (pubertyAge > currentAge) setPubertyAge(currentAge);
+    if (prayingAge > currentAge) setPrayingAge(currentAge);
+    if (prayingAge < pubertyAge) setPrayingAge(pubertyAge);
+  }, [currentAge, pubertyAge, prayingAge]);
 
   // 2. Cascade changes through Life Phases strictly left-to-right
   useEffect(() => {
+    if (prayerStatus === "never") return;
+
     setPhases((prev) => {
       const safePuberty = Math.min(pubertyAge, currentAge);
+      const endLimit = Math.max(safePuberty, Math.min(prayingAge, currentAge));
+
       let newP = prev.map((p) => ({ ...p }));
 
       // Step A: First phase must always start at Puberty Age
       newP[0].startAge = safePuberty;
 
-      // Step B: Cascade constraints forward (No gaps, no overlaps, no reverse times)
+      // Step B: Cascade constraints forward
       for (let i = 0; i < newP.length; i++) {
         if (i > 0) {
           newP[i].startAge = newP[i - 1].endAge;
@@ -107,15 +115,15 @@ export default function Qaza() {
         if (newP[i].endAge < newP[i].startAge) {
           newP[i].endAge = newP[i].startAge;
         }
-        if (newP[i].endAge > currentAge) {
-          newP[i].endAge = currentAge;
+        if (newP[i].endAge > endLimit) {
+          newP[i].endAge = endLimit;
         }
       }
 
-      // Step C: The last phase MUST end at Current Age
-      newP[newP.length - 1].endAge = currentAge;
+      // Step C: The last phase MUST end exactly at the endLimit
+      newP[newP.length - 1].endAge = endLimit;
 
-      // Step D: Cascade backwards if locking the final phase to Current Age squashed previous phases
+      // Step D: Cascade backwards if locking the final phase squashed previous phases
       for (let i = newP.length - 1; i > 0; i--) {
         if (newP[i].startAge > newP[i].endAge) {
           newP[i].startAge = newP[i].endAge;
@@ -123,16 +131,14 @@ export default function Qaza() {
         }
       }
 
-      // Final lock to guarantee Rule A isn't broken by backward cascading
       newP[0].startAge = safePuberty;
 
-      // Prevent unnecessary renders if deeply equal
       if (JSON.stringify(prev) === JSON.stringify(newP)) {
         return prev;
       }
       return newP;
     });
-  }, [currentAge, pubertyAge]);
+  }, [currentAge, pubertyAge, prayingAge, prayerStatus]);
 
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -151,7 +157,7 @@ export default function Qaza() {
     setPhases((prev) => {
       const last = prev[prev.length - 1];
       if (last.endAge - last.startAge <= 1) {
-        alert("This phase is too short to divide.");
+        alert("This phase is too short to divide further.");
         return prev;
       }
       const mid = Math.floor((last.startAge + last.endAge) / 2);
@@ -161,7 +167,7 @@ export default function Qaza() {
         id: Date.now(),
         startAge: mid,
         endAge: last.endAge,
-        prayers: { ...last.prayers }, // Inherit previous habits to save time
+        prayers: { ...last.prayers },
       });
       return newPhases;
     });
@@ -185,7 +191,6 @@ export default function Qaza() {
     const val = parseInt(value) || 0;
     setPhases((prev) => {
       const newP = prev.map((p) => ({ ...p }));
-      // We only ever manually edit the `endAge` of phase `index` (except the last phase)
       if (index < newP.length - 1) {
         const minEnd = newP[index].startAge;
         const maxEnd = newP[index + 1].endAge;
@@ -215,45 +220,66 @@ export default function Qaza() {
     const breakdowns = [];
     const daysPerYear = gender === "female" && subtractMenses ? 281 : 365;
 
-    phases.forEach((phase) => {
-      const years = phase.endAge - phase.startAge;
-      if (years <= 0) return;
+    if (prayerStatus === "never") {
+      const years = currentAge - pubertyAge;
+      if (years > 0) {
+        const totalDays = years * daysPerYear;
+        let phaseDebt = totalDays * 5;
+        phaseDebt = Math.round(phaseDebt * SCHOLAR_MODIFIERS[scholarMode]);
+        baseTotal += phaseDebt;
 
-      const totalDays = years * daysPerYear;
-      let phaseDebt = 0;
+        breakdowns.push({
+          id: "never-consistent",
+          startAge: pubertyAge,
+          endAge: currentAge,
+          years,
+          days: totalDays,
+          debt: phaseDebt,
+        });
+      }
+    } else {
+      phases.forEach((phase) => {
+        const years = phase.endAge - phase.startAge;
+        if (years <= 0) return;
 
-      PRAYERS.forEach((prayer) => {
-        const habit = phase.prayers[prayer];
-        const multiplier = PRAYER_MULTIPLIERS[habit.toLowerCase()];
-        phaseDebt += totalDays * multiplier;
+        const totalDays = years * daysPerYear;
+        let phaseDebt = 0;
+
+        PRAYERS.forEach((prayer) => {
+          const habit = phase.prayers[prayer];
+          const multiplier = PRAYER_MULTIPLIERS[habit.toLowerCase()];
+          phaseDebt += totalDays * multiplier;
+        });
+
+        phaseDebt = Math.round(phaseDebt * SCHOLAR_MODIFIERS[scholarMode]);
+        baseTotal += phaseDebt;
+
+        breakdowns.push({
+          ...phase,
+          years,
+          days: totalDays,
+          debt: phaseDebt,
+        });
       });
-
-      // Apply Scholar Modifier per phase to keep breakdown accurate
-      phaseDebt = Math.round(phaseDebt * SCHOLAR_MODIFIERS[scholarMode]);
-
-      baseTotal += phaseDebt;
-      breakdowns.push({
-        ...phase,
-        years,
-        days: totalDays,
-        debt: phaseDebt,
-      });
-    });
+    }
 
     let finalTotal = Math.max(0, baseTotal + manualAdjustment);
 
-    // Confidence & Range Logic
     let conf = 3;
-    let detailPoints = phases.length;
-    // Check if they varied their habits instead of leaving default "Never"
-    const hasVariedHabits = phases.some((p) =>
-      Object.values(p.prayers).some((h) => h !== "Never"),
-    );
-    if (hasVariedHabits) detailPoints += 1;
+    let detailPoints = prayerStatus === "consistent" ? phases.length : 2;
+
+    if (prayerStatus === "consistent") {
+      const hasVariedHabits = phases.some((p) =>
+        Object.values(p.prayers).some((h) => h !== "Never"),
+      );
+      if (hasVariedHabits) detailPoints += 1;
+      detailPoints += 1;
+    }
     if (manualAdjustment !== 0) detailPoints += 1;
 
     if (detailPoints >= 4) conf = 5;
     else if (detailPoints >= 2) conf = 4;
+    else conf = 3;
 
     let spread = 0.12;
     if (conf === 4) spread = 0.08;
@@ -263,7 +289,16 @@ export default function Qaza() {
     const high = Math.ceil(finalTotal * (1 + spread));
 
     return { baseTotal, finalTotal, breakdowns, conf, low, high };
-  }, [phases, gender, subtractMenses, scholarMode, manualAdjustment]);
+  }, [
+    phases,
+    gender,
+    subtractMenses,
+    scholarMode,
+    manualAdjustment,
+    prayerStatus,
+    currentAge,
+    pubertyAge,
+  ]);
 
   const activePace = customPace ? parseInt(customPace) || dailyPace : dailyPace;
 
@@ -291,12 +326,14 @@ export default function Qaza() {
     setGender("");
     setCurrentAge(25);
     setPubertyAge(12);
+    setPrayingAge(18);
+    setPrayerStatus("consistent");
     setSubtractMenses(false);
     setPhases([
       {
         id: 1,
         startAge: 12,
-        endAge: 25,
+        endAge: 18,
         prayers: {
           Fajr: "Never",
           Dhuhr: "Never",
@@ -463,9 +500,30 @@ export default function Qaza() {
                       exit={{ opacity: 0, x: -20 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <p className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#9d9d9d] mb-4">
-                        Step 1 of 2
-                      </p>
+                      <div className="flex justify-between items-center mb-4">
+                        <p className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#9d9d9d]">
+                          Step 1 of 3
+                        </p>
+                        <div className="flex items-center gap-1.5 text-[#C89A52]">
+                          <svg
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          >
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 15 15"></polyline>
+                          </svg>
+                          <span className="text-[9px] font-sans uppercase tracking-[0.15em] font-medium">
+                            Takes ~2 mins
+                          </span>
+                        </div>
+                      </div>
+
                       <h3 className="font-serif text-3xl md:text-4xl text-[#1a1a1a] mb-4 tracking-tight">
                         Estimate Your Missed Prayers
                       </h3>
@@ -600,8 +658,91 @@ export default function Qaza() {
                             </div>
                           </div>
 
+                          {/* Prayer Consistency Logic */}
+                          <div className="pt-2">
+                            <label className="block font-serif text-[1.1rem] text-[#1a1a1a] mb-3">
+                              Prayer Consistency
+                            </label>
+
+                            <div className="space-y-2 mb-5">
+                              <label
+                                className={`flex items-center gap-3 p-3 border cursor-pointer transition-colors ${prayerStatus === "consistent" ? "border-[#1a1a1a] bg-[#1a1a1a]/5" : "border-[#e0e0e0] bg-white/50 hover:border-[#C89A52]"}`}
+                              >
+                                <div
+                                  className={`w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${prayerStatus === "consistent" ? "border-[#1a1a1a]" : "border-[#9d9d9d]"}`}
+                                >
+                                  {prayerStatus === "consistent" && (
+                                    <div className="w-2 h-2 bg-[#1a1a1a] rounded-full" />
+                                  )}
+                                </div>
+                                <input
+                                  type="radio"
+                                  className="hidden"
+                                  name="prayerStatus"
+                                  checked={prayerStatus === "consistent"}
+                                  onChange={() => setPrayerStatus("consistent")}
+                                />
+                                <span className="font-serif text-[14px] text-[#1a1a1a]">
+                                  I began praying consistently
+                                </span>
+                              </label>
+
+                              <label
+                                className={`flex items-center gap-3 p-3 border cursor-pointer transition-colors ${prayerStatus === "never" ? "border-[#1a1a1a] bg-[#1a1a1a]/5" : "border-[#e0e0e0] bg-white/50 hover:border-[#C89A52]"}`}
+                              >
+                                <div
+                                  className={`w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${prayerStatus === "never" ? "border-[#1a1a1a]" : "border-[#9d9d9d]"}`}
+                                >
+                                  {prayerStatus === "never" && (
+                                    <div className="w-2 h-2 bg-[#1a1a1a] rounded-full" />
+                                  )}
+                                </div>
+                                <input
+                                  type="radio"
+                                  className="hidden"
+                                  name="prayerStatus"
+                                  checked={prayerStatus === "never"}
+                                  onChange={() => setPrayerStatus("never")}
+                                />
+                                <span className="font-serif text-[14px] text-[#1a1a1a]">
+                                  I have never prayed consistently
+                                </span>
+                              </label>
+                            </div>
+
+                            {/* Tactile Slider: Praying Age */}
+                            <div
+                              className={`transition-all duration-300 ${prayerStatus === "never" ? "opacity-30 pointer-events-none grayscale" : "opacity-100"}`}
+                            >
+                              <div className="flex justify-between items-center mb-3">
+                                <label className="font-serif text-[1.1rem] text-[#1a1a1a]">
+                                  When did you begin praying consistently?
+                                </label>
+                                <span className="font-serif text-lg font-medium text-[#C89A52]">
+                                  {prayingAge}
+                                </span>
+                              </div>
+                              <input
+                                type="range"
+                                min={pubertyAge}
+                                max={currentAge}
+                                step="1"
+                                value={prayingAge}
+                                onChange={(e) =>
+                                  setPrayingAge(Number(e.target.value))
+                                }
+                                disabled={prayerStatus === "never"}
+                                className="w-full accent-[#C89A52] bg-stone-200 h-1.5 rounded-lg cursor-pointer disabled:cursor-not-allowed"
+                              />
+                              <div className="flex justify-between text-[10px] text-[#9d9d9d] font-sans mt-1.5 tracking-wider">
+                                <span>{pubertyAge}</span>
+                                <span>{currentAge}</span>
+                              </div>
+                            </div>
+                          </div>
+
                           {/* Scholar Mode */}
-                          <div>
+                          <div className="pt-2">
                             <div className="flex justify-between items-center mb-3">
                               <label className="font-serif text-[1.1rem] text-[#1a1a1a]">
                                 Calculation Method
@@ -649,127 +790,143 @@ export default function Qaza() {
                           </div>
                         </div>
 
-                        {/* Life Phases Builder */}
-                        <div>
-                          <div className="mb-4">
-                            <h4 className="font-serif text-2xl text-[#1a1a1a]">
-                              Life Phases
-                            </h4>
-                            <p className="text-[12px] text-[#666666] font-sans mt-1">
-                              Break your life into periods to estimate more
-                              accurately.
-                            </p>
-                          </div>
-
-                          <div className="space-y-6">
-                            {phases.map((phase, index) => (
-                              <div
-                                key={phase.id}
-                                className="border border-[#e0e0e0] bg-white/30 p-4 md:p-5 relative"
-                              >
-                                {index > 0 && (
-                                  <button
-                                    onClick={() => handleDeletePhase(index)}
-                                    className="absolute top-4 right-4 text-[#9d9d9d] hover:text-red-500 transition-colors text-sm"
-                                  >
-                                    ✕
-                                  </button>
-                                )}
-
-                                <h5 className="font-sans uppercase tracking-[0.15em] text-[10px] text-[#C89A52] mb-3">
-                                  Phase {index + 1}
-                                </h5>
-
-                                <div className="flex items-center gap-3 mb-5 border-b border-[#e0e0e0] pb-4">
-                                  {/* From Age */}
-                                  <div className="flex flex-col">
-                                    <span className="text-[10px] uppercase font-sans text-[#9d9d9d] mb-1">
-                                      From Age
-                                    </span>
-                                    <span className="font-serif text-lg w-16 text-center text-[#666666]">
-                                      {phase.startAge}
-                                    </span>
-                                  </div>
-
-                                  <span className="text-[#9d9d9d]">→</span>
-
-                                  {/* To Age */}
-                                  <div className="flex flex-col">
-                                    <span className="text-[10px] uppercase font-sans text-[#9d9d9d] mb-1">
-                                      To Age
-                                    </span>
-                                    {index < phases.length - 1 ? (
-                                      <input
-                                        type="number"
-                                        min={phase.startAge}
-                                        max={
-                                          phases[index + 1]?.endAge ||
-                                          currentAge
-                                        }
-                                        value={phase.endAge}
-                                        onChange={(e) =>
-                                          updatePhaseBoundary(
-                                            index,
-                                            e.target.value,
-                                          )
-                                        }
-                                        className="font-serif text-lg w-16 bg-transparent border-b border-[#1a1a1a]/20 focus:border-[#C89A52] focus:outline-none text-center"
-                                      />
-                                    ) : (
-                                      <span className="font-serif text-lg w-16 text-center text-[#666666]">
-                                        {phase.endAge}
-                                      </span>
-                                    )}
-                                  </div>
+                        {/* Life Phases Builder (Conditionally Hidden) */}
+                        <AnimatePresence>
+                          {prayerStatus === "consistent" && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              className="overflow-hidden"
+                            >
+                              <div className="pt-4 pb-2 border-t border-[#e0e0e0]">
+                                <div className="mb-4">
+                                  <h4 className="font-serif text-2xl text-[#1a1a1a]">
+                                    Life Phases
+                                  </h4>
+                                  <p className="text-[12px] text-[#666666] font-sans mt-1">
+                                    Break the years from puberty to when you
+                                    started into periods.
+                                  </p>
                                 </div>
 
-                                <div className="space-y-3">
-                                  <p className="text-[11px] text-[#666666] font-sans uppercase tracking-wider mb-2">
-                                    Prayer Habits during this phase:
-                                  </p>
-                                  {PRAYERS.map((prayer) => (
+                                <div className="space-y-6">
+                                  {phases.map((phase, index) => (
                                     <div
-                                      key={prayer}
-                                      className="flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+                                      key={phase.id}
+                                      className="border border-[#e0e0e0] bg-white/30 p-4 md:p-5 relative"
                                     >
-                                      <span className="font-serif text-[14px] text-[#1a1a1a] w-20">
-                                        {prayer}
-                                      </span>
-                                      <div className="grid grid-cols-4 gap-1 w-full flex-1">
-                                        {HABITS.map((habit) => {
-                                          const isActive =
-                                            phase.prayers[prayer] === habit;
-                                          return (
-                                            <button
-                                              key={habit}
-                                              onClick={() =>
-                                                updatePrayerHabit(
+                                      {index > 0 && (
+                                        <button
+                                          onClick={() =>
+                                            handleDeletePhase(index)
+                                          }
+                                          className="absolute top-4 right-4 text-[#9d9d9d] hover:text-red-500 transition-colors text-sm"
+                                        >
+                                          ✕
+                                        </button>
+                                      )}
+
+                                      <h5 className="font-sans uppercase tracking-[0.15em] text-[10px] text-[#C89A52] mb-3">
+                                        Phase {index + 1}
+                                      </h5>
+
+                                      <div className="flex items-center gap-3 mb-5 border-b border-[#e0e0e0] pb-4">
+                                        {/* From Age */}
+                                        <div className="flex flex-col">
+                                          <span className="text-[10px] uppercase font-sans text-[#9d9d9d] mb-1">
+                                            From Age
+                                          </span>
+                                          <span className="font-serif text-lg w-16 text-center text-[#666666]">
+                                            {phase.startAge}
+                                          </span>
+                                        </div>
+
+                                        <span className="text-[#9d9d9d]">
+                                          →
+                                        </span>
+
+                                        {/* To Age */}
+                                        <div className="flex flex-col">
+                                          <span className="text-[10px] uppercase font-sans text-[#9d9d9d] mb-1">
+                                            To Age
+                                          </span>
+                                          {index < phases.length - 1 ? (
+                                            <input
+                                              type="number"
+                                              min={phase.startAge}
+                                              max={
+                                                phases[index + 1]?.endAge ||
+                                                prayingAge
+                                              }
+                                              value={phase.endAge}
+                                              onChange={(e) =>
+                                                updatePhaseBoundary(
                                                   index,
-                                                  prayer,
-                                                  habit,
+                                                  e.target.value,
                                                 )
                                               }
-                                              className={`py-1.5 text-[9px] uppercase tracking-wider border transition-all ${isActive ? "border-[#1a1a1a] bg-[#1a1a1a]/5 text-[#1a1a1a] font-bold" : "border-[#e0e0e0] bg-white text-[#9d9d9d] hover:border-[#C89A52]"}`}
-                                            >
-                                              {habit}
-                                            </button>
-                                          );
-                                        })}
+                                              className="font-serif text-lg w-16 bg-transparent border-b border-[#1a1a1a]/20 focus:border-[#C89A52] focus:outline-none text-center"
+                                            />
+                                          ) : (
+                                            <span className="font-serif text-lg w-16 text-center text-[#666666]">
+                                              {phase.endAge}
+                                            </span>
+                                          )}
+                                        </div>
+                                      </div>
+
+                                      <div className="space-y-3">
+                                        <p className="text-[11px] text-[#666666] font-sans uppercase tracking-wider mb-2">
+                                          Prayer Habits during this phase:
+                                        </p>
+                                        {PRAYERS.map((prayer) => (
+                                          <div
+                                            key={prayer}
+                                            className="flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+                                          >
+                                            <span className="font-serif text-[14px] text-[#1a1a1a] w-20">
+                                              {prayer}
+                                            </span>
+                                            <div className="grid grid-cols-4 gap-1 w-full flex-1">
+                                              {HABITS.map((habit) => {
+                                                const isActive =
+                                                  phase.prayers[prayer] ===
+                                                  habit;
+                                                return (
+                                                  <button
+                                                    key={habit}
+                                                    onClick={() =>
+                                                      updatePrayerHabit(
+                                                        index,
+                                                        prayer,
+                                                        habit,
+                                                      )
+                                                    }
+                                                    className={`py-1.5 text-[9px] uppercase tracking-wider border transition-all ${isActive ? "border-[#1a1a1a] bg-[#1a1a1a]/5 text-[#1a1a1a] font-bold" : "border-[#e0e0e0] bg-white text-[#9d9d9d] hover:border-[#C89A52]"}`}
+                                                  >
+                                                    {habit}
+                                                  </button>
+                                                );
+                                              })}
+                                            </div>
+                                          </div>
+                                        ))}
                                       </div>
                                     </div>
                                   ))}
+
+                                  <button
+                                    onClick={handleAddPhase}
+                                    className="w-full border border-dashed border-[#C89A52] text-[#C89A52] bg-[#C89A52]/5 hover:bg-[#C89A52]/10 py-3 font-sans text-[11px] uppercase tracking-[0.2em] transition-colors"
+                                  >
+                                    + Add Another Phase
+                                  </button>
                                 </div>
                               </div>
-                            ))}
-
-                            <button
-                              onClick={handleAddPhase}
-                              className="w-full border border-dashed border-[#C89A52] text-[#C89A52] bg-[#C89A52]/5 hover:bg-[#C89A52]/10 py-3 font-sans text-[11px] uppercase tracking-[0.2em] transition-colors"
-                            >
-                              + Add Another Phase
-                            </button>
-                          </div>
-                        </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
                       </div>
 
                       <button
@@ -782,7 +939,7 @@ export default function Qaza() {
                         }}
                         className="w-full mt-10 bg-[#1a1a1a] text-white font-sans text-[11px] uppercase tracking-[0.2em] px-8 py-4 hover:bg-[#C89A52] transition-colors duration-300 active:scale-95 shadow-sm flex items-center justify-center gap-2"
                       >
-                        Continue <span>→</span>
+                        Review Details <span>→</span>
                       </button>
 
                       {hasEstimated && (
@@ -801,15 +958,14 @@ export default function Qaza() {
                     </motion.div>
                   )}
 
-                  {/* --- STEP 2 --- */}
+                  {/* --- STEP 2: CONFIRMATION SCREEN --- */}
                   {modalStep === 2 && (
                     <motion.div
                       key="step2"
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: 20 }}
+                      exit={{ opacity: 0, x: -20 }}
                       transition={{ duration: 0.3 }}
-                      className="flex flex-col h-full"
                     >
                       <button
                         onClick={() => setModalStep(1)}
@@ -818,8 +974,116 @@ export default function Qaza() {
                         ← Back
                       </button>
 
+                      <p className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#9d9d9d] mb-4">
+                        Step 2 of 3
+                      </p>
+                      <h3 className="font-serif text-3xl md:text-4xl text-[#1a1a1a] mb-4 tracking-tight">
+                        Confirm Your Details
+                      </h3>
+                      <div className="font-serif text-[15px] text-[#666666] leading-[1.6] mb-8">
+                        <p>
+                          Please verify your journey details before we calculate
+                          the estimate.
+                        </p>
+                      </div>
+
+                      <div className="space-y-2 mb-12">
+                        <div className="flex justify-between items-start py-4 border-b border-[#e0e0e0]">
+                          <span className="font-sans text-[11px] uppercase tracking-widest text-[#9d9d9d] pt-1">
+                            Current Age
+                          </span>
+                          <div className="text-right">
+                            <span className="font-serif text-2xl text-[#1a1a1a] leading-none block">
+                              {currentAge}
+                            </span>
+                            <button
+                              onClick={() => setModalStep(1)}
+                              className="mt-1.5 text-[9px] font-sans uppercase tracking-[0.1em] text-[#C89A52] hover:text-[#1a1a1a] transition-colors"
+                            >
+                              Edit →
+                            </button>
+                          </div>
+                        </div>
+                        <div className="flex justify-between items-start py-4 border-b border-[#e0e0e0]">
+                          <span className="font-sans text-[11px] uppercase tracking-widest text-[#9d9d9d] pt-1">
+                            Puberty Age
+                          </span>
+                          <div className="text-right">
+                            <span className="font-serif text-2xl text-[#1a1a1a] leading-none block">
+                              {pubertyAge}
+                            </span>
+                            <button
+                              onClick={() => setModalStep(1)}
+                              className="mt-1.5 text-[9px] font-sans uppercase tracking-[0.1em] text-[#C89A52] hover:text-[#1a1a1a] transition-colors"
+                            >
+                              Edit →
+                            </button>
+                          </div>
+                        </div>
+                        <div className="flex justify-between items-start py-4 border-b border-[#e0e0e0]">
+                          <span className="font-sans text-[11px] uppercase tracking-widest text-[#9d9d9d] pt-1">
+                            Prayer Journey
+                          </span>
+                          <div className="text-right">
+                            <span className="font-serif text-[1.15rem] text-[#1a1a1a] leading-none block pb-0.5">
+                              {prayerStatus === "never"
+                                ? "Never prayed consistently"
+                                : `Life Phases: ${phases.length}`}
+                            </span>
+                            <button
+                              onClick={() => setModalStep(1)}
+                              className="mt-1 text-[9px] font-sans uppercase tracking-[0.1em] text-[#C89A52] hover:text-[#1a1a1a] transition-colors"
+                            >
+                              Edit →
+                            </button>
+                          </div>
+                        </div>
+                        <div className="flex justify-between items-start py-4 border-b border-[#e0e0e0]">
+                          <span className="font-sans text-[11px] uppercase tracking-widest text-[#9d9d9d] pt-1">
+                            Calculation Mode
+                          </span>
+                          <div className="text-right">
+                            <span className="font-serif text-[1.15rem] text-[#1a1a1a] capitalize leading-none block pb-0.5">
+                              {scholarMode}
+                            </span>
+                            <button
+                              onClick={() => setModalStep(1)}
+                              className="mt-1 text-[9px] font-sans uppercase tracking-[0.1em] text-[#C89A52] hover:text-[#1a1a1a] transition-colors"
+                            >
+                              Edit →
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() => setModalStep(3)}
+                        className="w-full bg-[#1a1a1a] text-white font-sans text-[11px] uppercase tracking-[0.2em] px-8 py-4 hover:bg-[#C89A52] transition-colors duration-300 active:scale-95 shadow-sm flex items-center justify-center gap-2"
+                      >
+                        Calculate Estimate <span>→</span>
+                      </button>
+                    </motion.div>
+                  )}
+
+                  {/* --- STEP 3: REVIEW & RESULTS --- */}
+                  {modalStep === 3 && (
+                    <motion.div
+                      key="step3"
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 20 }}
+                      transition={{ duration: 0.3 }}
+                      className="flex flex-col h-full"
+                    >
+                      <button
+                        onClick={() => setModalStep(2)}
+                        className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#9d9d9d] hover:text-[#1a1a1a] transition-colors mb-4 flex items-center gap-1 w-fit"
+                      >
+                        ← Back
+                      </button>
+
                       <p className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#C89A52] mb-4">
-                        Step 2 of 2
+                        Step 3 of 3
                       </p>
                       <h3 className="font-serif text-3xl md:text-4xl text-[#1a1a1a] mb-8 tracking-tight">
                         Review Your Estimate
@@ -906,6 +1170,7 @@ export default function Qaza() {
                           Calculation Breakdown
                         </h4>
                         <div className="relative pl-6 border-l border-[#C89A52]/30 space-y-8 py-2">
+                          {/* Mapped Debt Phases */}
                           {estimates.breakdowns.map((b, i) => (
                             <div key={b.id} className="relative">
                               <div className="absolute -left-[31px] top-1.5 w-3.5 h-3.5 bg-[#f9f7f2] border-[3px] border-[#C89A52] rounded-full" />
@@ -951,6 +1216,28 @@ export default function Qaza() {
                             </div>
                           ))}
 
+                          {/* Zero-Debt Established Status Node */}
+                          {prayerStatus === "consistent" &&
+                            prayingAge < currentAge && (
+                              <div className="relative opacity-60">
+                                <div className="absolute -left-[31px] top-1.5 w-3.5 h-3.5 bg-[#f9f7f2] border-[3px] border-[#C89A52] rounded-full" />
+                                <h5 className="font-serif text-[1.1rem] text-[#1a1a1a]">
+                                  Age {prayingAge} → {currentAge}
+                                </h5>
+                                <p className="text-[10px] font-sans text-[#9d9d9d] uppercase tracking-wider mb-1">
+                                  Consistent Prayer Established
+                                </p>
+                                <p className="text-[13px] font-serif text-[#666666]">
+                                  Estimated:{" "}
+                                  <span className="font-bold text-[#1a1a1a]">
+                                    0
+                                  </span>{" "}
+                                  prayers
+                                </p>
+                              </div>
+                            )}
+
+                          {/* Final Totals Node */}
                           <div className="relative pt-2">
                             <div className="absolute -left-[31px] top-3.5 w-3.5 h-3.5 bg-[#1a1a1a] rounded-full" />
                             <h5 className="font-serif text-[1.1rem] text-[#1a1a1a]">
