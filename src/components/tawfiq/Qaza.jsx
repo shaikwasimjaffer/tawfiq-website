@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence, animate } from "framer-motion";
 
 const ACCENT = "#C89A52";
@@ -27,6 +27,23 @@ function AnimatedNumber({ value }) {
   return <span ref={nodeRef}>{value.toLocaleString()}</span>;
 }
 
+// Helper: Calculation Constants
+const PRAYER_MULTIPLIERS = {
+  never: 1.0,
+  sometimes: 0.6,
+  usually: 0.2,
+  always: 0.0,
+};
+
+const SCHOLAR_MODIFIERS = {
+  conservative: 0.85,
+  moderate: 1.0,
+  maximum: 1.15,
+};
+
+const PRAYERS = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
+const HABITS = ["Never", "Sometimes", "Usually", "Always"];
+
 export default function Qaza() {
   // App State
   const [hasEstimated, setHasEstimated] = useState(false);
@@ -36,22 +53,86 @@ export default function Qaza() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalStep, setModalStep] = useState(1);
 
+  // Global Settings
   const [gender, setGender] = useState("");
   const [currentAge, setCurrentAge] = useState(25);
   const [pubertyAge, setPubertyAge] = useState(12);
-  const [prayingAge, setPrayingAge] = useState(18);
   const [subtractMenses, setSubtractMenses] = useState(false);
-  const [frequency, setFrequency] = useState("rarely");
 
-  // Keep dependent sliders safely bounded when currentAge changes
+  // Estimation State
+  const [scholarMode, setScholarMode] = useState("moderate");
+  const [showScholarInfo, setShowScholarInfo] = useState(false);
+  const [manualAdjustment, setManualAdjustment] = useState(0);
+  const [dailyPace, setDailyPace] = useState(3);
+  const [customPace, setCustomPace] = useState("");
+
+  const [phases, setPhases] = useState([
+    {
+      id: 1,
+      startAge: 12,
+      endAge: 25,
+      prayers: {
+        Fajr: "Never",
+        Dhuhr: "Never",
+        Asr: "Never",
+        Maghrib: "Never",
+        Isha: "Never",
+      },
+    },
+  ]);
+
+  // --- Core Validation & Dependency Logic ---
+
+  // 1. Ensure Puberty Age never exceeds Current Age
   useEffect(() => {
     if (pubertyAge > currentAge) {
       setPubertyAge(currentAge);
     }
-    if (prayingAge > currentAge) {
-      setPrayingAge(currentAge);
-    }
-  }, [currentAge]);
+  }, [currentAge, pubertyAge]);
+
+  // 2. Cascade changes through Life Phases strictly left-to-right
+  useEffect(() => {
+    setPhases((prev) => {
+      const safePuberty = Math.min(pubertyAge, currentAge);
+      let newP = prev.map((p) => ({ ...p }));
+
+      // Step A: First phase must always start at Puberty Age
+      newP[0].startAge = safePuberty;
+
+      // Step B: Cascade constraints forward (No gaps, no overlaps, no reverse times)
+      for (let i = 0; i < newP.length; i++) {
+        if (i > 0) {
+          newP[i].startAge = newP[i - 1].endAge;
+        }
+        if (newP[i].endAge < newP[i].startAge) {
+          newP[i].endAge = newP[i].startAge;
+        }
+        if (newP[i].endAge > currentAge) {
+          newP[i].endAge = currentAge;
+        }
+      }
+
+      // Step C: The last phase MUST end at Current Age
+      newP[newP.length - 1].endAge = currentAge;
+
+      // Step D: Cascade backwards if locking the final phase to Current Age squashed previous phases
+      for (let i = newP.length - 1; i > 0; i--) {
+        if (newP[i].startAge > newP[i].endAge) {
+          newP[i].startAge = newP[i].endAge;
+          newP[i - 1].endAge = newP[i].startAge;
+        }
+      }
+
+      // Final lock to guarantee Rule A isn't broken by backward cascading
+      newP[0].startAge = safePuberty;
+
+      // Prevent unnecessary renders if deeply equal
+      if (JSON.stringify(prev) === JSON.stringify(newP)) {
+        return prev;
+      }
+      return newP;
+    });
+  }, [currentAge, pubertyAge]);
 
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -65,55 +146,170 @@ export default function Qaza() {
     };
   }, [isModalOpen]);
 
-  // --- Core Calculation Logic ---
-  const getCalculatedDays = () => {
-    const pAge = parseInt(pubertyAge) || 12;
-    const cAge = parseInt(prayingAge) || pAge;
-    const yearsMissed = Math.max(0, cAge - pAge);
-
-    const shouldSubtractMenses = gender === "female" && subtractMenses;
-    const daysPerYear = shouldSubtractMenses ? 281 : 365;
-    const baseDays = yearsMissed * daysPerYear;
-
-    let multiplier = 1.0;
-    if (frequency === "occasionally") multiplier = 0.75;
-    if (frequency === "frequently") multiplier = 0.4;
-
-    return Math.round(baseDays * multiplier);
+  // --- Helpers for Phase Management ---
+  const handleAddPhase = () => {
+    setPhases((prev) => {
+      const last = prev[prev.length - 1];
+      if (last.endAge - last.startAge <= 1) {
+        alert("This phase is too short to divide.");
+        return prev;
+      }
+      const mid = Math.floor((last.startAge + last.endAge) / 2);
+      const newPhases = [...prev];
+      newPhases[newPhases.length - 1] = { ...last, endAge: mid };
+      newPhases.push({
+        id: Date.now(),
+        startAge: mid,
+        endAge: last.endAge,
+        prayers: { ...last.prayers }, // Inherit previous habits to save time
+      });
+      return newPhases;
+    });
   };
 
-  const previewMissedDays = getCalculatedDays();
-  const previewTotalPrayers = previewMissedDays * 5;
+  const handleDeletePhase = (indexToRemove) => {
+    if (phases.length <= 1) return;
+    setPhases((prev) => {
+      const newPhases = [...prev];
+      if (indexToRemove === 0) {
+        newPhases[1].startAge = newPhases[0].startAge;
+      } else {
+        newPhases[indexToRemove - 1].endAge = newPhases[indexToRemove].endAge;
+      }
+      newPhases.splice(indexToRemove, 1);
+      return newPhases;
+    });
+  };
+
+  const updatePhaseBoundary = (index, value) => {
+    const val = parseInt(value) || 0;
+    setPhases((prev) => {
+      const newP = prev.map((p) => ({ ...p }));
+      // We only ever manually edit the `endAge` of phase `index` (except the last phase)
+      if (index < newP.length - 1) {
+        const minEnd = newP[index].startAge;
+        const maxEnd = newP[index + 1].endAge;
+        const clamped = Math.max(minEnd, Math.min(val, maxEnd));
+
+        newP[index].endAge = clamped;
+        newP[index + 1].startAge = clamped;
+      }
+      return newP;
+    });
+  };
+
+  const updatePrayerHabit = (phaseIndex, prayer, habit) => {
+    setPhases((prev) => {
+      const newP = [...prev];
+      newP[phaseIndex].prayers = {
+        ...newP[phaseIndex].prayers,
+        [prayer]: habit,
+      };
+      return newP;
+    });
+  };
+
+  // --- Core Calculation Logic ---
+  const estimates = useMemo(() => {
+    let baseTotal = 0;
+    const breakdowns = [];
+    const daysPerYear = gender === "female" && subtractMenses ? 281 : 365;
+
+    phases.forEach((phase) => {
+      const years = phase.endAge - phase.startAge;
+      if (years <= 0) return;
+
+      const totalDays = years * daysPerYear;
+      let phaseDebt = 0;
+
+      PRAYERS.forEach((prayer) => {
+        const habit = phase.prayers[prayer];
+        const multiplier = PRAYER_MULTIPLIERS[habit.toLowerCase()];
+        phaseDebt += totalDays * multiplier;
+      });
+
+      // Apply Scholar Modifier per phase to keep breakdown accurate
+      phaseDebt = Math.round(phaseDebt * SCHOLAR_MODIFIERS[scholarMode]);
+
+      baseTotal += phaseDebt;
+      breakdowns.push({
+        ...phase,
+        years,
+        days: totalDays,
+        debt: phaseDebt,
+      });
+    });
+
+    let finalTotal = Math.max(0, baseTotal + manualAdjustment);
+
+    // Confidence & Range Logic
+    let conf = 3;
+    let detailPoints = phases.length;
+    // Check if they varied their habits instead of leaving default "Never"
+    const hasVariedHabits = phases.some((p) =>
+      Object.values(p.prayers).some((h) => h !== "Never"),
+    );
+    if (hasVariedHabits) detailPoints += 1;
+    if (manualAdjustment !== 0) detailPoints += 1;
+
+    if (detailPoints >= 4) conf = 5;
+    else if (detailPoints >= 2) conf = 4;
+
+    let spread = 0.12;
+    if (conf === 4) spread = 0.08;
+    if (conf === 5) spread = 0.04;
+
+    const low = Math.floor(finalTotal * (1 - spread));
+    const high = Math.ceil(finalTotal * (1 + spread));
+
+    return { baseTotal, finalTotal, breakdowns, conf, low, high };
+  }, [phases, gender, subtractMenses, scholarMode, manualAdjustment]);
+
+  const activePace = customPace ? parseInt(customPace) || dailyPace : dailyPace;
+
+  const calculateHorizon = (total) => {
+    if (total <= 0 || activePace <= 0) return "—";
+    const daysRemaining = total / activePace;
+    const date = new Date();
+    date.setDate(date.getDate() + daysRemaining);
+    return date.toLocaleString("default", { month: "long", year: "numeric" });
+  };
 
   const handleCommitEstimate = () => {
-    setTotalOwed(previewTotalPrayers);
+    setTotalOwed(estimates.finalTotal);
     setHasEstimated(true);
     setIsModalOpen(false);
     setModalStep(1);
 
-    // Smooth scroll to the Qaza tracker section
     const element = document.getElementById("qaza-tracker");
     if (element) {
       element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
-  const calculateHorizon = () => {
-    if (totalOwed === 0) return "—";
-    const pacePerDay = 3;
-    const daysRemaining = totalOwed / pacePerDay;
-    const date = new Date();
-    date.setDate(date.getDate() + daysRemaining);
-    return date.toLocaleString("default", { month: "long", year: "numeric" });
-  };
-
   const resetCalculator = () => {
     setGender("");
     setCurrentAge(25);
     setPubertyAge(12);
-    setPrayingAge(18);
     setSubtractMenses(false);
-    setFrequency("rarely");
+    setPhases([
+      {
+        id: 1,
+        startAge: 12,
+        endAge: 25,
+        prayers: {
+          Fajr: "Never",
+          Dhuhr: "Never",
+          Asr: "Never",
+          Maghrib: "Never",
+          Isha: "Never",
+        },
+      },
+    ]);
+    setScholarMode("moderate");
+    setManualAdjustment(0);
+    setDailyPace(3);
+    setCustomPace("");
     setTotalOwed(0);
     setHasEstimated(false);
     setModalStep(1);
@@ -122,31 +318,19 @@ export default function Qaza() {
 
   return (
     <section className="relative bg-[#f9f7f2] h-auto pb-24 md:pb-32 overflow-hidden selection:bg-[#C89A52] selection:text-white">
-      {/* Forced CSS injection for custom scrollbars */}
       <style
         dangerouslySetInnerHTML={{
           __html: `
-        /* Chrome, Edge, Safari */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 8px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: transparent;
-        }
+        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb {
             background-color: #C8C1B6;
             border-radius: 999px;
             border: 2px solid #f9f7f2;
             background-clip: padding-box; 
         }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background-color: #A99F90;
-        }
-        /* Firefox */
-        .custom-scrollbar {
-            scrollbar-width: thin;
-            scrollbar-color: #C8C1B6 transparent;
-        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #A99F90; }
+        .custom-scrollbar { scrollbar-width: thin; scrollbar-color: #C8C1B6 transparent; }
         `,
         }}
       />
@@ -191,7 +375,6 @@ export default function Qaza() {
         id="qaza-tracker"
         className="max-w-2xl mx-auto px-6 md:px-10 scroll-mt-24"
       >
-        {/* The Big Picture (Macro) - Always visible */}
         <div className="text-center mb-16">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -210,7 +393,6 @@ export default function Qaza() {
           </motion.div>
         </div>
 
-        {/* Dynamic Journey Elements - Rendered only AFTER estimation */}
         <AnimatePresence>
           {hasEstimated && (
             <motion.div
@@ -218,12 +400,11 @@ export default function Qaza() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: "easeOut" }}
             >
-              {/* Functional Horizon - Big and Readable without vertical divider line */}
               <div className="mb-16 text-center">
                 <p className="font-serif text-[1.35rem] sm:text-[1.75rem] md:text-[2rem] text-[#1a1a1a] leading-[1.4] max-w-xl mx-auto">
                   At your current pace, you will complete this journey in{" "}
                   <span className="italic font-normal text-[#C6A26B] block mt-1 sm:inline sm:mt-0">
-                    {calculateHorizon()}.
+                    {calculateHorizon(totalOwed)}.
                   </span>
                 </p>
               </div>
@@ -232,7 +413,7 @@ export default function Qaza() {
         </AnimatePresence>
       </div>
 
-      {/* Luxury Editorial Modal (2-Step Wizard) */}
+      {/* Luxury Editorial Modal */}
       <AnimatePresence>
         {isModalOpen && (
           <>
@@ -241,7 +422,7 @@ export default function Qaza() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsModalOpen(false)}
-              className="fixed inset-0 bg-[#1a1a1a]/40 backdrop-blur-[2px] z-40"
+              className="fixed inset-0 bg-[#1a1a1a]/60 backdrop-blur-[4px] z-40"
             />
 
             <div className="fixed inset-0 flex items-center justify-center p-4 z-50 pointer-events-none">
@@ -250,7 +431,7 @@ export default function Qaza() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 20, scale: 0.95 }}
                 transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className="custom-scrollbar bg-[#f9f7f2] border border-[#e0e0e0] w-full max-w-[28rem] p-8 md:p-12 shadow-2xl relative pointer-events-auto text-left flex flex-col max-h-[90vh] overflow-y-auto"
+                className="custom-scrollbar bg-[#f9f7f2] border border-[#e0e0e0] w-full max-w-[32rem] p-6 md:p-10 shadow-2xl relative pointer-events-auto text-left flex flex-col max-h-[90vh] overflow-y-auto"
                 style={{ borderRadius: "0px" }}
               >
                 <button
@@ -273,6 +454,7 @@ export default function Qaza() {
                 </button>
 
                 <AnimatePresence mode="wait">
+                  {/* --- STEP 1 --- */}
                   {modalStep === 1 && (
                     <motion.div
                       key="step1"
@@ -284,159 +466,51 @@ export default function Qaza() {
                       <p className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#9d9d9d] mb-4">
                         Step 1 of 2
                       </p>
-
                       <h3 className="font-serif text-3xl md:text-4xl text-[#1a1a1a] mb-4 tracking-tight">
                         Estimate Your Missed Prayers
                       </h3>
-
                       <div className="font-serif text-[15px] text-[#666666] leading-[1.6] mb-8">
                         <p>
-                          Answer a few questions and Tawfiq will estimate your
-                          starting point.
+                          Answer a few questions to build an accurate starting
+                          point.
                         </p>
                       </div>
 
-                      <div className="space-y-8">
-                        {/* Gender Toggle */}
-                        <div>
-                          <label className="block font-serif text-[1.1rem] text-[#1a1a1a] mb-3">
-                            Select your gender
-                          </label>
-                          <div className="grid grid-cols-2 gap-3">
-                            {[
-                              { id: "male", label: "Male" },
-                              { id: "female", label: "Female" },
-                            ].map((option) => (
-                              <button
-                                key={option.id}
-                                onClick={() => {
-                                  setGender(option.id);
-                                  if (option.id === "male")
-                                    setSubtractMenses(false);
-                                }}
-                                className={`w-full text-center px-4 py-3 border transition-colors duration-200 font-serif text-[15px] ${gender === option.id ? "border-[#1a1a1a] bg-[#1a1a1a]/5 text-[#1a1a1a]" : "border-[#e0e0e0] bg-white/50 text-[#666666] hover:border-[#C89A52]"}`}
+                      <div className="space-y-10">
+                        {/* Core Setup */}
+                        <div className="space-y-6">
+                          <div>
+                            <label className="block font-serif text-[1.1rem] text-[#1a1a1a] mb-3">
+                              Select your gender
+                            </label>
+                            <div className="grid grid-cols-2 gap-3">
+                              {[
+                                { id: "male", label: "Male" },
+                                { id: "female", label: "Female" },
+                              ].map((option) => (
+                                <button
+                                  key={option.id}
+                                  onClick={() => {
+                                    setGender(option.id);
+                                    if (option.id === "male")
+                                      setSubtractMenses(false);
+                                  }}
+                                  className={`w-full text-center px-4 py-3 border transition-colors duration-200 font-serif text-[15px] ${gender === option.id ? "border-[#1a1a1a] bg-[#1a1a1a]/5 text-[#1a1a1a]" : "border-[#e0e0e0] bg-white/50 text-[#666666] hover:border-[#C89A52]"}`}
+                                >
+                                  {option.label}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          <AnimatePresence>
+                            {gender === "female" && (
+                              <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: "auto" }}
+                                exit={{ opacity: 0, height: 0 }}
+                                className="overflow-hidden"
                               >
-                                {option.label}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* Tactile Slider: Current Age */}
-                        <div>
-                          <div className="flex justify-between items-center mb-3">
-                            <label className="font-serif text-[1.1rem] text-[#1a1a1a]">
-                              Current Age?
-                            </label>
-                            <span className="font-serif text-lg font-medium text-[#C89A52]">
-                              {currentAge}
-                            </span>
-                          </div>
-                          <input
-                            type="range"
-                            min="9"
-                            max="90"
-                            step="1"
-                            value={currentAge}
-                            onChange={(e) =>
-                              setCurrentAge(Number(e.target.value))
-                            }
-                            className="w-full accent-[#C89A52] bg-stone-200 h-1.5 rounded-lg cursor-pointer"
-                          />
-                          <div className="flex justify-between text-[10px] text-stone-400 font-sans mt-1.5 tracking-wider">
-                            <span>9</span>
-                            <span>90</span>
-                          </div>
-                        </div>
-
-                        {/* Tactile Slider: Puberty Age */}
-                        <div>
-                          <div className="flex justify-between items-center mb-3">
-                            <label className="font-serif text-[1.1rem] text-[#1a1a1a]">
-                              When did you reach puberty?
-                            </label>
-                            <span className="font-serif text-lg font-medium text-[#C89A52]">
-                              {pubertyAge}
-                            </span>
-                          </div>
-                          <input
-                            type="range"
-                            min="9"
-                            max={currentAge}
-                            step="1"
-                            value={pubertyAge}
-                            onChange={(e) =>
-                              setPubertyAge(Number(e.target.value))
-                            }
-                            className="w-full accent-[#C89A52] bg-stone-200 h-1.5 rounded-lg cursor-pointer"
-                          />
-                          <div className="flex justify-between text-[10px] text-stone-400 font-sans mt-1.5 tracking-wider">
-                            <span>9</span>
-                            <span>{currentAge}</span>
-                          </div>
-                        </div>
-
-                        {/* Tactile Slider: Praying Age */}
-                        <div>
-                          <div className="flex justify-between items-center mb-3">
-                            <label className="font-serif text-[1.1rem] text-[#1a1a1a]">
-                              When did you begin praying consistently?
-                            </label>
-                            <span className="font-serif text-lg font-medium text-[#C89A52]">
-                              {prayingAge}
-                            </span>
-                          </div>
-                          <input
-                            type="range"
-                            min="9"
-                            max={currentAge}
-                            step="1"
-                            value={prayingAge}
-                            onChange={(e) =>
-                              setPrayingAge(Number(e.target.value))
-                            }
-                            className="w-full accent-[#C89A52] bg-stone-200 h-1.5 rounded-lg cursor-pointer"
-                          />
-                          <div className="flex justify-between text-[10px] text-stone-400 font-sans mt-1.5 tracking-wider">
-                            <span>9</span>
-                            <span>{currentAge}</span>
-                          </div>
-                        </div>
-
-                        <div>
-                          <label className="block font-serif text-[1.1rem] text-[#1a1a1a] mb-3">
-                            Before then, how often did you pray?
-                          </label>
-                          <div className="space-y-2">
-                            {[
-                              { id: "rarely", label: "Rarely / Almost never" },
-                              {
-                                id: "occasionally",
-                                label: "Occasionally (e.g., Fridays, Ramadan)",
-                              },
-                              { id: "frequently", label: "Frequently" },
-                            ].map((option) => (
-                              <button
-                                key={option.id}
-                                onClick={() => setFrequency(option.id)}
-                                className={`w-full text-left px-4 py-3 border transition-colors duration-200 font-serif text-[15px] ${frequency === option.id ? "border-[#1a1a1a] bg-[#1a1a1a]/5 text-[#1a1a1a]" : "border-[#e0e0e0] bg-white/50 text-[#666666] hover:border-[#C89A52]"}`}
-                              >
-                                {option.label}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* Smart Reveal: Menstruation Checkbox */}
-                        <AnimatePresence>
-                          {gender === "female" && (
-                            <motion.div
-                              initial={{ opacity: 0, height: 0 }}
-                              animate={{ opacity: 1, height: "auto" }}
-                              exit={{ opacity: 0, height: 0 }}
-                              className="overflow-hidden"
-                            >
-                              <div className="pt-2">
                                 <label className="flex items-center gap-4 cursor-pointer group">
                                   <input
                                     type="checkbox"
@@ -468,10 +542,234 @@ export default function Qaza() {
                                     Exclude menstruation days
                                   </span>
                                 </label>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+
+                          {/* Tactile Slider: Current Age */}
+                          <div>
+                            <div className="flex justify-between items-center mb-3">
+                              <label className="font-serif text-[1.1rem] text-[#1a1a1a]">
+                                Current Age?
+                              </label>
+                              <span className="font-serif text-lg font-medium text-[#C89A52]">
+                                {currentAge}
+                              </span>
+                            </div>
+                            <input
+                              type="range"
+                              min="9"
+                              max="90"
+                              step="1"
+                              value={currentAge}
+                              onChange={(e) =>
+                                setCurrentAge(Number(e.target.value))
+                              }
+                              className="w-full accent-[#C89A52] bg-stone-200 h-1.5 rounded-lg cursor-pointer"
+                            />
+                            <div className="flex justify-between text-[10px] text-[#9d9d9d] font-sans mt-1.5 tracking-wider">
+                              <span>9</span>
+                              <span>90</span>
+                            </div>
+                          </div>
+
+                          {/* Tactile Slider: Puberty Age */}
+                          <div>
+                            <div className="flex justify-between items-center mb-3">
+                              <label className="font-serif text-[1.1rem] text-[#1a1a1a]">
+                                Puberty Age?
+                              </label>
+                              <span className="font-serif text-lg font-medium text-[#C89A52]">
+                                {pubertyAge}
+                              </span>
+                            </div>
+                            <input
+                              type="range"
+                              min="9"
+                              max={currentAge}
+                              step="1"
+                              value={pubertyAge}
+                              onChange={(e) =>
+                                setPubertyAge(Number(e.target.value))
+                              }
+                              className="w-full accent-[#C89A52] bg-stone-200 h-1.5 rounded-lg cursor-pointer"
+                            />
+                            <div className="flex justify-between text-[10px] text-[#9d9d9d] font-sans mt-1.5 tracking-wider">
+                              <span>9</span>
+                              <span>{currentAge}</span>
+                            </div>
+                          </div>
+
+                          {/* Scholar Mode */}
+                          <div>
+                            <div className="flex justify-between items-center mb-3">
+                              <label className="font-serif text-[1.1rem] text-[#1a1a1a]">
+                                Calculation Method
+                              </label>
+                              <button
+                                onClick={() =>
+                                  setShowScholarInfo(!showScholarInfo)
+                                }
+                                className="text-[10px] uppercase tracking-widest font-sans text-[#C89A52] hover:text-[#1a1a1a] underline underline-offset-2"
+                              >
+                                Learn More
+                              </button>
+                            </div>
+
+                            <AnimatePresence>
+                              {showScholarInfo && (
+                                <motion.div
+                                  initial={{ opacity: 0, height: 0 }}
+                                  animate={{ opacity: 1, height: "auto" }}
+                                  exit={{ opacity: 0, height: 0 }}
+                                  className="overflow-hidden"
+                                >
+                                  <p className="text-[11px] text-[#666666] font-sans mb-3 p-3 bg-white/50 border border-[#e0e0e0]">
+                                    Provides different estimation models based
+                                    on varying fiqh assumptions. Does not
+                                    dictate which opinion is correct.
+                                  </p>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+
+                            <div className="grid grid-cols-3 gap-2">
+                              {["conservative", "moderate", "maximum"].map(
+                                (mode) => (
+                                  <button
+                                    key={mode}
+                                    onClick={() => setScholarMode(mode)}
+                                    className={`w-full text-center px-2 py-2 border transition-colors duration-200 font-serif text-[13px] capitalize ${scholarMode === mode ? "border-[#1a1a1a] bg-[#1a1a1a]/5 text-[#1a1a1a]" : "border-[#e0e0e0] bg-white/50 text-[#666666] hover:border-[#C89A52]"}`}
+                                  >
+                                    {mode}
+                                  </button>
+                                ),
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Life Phases Builder */}
+                        <div>
+                          <div className="mb-4">
+                            <h4 className="font-serif text-2xl text-[#1a1a1a]">
+                              Life Phases
+                            </h4>
+                            <p className="text-[12px] text-[#666666] font-sans mt-1">
+                              Break your life into periods to estimate more
+                              accurately.
+                            </p>
+                          </div>
+
+                          <div className="space-y-6">
+                            {phases.map((phase, index) => (
+                              <div
+                                key={phase.id}
+                                className="border border-[#e0e0e0] bg-white/30 p-4 md:p-5 relative"
+                              >
+                                {index > 0 && (
+                                  <button
+                                    onClick={() => handleDeletePhase(index)}
+                                    className="absolute top-4 right-4 text-[#9d9d9d] hover:text-red-500 transition-colors text-sm"
+                                  >
+                                    ✕
+                                  </button>
+                                )}
+
+                                <h5 className="font-sans uppercase tracking-[0.15em] text-[10px] text-[#C89A52] mb-3">
+                                  Phase {index + 1}
+                                </h5>
+
+                                <div className="flex items-center gap-3 mb-5 border-b border-[#e0e0e0] pb-4">
+                                  {/* From Age */}
+                                  <div className="flex flex-col">
+                                    <span className="text-[10px] uppercase font-sans text-[#9d9d9d] mb-1">
+                                      From Age
+                                    </span>
+                                    <span className="font-serif text-lg w-16 text-center text-[#666666]">
+                                      {phase.startAge}
+                                    </span>
+                                  </div>
+
+                                  <span className="text-[#9d9d9d]">→</span>
+
+                                  {/* To Age */}
+                                  <div className="flex flex-col">
+                                    <span className="text-[10px] uppercase font-sans text-[#9d9d9d] mb-1">
+                                      To Age
+                                    </span>
+                                    {index < phases.length - 1 ? (
+                                      <input
+                                        type="number"
+                                        min={phase.startAge}
+                                        max={
+                                          phases[index + 1]?.endAge ||
+                                          currentAge
+                                        }
+                                        value={phase.endAge}
+                                        onChange={(e) =>
+                                          updatePhaseBoundary(
+                                            index,
+                                            e.target.value,
+                                          )
+                                        }
+                                        className="font-serif text-lg w-16 bg-transparent border-b border-[#1a1a1a]/20 focus:border-[#C89A52] focus:outline-none text-center"
+                                      />
+                                    ) : (
+                                      <span className="font-serif text-lg w-16 text-center text-[#666666]">
+                                        {phase.endAge}
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+
+                                <div className="space-y-3">
+                                  <p className="text-[11px] text-[#666666] font-sans uppercase tracking-wider mb-2">
+                                    Prayer Habits during this phase:
+                                  </p>
+                                  {PRAYERS.map((prayer) => (
+                                    <div
+                                      key={prayer}
+                                      className="flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+                                    >
+                                      <span className="font-serif text-[14px] text-[#1a1a1a] w-20">
+                                        {prayer}
+                                      </span>
+                                      <div className="grid grid-cols-4 gap-1 w-full flex-1">
+                                        {HABITS.map((habit) => {
+                                          const isActive =
+                                            phase.prayers[prayer] === habit;
+                                          return (
+                                            <button
+                                              key={habit}
+                                              onClick={() =>
+                                                updatePrayerHabit(
+                                                  index,
+                                                  prayer,
+                                                  habit,
+                                                )
+                                              }
+                                              className={`py-1.5 text-[9px] uppercase tracking-wider border transition-all ${isActive ? "border-[#1a1a1a] bg-[#1a1a1a]/5 text-[#1a1a1a] font-bold" : "border-[#e0e0e0] bg-white text-[#9d9d9d] hover:border-[#C89A52]"}`}
+                                            >
+                                              {habit}
+                                            </button>
+                                          );
+                                        })}
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
                               </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
+                            ))}
+
+                            <button
+                              onClick={handleAddPhase}
+                              className="w-full border border-dashed border-[#C89A52] text-[#C89A52] bg-[#C89A52]/5 hover:bg-[#C89A52]/10 py-3 font-sans text-[11px] uppercase tracking-[0.2em] transition-colors"
+                            >
+                              + Add Another Phase
+                            </button>
+                          </div>
+                        </div>
                       </div>
 
                       <button
@@ -503,6 +801,7 @@ export default function Qaza() {
                     </motion.div>
                   )}
 
+                  {/* --- STEP 2 --- */}
                   {modalStep === 2 && (
                     <motion.div
                       key="step2"
@@ -522,38 +821,205 @@ export default function Qaza() {
                       <p className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#C89A52] mb-4">
                         Step 2 of 2
                       </p>
-
                       <h3 className="font-serif text-3xl md:text-4xl text-[#1a1a1a] mb-8 tracking-tight">
                         Review Your Estimate
                       </h3>
 
-                      <div className="bg-white/40 border border-[#e0e0e0] p-8 text-center mb-8">
-                        <p className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#9d9d9d] mb-3">
-                          Estimated Missed Prayers
+                      {/* Header Data */}
+                      <div className="bg-white/40 border border-[#e0e0e0] p-6 text-center mb-8 relative">
+                        <p className="text-[10px] font-sans uppercase tracking-[0.2em] text-[#9d9d9d] mb-1">
+                          Estimated Range
                         </p>
-                        <div className="font-serif text-[4rem] leading-none text-[#1a1a1a] tracking-tight">
-                          <span className="text-3xl text-[#9d9d9d] mr-2">
-                            ≈
-                          </span>
-                          {previewTotalPrayers.toLocaleString()}
+                        <div className="font-serif text-[2.5rem] sm:text-[3rem] leading-none text-[#1a1a1a] tracking-tight py-2">
+                          {estimates.low.toLocaleString()} –{" "}
+                          {estimates.high.toLocaleString()}
+                        </div>
+                        <div className="flex justify-center items-center gap-2 mt-2">
+                          <p className="text-[10px] uppercase font-sans text-[#9d9d9d]">
+                            Confidence
+                          </p>
+                          <div className="text-[#C89A52] text-sm tracking-widest">
+                            {"★".repeat(estimates.conf)}
+                            {"☆".repeat(5 - estimates.conf)}
+                          </div>
                         </div>
                       </div>
 
-                      <div className="space-y-4">
-                        <p className="font-serif text-[15px] text-[#666666] leading-[1.6]">
-                          This is an estimate based on the information you
-                          provided and your daily routines.
+                      {/* Manual Adjustments */}
+                      <div className="mb-8 p-5 bg-white/30 border border-[#e0e0e0]">
+                        <h4 className="font-serif text-lg text-[#1a1a1a] mb-1">
+                          Manual Fine-tuning
+                        </h4>
+                        <p className="text-[11px] text-[#666666] font-sans mb-4">
+                          Adjust the final calculation directly if something
+                          feels slightly off.
                         </p>
-                        <p className="font-sans text-[11px] text-[#9d9d9d] leading-[1.7] p-4 bg-[#1a1a1a]/5 border-l-2 border-[#C89A52]">
-                          Different scholars hold different opinions on how
-                          missed prayers should be estimated and fulfilled. We
-                          encourage you to follow the guidance of a trusted
-                          scholar if you are uncertain. You can always edit this
-                          number later.
-                        </p>
+                        <div className="flex items-center justify-between sm:justify-center gap-2 sm:gap-4">
+                          <button
+                            onClick={() => setManualAdjustment((m) => m - 500)}
+                            className="w-10 h-10 border border-[#e0e0e0] bg-white text-[10px] font-sans hover:border-[#C89A52]"
+                          >
+                            -500
+                          </button>
+                          <button
+                            onClick={() => setManualAdjustment((m) => m - 100)}
+                            className="w-10 h-10 border border-[#e0e0e0] bg-white text-[10px] font-sans hover:border-[#C89A52]"
+                          >
+                            -100
+                          </button>
+
+                          <div className="relative">
+                            <input
+                              type="number"
+                              value={estimates.finalTotal}
+                              onChange={(e) =>
+                                setManualAdjustment(
+                                  (parseInt(e.target.value) || 0) -
+                                    estimates.baseTotal,
+                                )
+                              }
+                              className="font-serif text-xl w-24 text-center bg-transparent border-b border-[#1a1a1a] focus:outline-none focus:border-[#C89A52] py-1"
+                            />
+                            <span className="absolute -bottom-4 left-0 w-full text-center text-[9px] text-[#9d9d9d] uppercase">
+                              Current
+                            </span>
+                          </div>
+
+                          <button
+                            onClick={() => setManualAdjustment((m) => m + 100)}
+                            className="w-10 h-10 border border-[#e0e0e0] bg-white text-[10px] font-sans hover:border-[#C89A52]"
+                          >
+                            +100
+                          </button>
+                          <button
+                            onClick={() => setManualAdjustment((m) => m + 500)}
+                            className="w-10 h-10 border border-[#e0e0e0] bg-white text-[10px] font-sans hover:border-[#C89A52]"
+                          >
+                            +500
+                          </button>
+                        </div>
                       </div>
 
-                      <div className="mt-auto pt-8">
+                      {/* Calculation Breakdown Timeline */}
+                      <div className="mb-8">
+                        <h4 className="font-serif text-xl text-[#1a1a1a] mb-4">
+                          Calculation Breakdown
+                        </h4>
+                        <div className="relative pl-6 border-l border-[#C89A52]/30 space-y-8 py-2">
+                          {estimates.breakdowns.map((b, i) => (
+                            <div key={b.id} className="relative">
+                              <div className="absolute -left-[31px] top-1.5 w-3.5 h-3.5 bg-[#f9f7f2] border-[3px] border-[#C89A52] rounded-full" />
+                              <h5 className="font-serif text-[1.1rem] text-[#1a1a1a]">
+                                Age {b.startAge} → {b.endAge}
+                              </h5>
+                              <p className="text-[10px] font-sans text-[#9d9d9d] uppercase tracking-wider mb-2">
+                                {b.years} Years • {b.days.toLocaleString()} Days
+                              </p>
+
+                              {/* Visual Debt Bar (Timeline) */}
+                              <div className="flex flex-wrap gap-[2px] mb-2">
+                                {Array.from({
+                                  length: Math.min(
+                                    60,
+                                    Math.ceil(b.debt / 1000),
+                                  ),
+                                }).map((_, j) => (
+                                  <span
+                                    key={j}
+                                    className="inline-block w-2 h-4 bg-[#1a1a1a]/70 rounded-sm"
+                                  />
+                                ))}
+                                {b.debt > 60000 && (
+                                  <span className="text-[10px] text-[#9d9d9d] ml-1 self-end">
+                                    +
+                                  </span>
+                                )}
+                                {b.debt === 0 && (
+                                  <span className="text-[10px] text-[#9d9d9d] italic">
+                                    Consistent (0 generated)
+                                  </span>
+                                )}
+                              </div>
+
+                              <p className="text-[13px] font-serif text-[#666666]">
+                                Estimated:{" "}
+                                <span className="font-bold text-[#1a1a1a]">
+                                  {b.debt.toLocaleString()}
+                                </span>{" "}
+                                prayers
+                              </p>
+                            </div>
+                          ))}
+
+                          <div className="relative pt-2">
+                            <div className="absolute -left-[31px] top-3.5 w-3.5 h-3.5 bg-[#1a1a1a] rounded-full" />
+                            <h5 className="font-serif text-[1.1rem] text-[#1a1a1a]">
+                              Current Age ({currentAge})
+                            </h5>
+                            {manualAdjustment !== 0 && (
+                              <p className="text-[12px] font-serif text-[#666666] mt-1">
+                                Manual edits:{" "}
+                                <span className="font-bold">
+                                  {manualAdjustment > 0
+                                    ? `+${manualAdjustment}`
+                                    : manualAdjustment}
+                                </span>
+                              </p>
+                            )}
+                            <div className="border-t border-[#e0e0e0] mt-3 pt-2">
+                              <p className="font-serif text-[15px]">
+                                Total:{" "}
+                                <span className="font-bold text-[#1a1a1a]">
+                                  {estimates.finalTotal.toLocaleString()}
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Daily Pace Setup */}
+                      <div className="mb-10 p-5 bg-white/30 border border-[#e0e0e0]">
+                        <h4 className="font-serif text-lg text-[#1a1a1a] mb-1">
+                          Daily Recovery Pace
+                        </h4>
+                        <p className="text-[11px] text-[#666666] font-sans mb-4">
+                          How many Qaza prayers can you comfortably pray daily?
+                        </p>
+
+                        <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 mb-4">
+                          {[1, 2, 3, 5, 10].map((n) => (
+                            <button
+                              key={n}
+                              onClick={() => {
+                                setDailyPace(n);
+                                setCustomPace("");
+                              }}
+                              className={`py-2 text-[12px] font-sans border transition-colors ${!customPace && dailyPace === n ? "border-[#1a1a1a] bg-[#1a1a1a]/5 text-[#1a1a1a] font-bold" : "border-[#e0e0e0] bg-white text-[#666666] hover:border-[#C89A52]"}`}
+                            >
+                              {n}
+                            </button>
+                          ))}
+                          <input
+                            type="number"
+                            placeholder="Custom"
+                            value={customPace}
+                            onChange={(e) => setCustomPace(e.target.value)}
+                            className={`py-2 text-[12px] font-sans border text-center transition-colors focus:outline-none ${customPace ? "border-[#1a1a1a] bg-[#1a1a1a]/5 text-[#1a1a1a] font-bold" : "border-[#e0e0e0] bg-white text-[#666666] focus:border-[#C89A52]"}`}
+                          />
+                        </div>
+
+                        <div className="flex justify-between items-center pt-3 border-t border-[#e0e0e0]">
+                          <span className="text-[11px] uppercase font-sans text-[#9d9d9d]">
+                            Estimated Finish
+                          </span>
+                          <span className="font-serif text-[15px] text-[#C89A52] font-medium">
+                            {calculateHorizon(estimates.finalTotal)}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="mt-auto pt-4">
                         <button
                           onClick={handleCommitEstimate}
                           className="w-full bg-[#1a1a1a] text-white font-sans text-[11px] uppercase tracking-[0.2em] px-8 py-4 hover:bg-[#C89A52] transition-colors duration-300 active:scale-95 shadow-sm"
