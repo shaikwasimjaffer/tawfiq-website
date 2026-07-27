@@ -69,29 +69,29 @@ export default function Footer() {
         >
           <p
             className="
-    font-arabic
-    text-[#64584F]
-    text-4xl
-    md:text-5xl
-    mb-2
-    tracking-wide
-    translate-x-[2px]
-  "
+              font-arabic
+              text-[#64584F]
+              text-5xl
+              md:text-6xl
+              mb-4
+              tracking-wide
+              translate-x-[2px]
+            "
           >
-            تَوْفِيق
+            توفيق
           </p>
 
           <h2
             className="
-            font-serif
-            uppercase
-            font-normal
-            leading-[0.88]
-            tracking-[-0.04em]
-            text-[#1B140F]
-            text-[clamp(6rem,18vw,12rem)]
-            select-none
-          "
+              font-serif
+              uppercase
+              font-normal
+              leading-[0.88]
+              tracking-[-0.04em]
+              text-[#1B140F]
+              text-[clamp(6rem,18vw,12rem)]
+              select-none
+            "
           >
             TAWFIQ
           </h2>

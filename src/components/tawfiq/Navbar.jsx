@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 
+// Note: Ensure this path correctly points to your QR image
+import qrImage from "../../assets/qr-placeholder.png";
+
 const navItems = [
   { id: "qaza", label: "Qaza", href: "#qaza" },
   { id: "quran", label: "Quran", href: "#quran" },
@@ -35,6 +38,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [activeItem, setActiveItem] = useState("qaza");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showScanner, setShowScanner] = useState(false);
   const location = useLocation();
 
   // Handle scroll blur effect
@@ -44,14 +48,14 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Prevent scrolling when mobile menu is open
+  // Prevent scrolling when mobile menu OR scanner page is open
   useEffect(() => {
-    if (isMenuOpen) {
+    if (isMenuOpen || showScanner) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "unset";
     }
-  }, [isMenuOpen]);
+  }, [isMenuOpen, showScanner]);
 
   // Section Observer for Active Dots
   useEffect(() => {
@@ -91,7 +95,8 @@ export default function Navbar() {
         top: 0,
         behavior: "smooth",
       });
-      setIsMenuOpen(false); // Close menu if open on mobile
+      setIsMenuOpen(false);
+      setShowScanner(false);
     }
   };
 
@@ -107,11 +112,8 @@ export default function Navbar() {
             : "bg-transparent border-b border-transparent"
         }`}
       >
-        {/* Navbar Container */}
         <nav className="relative max-w-[1400px] mx-auto px-6 lg:px-10 h-14 md:h-20 flex items-center justify-between">
-          {/* =========================================
-              MOBILE LEFT: Premium Editorial Menu Icon 
-              ========================================= */}
+          {/* MOBILE LEFT: Premium Editorial Menu Icon */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="md:hidden relative z-50 p-2 -ml-2 text-stone-900 focus:outline-none"
@@ -130,9 +132,7 @@ export default function Navbar() {
             </div>
           </button>
 
-          {/* =========================================
-              LOGO: Left on Desktop, Center on Mobile 
-              ========================================= */}
+          {/* LOGO */}
           <div className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 z-50">
             <Link
               to="/"
@@ -168,9 +168,7 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* =========================================
-              DESKTOP CENTER: Navigation Items 
-              ========================================= */}
+          {/* DESKTOP CENTER: Navigation Items */}
           <div className="hidden md:flex items-center absolute left-1/2 -translate-x-1/2">
             {navItems.map((item, index) => (
               <React.Fragment key={item.id}>
@@ -186,15 +184,11 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* =========================================
-              DESKTOP RIGHT: CTA (Hidden on Mobile)
-              ========================================= */}
+          {/* DESKTOP RIGHT: CTA */}
           <div className="hidden md:block">
-            <a
-              href="https://tawfiq-official.github.io/Tawfiq/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2.5 text-[13px] text-stone-900 transition-all duration-300"
+            <button
+              onClick={() => setShowScanner(true)}
+              className="group inline-flex items-center gap-2.5 text-[13px] text-stone-900 transition-all duration-300 cursor-pointer focus:outline-none"
             >
               <span className="w-0 group-hover:w-4 h-[1px] bg-[#C6A26B] transition-all duration-500" />
               <svg
@@ -228,13 +222,131 @@ export default function Navbar() {
                 <span className="absolute left-0 -bottom-1 h-[1px] w-0 bg-[#C6A26B] transition-all duration-500 group-hover:w-full" />
               </span>
               <span className="w-0 group-hover:w-4 h-[1px] bg-[#C6A26B] transition-all duration-500" />
-            </a>
+            </button>
           </div>
 
-          {/* Spacer block for mobile to keep flex-between balanced if needed */}
           <div className="block md:hidden w-8" />
         </nav>
       </motion.header>
+
+      {/* =========================================
+          PREMIUM DOWNLOAD EXPERIENCE OVERLAY
+          ========================================= */}
+      <AnimatePresence>
+        {showScanner && (
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 40 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-0 z-[100] bg-[#f4f5f4] overflow-y-auto overflow-x-hidden flex flex-col items-center pt-24 pb-16 px-6"
+          >
+            {/* Back Button */}
+            <motion.button
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              onClick={() => setShowScanner(false)}
+              className="absolute top-8 left-6 sm:top-12 sm:left-12 text-stone-400 hover:text-stone-800 tracking-widest uppercase text-[10px] sm:text-xs font-semibold py-2 transition-colors cursor-pointer group flex items-center gap-2"
+            >
+              <span className="transform group-hover:-translate-x-1 transition-transform duration-300">
+                ←
+              </span>
+              Back to Site
+            </motion.button>
+
+            {/* Cinematic Header Container */}
+            <div className="w-full max-w-5xl mx-auto flex flex-col items-center text-center mt-4 sm:mt-8">
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.6, ease: "easeOut" }}
+                className="font-serif text-5xl sm:text-7xl text-stone-900 tracking-tight mb-8"
+              >
+                Download <span className="text-[#C6A26B]">Tawfiq</span>
+              </motion.h2>
+
+              <motion.div
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ delay: 0.5, duration: 0.8, ease: "easeInOut" }}
+                className="w-16 sm:w-24 h-[1px] bg-[#C6A26B] mb-8"
+              />
+
+              <motion.h3
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 0.6 }}
+                className="font-serif text-2xl sm:text-4xl text-stone-800 font-light leading-relaxed max-w-2xl"
+              >
+                Begin with one prayer. <br className="hidden sm:block" />
+                <span className="italic text-stone-500 text-xl sm:text-3xl mt-2 block">
+                  Leave with a lifetime of consistency.
+                </span>
+              </motion.h3>
+            </div>
+
+            {/* Centered QR Code */}
+            <div className="w-full max-w-xl mx-auto mt-16 sm:mt-24 flex flex-col items-center justify-center">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.6, duration: 0.6 }}
+                className="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-stone-200/50 mb-8 flex flex-col items-center"
+              >
+                <img
+                  src={qrImage}
+                  alt="Scan to download"
+                  className="w-56 h-56 sm:w-64 sm:h-64 object-contain mix-blend-multiply"
+                />
+              </motion.div>
+            </div>
+
+            {/* Features & Trust Signals Footer */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.6 }}
+              className="w-full mt-16 sm:mt-24 flex flex-col items-center"
+            >
+              {/* Feature List */}
+              <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-6 text-stone-500 font-serif italic text-lg sm:text-xl px-4 text-center">
+                <span>Prayer Tracking</span>
+                <span className="text-[#C6A26B] opacity-50 hidden sm:block">
+                  •
+                </span>
+                <span>Qaza Recovery</span>
+                <span className="text-[#C6A26B] opacity-50 hidden sm:block">
+                  •
+                </span>
+                <span>Quran</span>
+                <span className="text-[#C6A26B] opacity-50 hidden sm:block">
+                  •
+                </span>
+                <span>Dhikr</span>
+                <span className="text-[#C6A26B] opacity-50 hidden sm:block">
+                  •
+                </span>
+                <span>Islamic Academy</span>
+              </div>
+
+              {/* Trust Signals */}
+              <div className="mt-12 flex flex-col items-center gap-4">
+                <p className="font-sans text-[10px] sm:text-xs tracking-[0.2em] uppercase text-stone-400 font-semibold text-center">
+                  Built with sincerity for every Muslim.
+                </p>
+                <div className="flex items-center gap-4 text-[10px] sm:text-xs tracking-widest uppercase text-stone-400/70">
+                  <span>Free Forever</span>
+                  <span className="w-1 h-1 rounded-full bg-stone-300" />
+                  <span>No Ads</span>
+                  <span className="w-1 h-1 rounded-full bg-stone-300" />
+                  <span>Privacy First</span>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* =========================================
           MOBILE MENU FULLSCREEN OVERLAY
@@ -266,9 +378,25 @@ export default function Navbar() {
                   {item.label}
                 </motion.a>
               ))}
+
+              <motion.button
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  setShowScanner(true);
+                }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  delay: 0.4,
+                  duration: 0.5,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="mt-4 font-serif text-2xl text-[#C6A26B] tracking-tight"
+              >
+                Begin with Bismillah
+              </motion.button>
             </div>
 
-            {/* Minimalist divider */}
             <motion.div
               initial={{ opacity: 0, scaleX: 0 }}
               animate={{ opacity: 1, scaleX: 1 }}
