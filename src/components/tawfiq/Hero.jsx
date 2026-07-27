@@ -144,7 +144,6 @@ export default function Hero() {
                 height="100"
                 patternUnits="userSpaceOnUse"
               >
-                {/* Subtle minimalist stone slab grid lines for mosque floor */}
                 <rect
                   width="200"
                   height="100"
@@ -166,8 +165,6 @@ export default function Hero() {
             </defs>
             <rect width="1200" height="800" fill="url(#stoneFloor)" />
           </svg>
-
-          {/* Ambient soft shadow gradients simulating morning light filtering across stone */}
           <div className="absolute inset-0 bg-gradient-to-t from-stone-900/10 via-transparent to-transparent pointer-events-none" />
         </motion.div>
 
@@ -184,15 +181,15 @@ export default function Hero() {
         </div>
 
         {/* ==================================================================== */}
-        {/* STAGE 1: HERO HEADLINE (REFLECTIVE QUESTION) */}
+        {/* STAGE 1: HERO HEADLINE (FORCED 2-LINE LAYOUT) */}
         {/* ==================================================================== */}
         <motion.div
           style={{ opacity: heroTextOpacity, y: heroTextY }}
-          className="relative z-10 max-w-[1200px] w-full px-6 text-center flex flex-col items-center"
+          className="relative z-10 max-w-[1200px] w-full px-4 text-center flex flex-col items-center"
         >
-          <h1 className="font-serif text-[3.2rem] sm:text-[4.8rem] md:text-[6.2rem] lg:text-[7.2rem] leading-[0.95] tracking-[-0.03em] text-stone-900 max-w-[18ch]">
+          <h1 className="font-serif text-[2.4rem] xs:text-[2.8rem] sm:text-[4.8rem] md:text-[6.2rem] lg:text-[7.2rem] leading-[1.15] sm:leading-[0.95] tracking-[-0.03em] text-stone-900 max-w-[18ch]">
             <span className="block font-normal">How long has it been</span>
-            <span className="block font-light text-stone-500 mt-2">
+            <span className="block font-light text-stone-500 mt-1 sm:mt-2">
               since your{" "}
               <span className="italic font-normal text-[#C6A26B]">
                 last prayer?
@@ -212,8 +209,6 @@ export default function Hero() {
             <span className="block font-light">
               No matter how many prayers you've missed...
             </span>
-
-            {/* Write-on mask reveal with reading hold */}
             <span className="block mt-2 sm:mt-3">
               <motion.span
                 style={{ clipPath: goldRevealMask }}
@@ -234,7 +229,6 @@ export default function Hero() {
         >
           {cascadeItems.map((item, index) => (
             <React.Fragment key={index}>
-              {/* Word Element */}
               <motion.div
                 style={{
                   opacity: cascadeOpacities[index],
@@ -253,7 +247,6 @@ export default function Hero() {
                 </p>
               </motion.div>
 
-              {/* Downward Arrow */}
               {index < cascadeItems.length - 1 && (
                 <motion.span
                   style={{ opacity: cascadeOpacities[index] }}
@@ -267,13 +260,12 @@ export default function Hero() {
         </motion.div>
 
         {/* ==================================================================== */}
-        {/* STAGE 4: ARABIC BISMILLAH HERO WITH EXTENDED HOLD */}
+        {/* STAGE 4: ARABIC BISMILLAH HERO & EXTENDED HOLD */}
         {/* ==================================================================== */}
         <motion.div
           style={{ opacity: bismillahOpacity, scale: bismillahScale }}
           className="absolute z-30 text-center px-6 max-w-[100vw] overflow-hidden flex flex-col items-center"
         >
-          {/* Main Arabic Hero */}
           <h2
             dir="rtl"
             className="font-serif text-[5.5rem] sm:text-[9rem] md:text-[12rem] lg:text-[14rem] text-stone-900 font-normal tracking-normal leading-none select-none"
@@ -281,7 +273,6 @@ export default function Hero() {
             بِسْمِ ٱللَّٰهِ
           </h2>
 
-          {/* English Translation with Mask Reveal & Reading Hold */}
           <div className="mt-3 sm:mt-6 overflow-hidden">
             <motion.p
               style={{ clipPath: bismillahTransMask }}
@@ -291,7 +282,6 @@ export default function Hero() {
             </motion.p>
           </div>
 
-          {/* Meaning Subtext */}
           <span className="mt-6 sm:mt-8 block font-sans text-[10px] sm:text-[12px] uppercase tracking-[0.35em] text-stone-500 font-medium">
             Every meaningful journey begins here.
           </span>
