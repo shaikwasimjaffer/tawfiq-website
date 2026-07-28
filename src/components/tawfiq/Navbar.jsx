@@ -16,7 +16,7 @@ function NavLink({ item, isActive, onClick }) {
     <motion.a
       href={item.href}
       onClick={onClick}
-      className="relative px-5 py-2 font-sans text-[13px] tracking-wide transition-colors duration-300 z-10 cursor-pointer"
+      className="relative px-5 py-2 font-['Manrope'] text-[13px] tracking-[-0.01em] font-medium transition-colors duration-300 z-10 cursor-pointer"
       style={{ color: isActive ? "#1c1917" : "#78716c" }}
       whileHover={{ color: "#1c1917" }}
     >
@@ -116,7 +116,7 @@ export default function Navbar() {
           {/* MOBILE LEFT: Premium Editorial Menu Icon */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden relative z-50 p-2 -ml-2 text-stone-900 focus:outline-none"
+            className="md:hidden relative z-50 p-2 -ml-2 text-stone-900 focus:outline-none cursor-pointer"
             aria-label="Toggle Menu"
           >
             <div className="w-5 h-4 flex flex-col justify-between">
@@ -162,7 +162,7 @@ export default function Navbar() {
                   strokeLinejoin="round"
                 />
               </motion.svg>
-              <span className="font-serif text-xl text-stone-900 tracking-tight">
+              <span className="font-['Manrope'] font-semibold text-lg text-stone-900 tracking-tight">
                 Tawfiq
               </span>
             </Link>
@@ -184,7 +184,7 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* DESKTOP RIGHT: CTA */}
+          {/* DESKTOP RIGHT: CTA Button */}
           <div className="hidden md:block">
             <button
               onClick={() => setShowScanner(true)}
@@ -217,7 +217,7 @@ export default function Navbar() {
                 />
                 <circle cx="12" cy="12" r="0.7" fill="currentColor" />
               </svg>
-              <span className="relative font-serif text-[15px] tracking-tight group-hover:text-[#6B4F37] transition-colors duration-500">
+              <span className="relative font-['Manrope'] font-medium text-[14px] tracking-tight group-hover:text-[#6B4F37] transition-colors duration-500">
                 Begin with Bismillah
                 <span className="absolute left-0 -bottom-1 h-[1px] w-0 bg-[#C6A26B] transition-all duration-500 group-hover:w-full" />
               </span>
@@ -239,7 +239,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 40 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-[100] bg-[#f4f5f4] overflow-y-auto overflow-x-hidden flex flex-col items-center pt-24 pb-16 px-6"
+            className="fixed inset-0 z-[100] bg-[#f4f5f4] overflow-y-auto overflow-x-hidden flex flex-col items-center pt-24 pb-16 px-6 font-['Manrope']"
           >
             {/* Back Button */}
             <motion.button
@@ -247,7 +247,7 @@ export default function Navbar() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2, duration: 0.5 }}
               onClick={() => setShowScanner(false)}
-              className="absolute top-8 left-6 sm:top-12 sm:left-12 text-stone-400 hover:text-stone-800 tracking-widest uppercase text-[10px] sm:text-xs font-semibold py-2 transition-colors cursor-pointer group flex items-center gap-2"
+              className="absolute top-8 left-6 sm:top-12 sm:left-12 text-stone-400 hover:text-stone-800 tracking-[0.2em] uppercase text-[10px] sm:text-xs font-semibold py-2 transition-colors cursor-pointer group flex items-center gap-2"
             >
               <span className="transform group-hover:-translate-x-1 transition-transform duration-300">
                 ←
@@ -261,7 +261,7 @@ export default function Navbar() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.6, ease: "easeOut" }}
-                className="font-serif text-5xl sm:text-7xl text-stone-900 tracking-tight mb-8"
+                className="font-['Manrope'] font-bold text-4xl sm:text-6xl text-stone-900 tracking-[-0.03em] mb-6"
               >
                 Download <span className="text-[#C6A26B]">Tawfiq</span>
               </motion.h2>
@@ -277,10 +277,10 @@ export default function Navbar() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.6 }}
-                className="font-serif text-2xl sm:text-4xl text-stone-800 font-light leading-relaxed max-w-2xl"
+                className="font-['Manrope'] text-xl sm:text-3xl text-stone-800 font-normal leading-relaxed max-w-2xl tracking-tight"
               >
                 Begin with one prayer. <br className="hidden sm:block" />
-                <span className="italic text-stone-500 text-xl sm:text-3xl mt-2 block">
+                <span className="text-stone-500 text-lg sm:text-2xl mt-2 block font-light">
                   Leave with a lifetime of consistency.
                 </span>
               </motion.h3>
@@ -310,7 +310,7 @@ export default function Navbar() {
               className="w-full mt-16 sm:mt-24 flex flex-col items-center"
             >
               {/* Feature List */}
-              <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-6 text-stone-500 font-serif italic text-lg sm:text-xl px-4 text-center">
+              <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-6 text-stone-500 font-['Manrope'] font-medium text-base sm:text-lg px-4 text-center tracking-tight">
                 <span>Prayer Tracking</span>
                 <span className="text-[#C6A26B] opacity-50 hidden sm:block">
                   •
@@ -332,10 +332,10 @@ export default function Navbar() {
 
               {/* Trust Signals */}
               <div className="mt-12 flex flex-col items-center gap-4">
-                <p className="font-sans text-[10px] sm:text-xs tracking-[0.2em] uppercase text-stone-400 font-semibold text-center">
+                <p className="font-['Manrope'] text-[10px] sm:text-xs tracking-[0.2em] uppercase text-stone-400 font-semibold text-center">
                   Built with sincerity for every Muslim.
                 </p>
-                <div className="flex items-center gap-4 text-[10px] sm:text-xs tracking-widest uppercase text-stone-400/70">
+                <div className="flex items-center gap-4 text-[10px] sm:text-xs tracking-widest uppercase text-stone-400/70 font-medium">
                   <span>Free Forever</span>
                   <span className="w-1 h-1 rounded-full bg-stone-300" />
                   <span>No Ads</span>
@@ -358,7 +358,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-40 bg-[#F7F5F1] flex flex-col items-center justify-center md:hidden"
+            className="fixed inset-0 z-40 bg-[#F7F5F1] flex flex-col items-center justify-center md:hidden font-['Manrope']"
           >
             <div className="flex flex-col items-center gap-10">
               {navItems.map((item, i) => (
@@ -373,7 +373,7 @@ export default function Navbar() {
                     duration: 0.5,
                     ease: [0.22, 1, 0.36, 1],
                   }}
-                  className="font-serif text-4xl text-stone-900 tracking-tight"
+                  className="font-['Manrope'] font-medium text-3xl text-stone-900 tracking-tight"
                 >
                   {item.label}
                 </motion.a>
@@ -391,7 +391,7 @@ export default function Navbar() {
                   duration: 0.5,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                className="mt-4 font-serif text-2xl text-[#C6A26B] tracking-tight"
+                className="mt-4 font-['Manrope'] font-medium text-xl text-[#C6A26B] tracking-tight cursor-pointer"
               >
                 Begin with Bismillah
               </motion.button>

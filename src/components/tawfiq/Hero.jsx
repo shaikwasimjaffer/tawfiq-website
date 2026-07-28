@@ -110,11 +110,11 @@ export default function Hero() {
   return (
     <section ref={containerRef} className="relative h-[900vh] bg-[#F7F5F1]">
       {/* Sticky Fullscreen Canvas */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center pointer-events-none">
         {/* --- MORNING SUNLIGHT BEAM & LONG SHADOWS --- */}
         <motion.div
           style={{ opacity: lightBeamOpacity }}
-          className="absolute inset-0 pointer-events-none z-0"
+          className="absolute inset-0 z-0"
         >
           <div
             className="w-full h-full"
@@ -128,7 +128,7 @@ export default function Hero() {
         {/* --- POLISHED STONE FLOOR TEXTURE & TILES --- */}
         <motion.div
           style={{ opacity: floorOpacity, scale: floorScale }}
-          className="absolute inset-0 pointer-events-none flex items-center justify-center z-0 overflow-hidden"
+          className="absolute inset-0 flex items-center justify-center z-0 overflow-hidden"
         >
           <svg
             viewBox="0 0 1200 800"
@@ -165,11 +165,11 @@ export default function Hero() {
             </defs>
             <rect width="1200" height="800" fill="url(#stoneFloor)" />
           </svg>
-          <div className="absolute inset-0 bg-gradient-to-t from-stone-900/10 via-transparent to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-stone-900/10 via-transparent to-transparent" />
         </motion.div>
 
         {/* Minimal Grid Overlay */}
-        <div className="absolute inset-0 flex justify-center pointer-events-none opacity-[0.025] z-0">
+        <div className="absolute inset-0 flex justify-center opacity-[0.025] z-0">
           <div className="w-full max-w-[1400px] grid grid-cols-6 h-full">
             {Array.from({ length: 6 }).map((_, i) => (
               <div
@@ -181,15 +181,17 @@ export default function Hero() {
         </div>
 
         {/* ==================================================================== */}
-        {/* STAGE 1: HERO HEADLINE (FORCED 2-LINE LAYOUT) */}
+        {/* STAGE 1: HERO HEADLINE */}
         {/* ==================================================================== */}
         <motion.div
           style={{ opacity: heroTextOpacity, y: heroTextY }}
-          className="relative z-10 max-w-[1200px] w-full px-4 text-center flex flex-col items-center"
+          className="absolute z-10 max-w-[1200px] w-full px-4 text-center flex flex-col items-center"
         >
-          <h1 className="font-serif text-[2.4rem] xs:text-[2.8rem] sm:text-[4.8rem] md:text-[6.2rem] lg:text-[7.2rem] leading-[1.15] sm:leading-[0.95] tracking-[-0.03em] text-stone-900 max-w-[18ch]">
-            <span className="block font-normal">How long has it been</span>
-            <span className="block font-light text-stone-500 mt-1 sm:mt-2">
+          <h1 className="font-['Manrope'] font-medium text-[2.4rem] xs:text-[2.8rem] sm:text-[4.8rem] md:text-[6.2rem] lg:text-[7.2rem] leading-[1.15] sm:leading-[0.95] tracking-[-0.03em] text-stone-900 max-w-[18ch]">
+            <span className="block font-normal text-stone-900">
+              How long has it been
+            </span>
+            <span className="block font-normal text-stone-900 mt-1 sm:mt-2">
               since your{" "}
               <span className="italic font-normal text-[#C6A26B]">
                 last prayer?
@@ -205,7 +207,7 @@ export default function Hero() {
           style={{ opacity: philosophyOpacity, y: philosophyY }}
           className="absolute z-10 max-w-5xl w-full px-6 text-center"
         >
-          <h2 className="font-serif text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-stone-900 leading-[1.2] font-light">
+          <h2 className="font-['Manrope'] text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-stone-900 leading-[1.2] font-light tracking-[-0.02em]">
             <span className="block font-light">
               No matter how many prayers you've missed...
             </span>
@@ -237,7 +239,7 @@ export default function Hero() {
                 className="transition-all duration-300"
               >
                 <p
-                  className={`font-serif text-3xl sm:text-4xl md:text-5xl tracking-tight ${
+                  className={`font-['Manrope'] text-3xl sm:text-4xl md:text-5xl tracking-[-0.02em] ${
                     item.isHighlight
                       ? "text-[#C6A26B] font-normal italic"
                       : "text-stone-800 font-light"
@@ -250,7 +252,7 @@ export default function Hero() {
               {index < cascadeItems.length - 1 && (
                 <motion.span
                   style={{ opacity: cascadeOpacities[index] }}
-                  className="text-stone-400 font-sans text-xs tracking-widest my-1 block"
+                  className="text-stone-400 font-['Manrope'] text-xs tracking-widest my-1 block"
                 >
                   ↓
                 </motion.span>
@@ -276,13 +278,13 @@ export default function Hero() {
           <div className="mt-3 sm:mt-6 overflow-hidden">
             <motion.p
               style={{ clipPath: bismillahTransMask }}
-              className="inline-block font-serif text-2xl sm:text-4xl md:text-5xl text-[#C6A26B] font-light italic tracking-wide"
+              className="inline-block font-['Manrope'] text-2xl sm:text-4xl md:text-5xl text-[#C6A26B] font-light italic tracking-wide"
             >
               In the Name of Allah
             </motion.p>
           </div>
 
-          <span className="mt-6 sm:mt-8 block font-sans text-[10px] sm:text-[12px] uppercase tracking-[0.35em] text-stone-500 font-medium">
+          <span className="mt-6 sm:mt-8 block font-['Manrope'] text-[10px] sm:text-[12px] uppercase tracking-[0.35em] text-stone-500 font-medium">
             Every meaningful journey begins here.
           </span>
         </motion.div>
@@ -294,7 +296,7 @@ export default function Hero() {
           style={{ opacity: introTawfiqOpacity, scale: introTawfiqScale }}
           className="absolute z-35 text-center px-6 max-w-[100vw] overflow-hidden"
         >
-          <h2 className="font-serif text-[4rem] sm:text-[7rem] md:text-[9.5rem] lg:text-[11.5rem] text-stone-900 font-light tracking-[-0.03em] leading-none select-none">
+          <h2 className="font-['Manrope'] text-[4rem] sm:text-[7rem] md:text-[9.5rem] lg:text-[11.5rem] text-stone-900 font-light tracking-[-0.03em] leading-none select-none">
             Introducing{" "}
             <span className="italic font-normal text-[#C6A26B]">Tawfiq.</span>
           </h2>
