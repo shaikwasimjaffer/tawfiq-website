@@ -371,15 +371,15 @@ export default function Qaza() {
       />
 
       {/* 1. Header */}
-      <div className="max-w-4xl mx-auto px-6 md:px-10 mb-12 md:mb-16 mt-12 md:mt-16">
-        <div className="md:pl-20 text-left">
+      <div className="max-w-4xl mx-auto px-6 md:px-10 mb-12 md:mb-16 mt-12 md:mt-16 text-center">
+        <div className="max-w-2xl mx-auto">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
-            className="font-['Manrope'] font-medium text-[clamp(2.5rem,5.5vw,4.8rem)] leading-[1.1] tracking-[-0.03em] text-stone-900"
+            className="font-['Manrope'] font-medium text-[clamp(2.1rem,4.8vw,4.8rem)] leading-[1.15] tracking-[-0.03em] text-stone-900"
           >
-            Missed prayers don't have to stay <br />
+            Missed prayers don't have to stay{" "}
             <span className="italic font-normal text-[#C6A26B]">
               unfinished.
             </span>
@@ -389,15 +389,20 @@ export default function Qaza() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.2 }}
-            className="mt-10 md:mt-12 max-w-xl pl-5"
+            className="mt-8 md:mt-12 flex flex-col items-center"
           >
-            <p className="font-['Manrope'] text-[1.1rem] md:text-[1.2rem] text-stone-700 leading-[1.6] font-light">
+            <p className="font-['Manrope'] text-[1.1rem] md:text-[1.2rem] text-stone-700 leading-[1.6] font-light max-w-xl">
               Recover your Qaza with clarity, structure, and consistency.
             </p>
 
             <button
               onClick={() => setIsModalOpen(true)}
-              className="mt-12 bg-stone-900 text-white font-['Manrope'] text-[13px] font-medium tracking-tight px-8 py-3.5 rounded-full hover:bg-[#C6A26B] transition-colors duration-300 active:scale-95 shadow-sm cursor-pointer"
+              className="mt-10 bg-stone-900 text-white font-['Manrope'] text-[13px] font-medium tracking-tight py-3.5 rounded-full hover:bg-[#C6A26B] transition-colors duration-300 active:scale-95 shadow-sm cursor-pointer"
+              style={{
+                width: "fit-content",
+                paddingLeft: "28px",
+                paddingRight: "28px",
+              }}
             >
               {hasEstimated ? "Update Estimate" : "Estimate Your Qaza"}
             </button>
@@ -1169,7 +1174,7 @@ export default function Qaza() {
                         </h4>
                         <div className="relative pl-6 border-l border-[#C6A26B]/30 space-y-8 py-2">
                           {/* Mapped Debt Phases */}
-                          {estimates.breakdowns.map((b, i) => (
+                          {estimates.breakdowns.map((b) => (
                             <div key={b.id} className="relative">
                               <div className="absolute -left-[31px] top-1.5 w-3.5 h-3.5 bg-[#F7F5F1] border-[3px] border-[#C6A26B] rounded-full" />
                               <h5 className="font-['Manrope'] font-medium text-[1.1rem] text-stone-900">

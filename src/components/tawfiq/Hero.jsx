@@ -51,24 +51,60 @@ export default function Hero() {
 
   // --- 4. STAGE 3: THE RETURN CASCADE (38% -> 72%) ---
   const cascadeItems = [
-    { text: "One Prayer.", isHighlight: false, start: 0.38, end: 0.43 },
-    { text: "One Step.", isHighlight: false, start: 0.44, end: 0.49 },
-    { text: "One Day.", isHighlight: false, start: 0.5, end: 0.55 },
-    { text: "One Habit.", isHighlight: false, start: 0.56, end: 0.61 },
-    { text: "Consistency.", isHighlight: true, start: 0.62, end: 0.67 },
-    { text: "Closeness.", isHighlight: true, start: 0.68, end: 0.73 },
+    {
+      text: "One Prayer.",
+      isHighlight: false,
+      start: 0.38,
+      peak: 0.405,
+      end: 0.43,
+    },
+    {
+      text: "One Step.",
+      isHighlight: false,
+      start: 0.44,
+      peak: 0.465,
+      end: 0.49,
+    },
+    {
+      text: "One Day.",
+      isHighlight: false,
+      start: 0.5,
+      peak: 0.525,
+      end: 0.55,
+    },
+    {
+      text: "One Habit.",
+      isHighlight: false,
+      start: 0.56,
+      peak: 0.585,
+      end: 0.61,
+    },
+    {
+      text: "Consistency.",
+      isHighlight: true,
+      start: 0.62,
+      peak: 0.645,
+      end: 0.67,
+    },
+    {
+      text: "Closeness.",
+      isHighlight: true,
+      start: 0.68,
+      peak: 0.705,
+      end: 0.73,
+    },
   ];
 
   const cascadeOpacities = cascadeItems.map((item) =>
-    useTransform(
-      scrollYProgress,
-      [item.start, item.start + 0.02, item.end, item.end + 0.03],
-      [0, 1, 1, 0.2],
-    ),
+    useTransform(scrollYProgress, [item.start, item.peak, item.end], [0, 1, 0]),
   );
 
-  const cascadeScales = cascadeItems.map((item) =>
-    useTransform(scrollYProgress, [item.start, item.end], [0.96, 1]),
+  const cascadeY = cascadeItems.map((item) =>
+    useTransform(
+      scrollYProgress,
+      [item.start, item.peak, item.end],
+      [25, 0, -25],
+    ),
   );
 
   const cascadeContainerOpacity = useTransform(
@@ -108,7 +144,10 @@ export default function Hero() {
   );
 
   return (
-    <section ref={containerRef} className="relative h-[900vh] bg-[#F7F5F1]">
+    <section
+      ref={containerRef}
+      className="relative h-[900vh] bg-[#F7F5F1] font-['Plus_Jakarta_Sans',sans-serif]"
+    >
       {/* Sticky Fullscreen Canvas */}
       <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center pointer-events-none">
         {/* --- MORNING SUNLIGHT BEAM & LONG SHADOWS --- */}
@@ -187,13 +226,13 @@ export default function Hero() {
           style={{ opacity: heroTextOpacity, y: heroTextY }}
           className="absolute z-10 max-w-[1200px] w-full px-4 text-center flex flex-col items-center"
         >
-          <h1 className="font-['Manrope'] font-medium text-[2.4rem] xs:text-[2.8rem] sm:text-[4.8rem] md:text-[6.2rem] lg:text-[7.2rem] leading-[1.15] sm:leading-[0.95] tracking-[-0.03em] text-stone-900 max-w-[18ch]">
+          <h1 className="font-['Cormorant_Garamond',serif] font-medium text-[2.8rem] xs:text-[3.2rem] sm:text-[5.2rem] md:text-[6.8rem] lg:text-[8rem] leading-[1.1] sm:leading-[0.92] tracking-[-0.02em] text-stone-900 max-w-[22ch]">
             <span className="block font-normal text-stone-900">
               How long has it been
             </span>
             <span className="block font-normal text-stone-900 mt-1 sm:mt-2">
               since your{" "}
-              <span className="italic font-normal text-[#C6A26B]">
+              <span className="inline-block whitespace-nowrap italic font-normal text-[#C6A26B]">
                 last prayer?
               </span>
             </span>
@@ -207,7 +246,7 @@ export default function Hero() {
           style={{ opacity: philosophyOpacity, y: philosophyY }}
           className="absolute z-10 max-w-5xl w-full px-6 text-center"
         >
-          <h2 className="font-['Manrope'] text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-stone-900 leading-[1.2] font-light tracking-[-0.02em]">
+          <h2 className="font-['Cormorant_Garamond',serif] text-3xl sm:text-5xl md:text-6xl lg:text-7xl text-stone-900 leading-[1.15] font-light tracking-[-0.01em]">
             <span className="block font-light">
               No matter how many prayers you've missed...
             </span>
@@ -223,41 +262,36 @@ export default function Hero() {
         </motion.div>
 
         {/* ==================================================================== */}
-        {/* STAGE 3: THE RETURN CASCADE */}
+        {/* STAGE 3: THE RETURN CASCADE (Individual & Focal Screen View) */}
         {/* ==================================================================== */}
         <motion.div
           style={{ opacity: cascadeContainerOpacity }}
-          className="absolute z-20 flex flex-col items-center justify-center text-center px-6 max-w-lg w-full space-y-6"
+          className="absolute z-20 inset-0 flex items-center justify-center text-center px-6 pointer-events-none"
         >
           {cascadeItems.map((item, index) => (
-            <React.Fragment key={index}>
-              <motion.div
-                style={{
-                  opacity: cascadeOpacities[index],
-                  scale: cascadeScales[index],
-                }}
-                className="transition-all duration-300"
+            <motion.div
+              key={index}
+              style={{
+                opacity: cascadeOpacities[index],
+                y: cascadeY[index],
+              }}
+              className="absolute inset-0 flex flex-col items-center justify-center text-center"
+            >
+              <p
+                className={`font-['Cormorant_Garamond',serif] text-5xl sm:text-6xl md:text-7xl tracking-[-0.01em] ${
+                  item.isHighlight
+                    ? "text-[#C6A26B] font-normal italic"
+                    : "text-stone-900 font-light"
+                }`}
               >
-                <p
-                  className={`font-['Manrope'] text-3xl sm:text-4xl md:text-5xl tracking-[-0.02em] ${
-                    item.isHighlight
-                      ? "text-[#C6A26B] font-normal italic"
-                      : "text-stone-800 font-light"
-                  }`}
-                >
-                  {item.text}
-                </p>
-              </motion.div>
-
+                {item.text}
+              </p>
               {index < cascadeItems.length - 1 && (
-                <motion.span
-                  style={{ opacity: cascadeOpacities[index] }}
-                  className="text-stone-400 font-['Manrope'] text-xs tracking-widest my-1 block"
-                >
+                <span className="text-stone-400 font-['Plus_Jakarta_Sans',sans-serif] text-sm tracking-widest mt-4 block">
                   ↓
-                </motion.span>
+                </span>
               )}
-            </React.Fragment>
+            </motion.div>
           ))}
         </motion.div>
 
@@ -278,13 +312,13 @@ export default function Hero() {
           <div className="mt-3 sm:mt-6 overflow-hidden">
             <motion.p
               style={{ clipPath: bismillahTransMask }}
-              className="inline-block font-['Manrope'] text-2xl sm:text-4xl md:text-5xl text-[#C6A26B] font-light italic tracking-wide"
+              className="inline-block font-['Cormorant_Garamond',serif] text-3xl sm:text-4xl md:text-5xl text-[#C6A26B] font-light italic tracking-wide"
             >
               In the Name of Allah
             </motion.p>
           </div>
 
-          <span className="mt-6 sm:mt-8 block font-['Manrope'] text-[10px] sm:text-[12px] uppercase tracking-[0.35em] text-stone-500 font-medium">
+          <span className="mt-6 sm:mt-8 block font-['Plus_Jakarta_Sans',sans-serif] text-[10px] sm:text-[12px] uppercase tracking-[0.35em] text-stone-500 font-medium">
             Every meaningful journey begins here.
           </span>
         </motion.div>
@@ -294,9 +328,9 @@ export default function Hero() {
         {/* ==================================================================== */}
         <motion.div
           style={{ opacity: introTawfiqOpacity, scale: introTawfiqScale }}
-          className="absolute z-35 text-center px-6 max-w-[100vw] overflow-hidden"
+          className="absolute z-35 text-center px-6 max-w-[100vw] overflow-visible"
         >
-          <h2 className="font-['Manrope'] text-[4rem] sm:text-[7rem] md:text-[9.5rem] lg:text-[11.5rem] text-stone-900 font-light tracking-[-0.03em] leading-none select-none">
+          <h2 className="font-['Cormorant_Garamond',serif] text-[3.5rem] xs:text-[4rem] sm:text-[6.5rem] md:text-[8.5rem] lg:text-[10rem] text-stone-900 font-light tracking-[-0.02em] leading-[1.15] select-none whitespace-nowrap">
             Introducing{" "}
             <span className="italic font-normal text-[#C6A26B]">Tawfiq.</span>
           </h2>

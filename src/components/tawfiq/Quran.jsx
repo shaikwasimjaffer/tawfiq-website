@@ -14,9 +14,9 @@ const Tajweed = ({ segments }) => (
         key={i}
         className={
           s.type === "madd"
-            ? "text-amber-700"
+            ? "text-amber-700 font-medium"
             : s.type === "ghunnah"
-              ? "text-emerald-700"
+              ? "text-emerald-700 font-medium"
               : ""
         }
       >
@@ -238,7 +238,7 @@ export default function Quran() {
   return (
     <section
       id="quran"
-      className="relative bg-[#F7F5F1] py-24 md:py-32 overflow-hidden selection:bg-[#C6A26B] selection:text-white"
+      className="relative bg-[#F7F5F1] py-24 md:py-32 overflow-hidden selection:bg-[#C6A26B] selection:text-white font-['Manrope']"
     >
       <div
         className="absolute inset-0 pointer-events-none"
@@ -248,18 +248,17 @@ export default function Quran() {
         }}
       />
 
-      {/* 1. Header (Matches Qaza Layout and Size) */}
+      {/* 1. Header */}
       <div className="relative max-w-4xl mx-auto px-6 md:px-10 mb-24 md:mb-32 mt-12 md:mt-16">
-        <div className="md:pl-20 text-left">
+        <div className="max-w-2xl mx-auto text-center">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
-            className="font-serif text-[clamp(2.5rem,6vw,5rem)] leading-[1.05] tracking-[-0.01em] text-stone-900"
+            className="font-serif text-[clamp(2rem,4.5vw,3.8rem)] leading-[1.15] tracking-[-0.01em] text-stone-900"
           >
-            Read the way
-            <br />
-            <span className="italic font-light text-stone-500">
+            Read the way{" "}
+            <span className="italic font-light text-[#C6A26B]">
               it was meant to be read.
             </span>
           </motion.h2>
@@ -268,15 +267,15 @@ export default function Quran() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.2 }}
-            className="mt-10 md:mt-12 max-w-xl pl-5 border-l-[1.5px] border-stone-200"
+            className="mt-8 md:mt-12 flex flex-col items-center"
           >
             <p className="font-serif text-[1.1rem] md:text-[1.2rem] text-stone-900 leading-[1.6]">
-              Experience the living Mushaf.
+              Experience the{" "}
+              <span className="text-[#C6A26B]">living Mushaf</span>.
             </p>
-            <p className="font-serif text-[15px] text-stone-500 mt-2 leading-[1.6]">
-              Read, listen, and reflect at your own pace. Tawfiq remembers where
-              you left off, highlights Tajweed as you recite, and keeps every
-              session connected to your journey.
+            <p className="font-serif text-[15px] text-stone-500 mt-3 leading-[1.6] max-w-lg">
+              Read, listen, and reflect effortlessly. Tawfiq remembers your
+              place, highlights Tajweed live, and keeps you connected.
             </p>
           </motion.div>
         </div>
@@ -307,7 +306,7 @@ export default function Quran() {
               <div className="flex items-baseline justify-between mb-16 pb-6 border-b border-stone-200/60">
                 <div>
                   <h3 className="font-serif text-2xl text-stone-900">
-                    Surah Al-Fatiha
+                    Surah <span className="text-[#C6A26B]">Al-Fatiha</span>
                   </h3>
                   <div className="flex items-center gap-3 mt-1.5 text-[10px] font-sans text-stone-400 uppercase tracking-widest">
                     <p>Alafasy</p>
@@ -441,13 +440,13 @@ export default function Quran() {
                     <h4 className="font-serif text-xl text-stone-900 mb-2">
                       Surah Complete
                     </h4>
-                    <p className="text-[11px] font-sans tracking-widest uppercase text-stone-400 mb-10">
+                    <p className="text-[11px] font-sans tracking-widest uppercase text-[#C6A26B] mb-10 font-semibold">
                       Alhamdulillah
                     </p>
 
                     <button
                       onClick={toggle}
-                      className="text-[11px] font-sans text-stone-500 hover:text-stone-900 transition-colors uppercase tracking-widest border-b border-stone-300 pb-1"
+                      className="text-[11px] font-sans text-stone-500 hover:text-stone-900 transition-colors uppercase tracking-widest border-b border-stone-300 pb-1 cursor-pointer"
                     >
                       Read Again
                     </button>
@@ -460,7 +459,7 @@ export default function Quran() {
             <div className="flex items-center justify-between gap-4 px-10 sm:px-16 py-6 border-t border-stone-200/60 bg-stone-50/40">
               <button
                 onClick={toggle}
-                className="group relative inline-flex items-center gap-3 transition-colors duration-300"
+                className="group relative inline-flex items-center gap-3 transition-colors duration-300 cursor-pointer"
               >
                 {/* Breathe interaction */}
                 {isPlaying && !isComplete && (
@@ -513,7 +512,7 @@ export default function Quran() {
               <div className="flex items-center gap-6">
                 <button
                   onClick={() => setShowTranslation((s) => !s)}
-                  className="text-[11px] font-sans text-stone-400 hover:text-stone-900 transition-colors"
+                  className="text-[11px] font-sans text-stone-400 hover:text-stone-900 transition-colors cursor-pointer"
                 >
                   {showTranslation ? "Hide Translation" : "Show Translation"}
                 </button>
