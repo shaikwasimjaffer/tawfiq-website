@@ -1,15 +1,49 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
+import emailjs from "@emailjs/browser";
 
 // Note: Ensure this path correctly points to your QR image
 import qrImage from "../../assets/qr-placeholder.png";
+
+// EmailJS Configuration Keys (Replace with your actual EmailJS IDs)
+const EMAILJS_SERVICE_ID = "service_8msblsf";
+const EMAILJS_TEMPLATE_ID = "template_9gd6lm2";
+const EMAILJS_PUBLIC_KEY = "5iuNuXg40cmMgueNJ";
 
 const navItems = [
   { id: "qaza", label: "Qaza", href: "#qaza" },
   { id: "quran", label: "Quran", href: "#quran" },
   { id: "academy", label: "Academy", href: "#academy" },
 ];
+
+const categoryConfig = {
+  Bug: {
+    label: "Bug",
+    placeholder:
+      "Describe the bug you encountered, steps to reproduce, or unexpected behavior...",
+  },
+  "Feature Request": {
+    label: "Feature Request",
+    placeholder: "Share your idea or feature suggestion to improve Tawfiq...",
+  },
+  "General Question": {
+    label: "General Question",
+    placeholder: "Ask us anything about Tawfiq or how things work...",
+  },
+  Feedback: {
+    label: "Feedback",
+    placeholder:
+      "Tell us what you love or how we can refine your experience...",
+  },
+  Partnership: {
+    label: "Partnership",
+    placeholder:
+      "Tell us about your organization, collaboration ideas, or proposal...",
+  },
+};
+
+const categories = Object.keys(categoryConfig);
 
 function NavLink({ item, isActive, onClick }) {
   return (
@@ -39,7 +73,18 @@ export default function Navbar() {
   const [activeItem, setActiveItem] = useState("qaza");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showScanner, setShowScanner] = useState(false);
+  const [showContact, setShowContact] = useState(false);
   const location = useLocation();
+
+  // Contact Form State
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    category: "General Question",
+    message: "",
+  });
+  const [formStatus, setFormStatus] = useState("idle"); // 'idle' | 'loading' | 'success' | 'error'
+  const [shaking, setShaking] = useState(false);
 
   // Handle scroll blur effect
   useEffect(() => {
@@ -48,14 +93,14 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Prevent scrolling when mobile menu OR scanner page is open
+  // Prevent scrolling when mobile menu, scanner, or contact modal is open
   useEffect(() => {
-    if (isMenuOpen || showScanner) {
+    if (isMenuOpen || showScanner || showContact) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "unset";
     }
-  }, [isMenuOpen, showScanner]);
+  }, [isMenuOpen, showScanner, showContact]);
 
   // Section Observer for Active Dots
   useEffect(() => {
@@ -97,6 +142,59 @@ export default function Navbar() {
       });
       setIsMenuOpen(false);
       setShowScanner(false);
+      setShowContact(false);
+    }
+  };
+
+  const handleContactSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email || !formData.message) {
+      setShaking(true);
+      setFormStatus("error");
+      setTimeout(() => {
+        setShaking(false);
+        setFormStatus("idle");
+      }, 1000);
+      return;
+    }
+
+    setFormStatus("loading");
+
+    try {
+      const templateParams = {
+        to_email: "tawfiq.base44@gmail.com",
+        from_name: formData.name,
+        reply_to: formData.email,
+        category: formData.category,
+        message: formData.message,
+      };
+
+      await emailjs.send(
+        EMAILJS_SERVICE_ID,
+        EMAILJS_TEMPLATE_ID,
+        templateParams,
+        EMAILJS_PUBLIC_KEY,
+      );
+
+      setFormStatus("success");
+      setTimeout(() => {
+        setFormStatus("idle");
+        setFormData({
+          name: "",
+          email: "",
+          category: "General Question",
+          message: "",
+        });
+        setShowContact(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Failed to send email:", error);
+      setFormStatus("error");
+      setShaking(true);
+      setTimeout(() => {
+        setShaking(false);
+        setFormStatus("idle");
+      }, 1500);
     }
   };
 
@@ -121,13 +219,19 @@ export default function Navbar() {
           >
             <div className="w-5 h-4 flex flex-col justify-between">
               <span
-                className={`block h-[1px] w-full bg-stone-900 transition-all duration-300 ${isMenuOpen ? "rotate-45 translate-y-[7px]" : ""}`}
+                className={`block h-[1px] w-full bg-stone-900 transition-all duration-300 ${
+                  isMenuOpen ? "rotate-45 translate-y-[7px]" : ""
+                }`}
               />
               <span
-                className={`block h-[1px] bg-stone-900 transition-all duration-300 ${isMenuOpen ? "w-0 opacity-0" : "w-full"}`}
+                className={`block h-[1px] bg-stone-900 transition-all duration-300 ${
+                  isMenuOpen ? "w-0 opacity-0" : "w-full"
+                }`}
               />
               <span
-                className={`block h-[1px] w-full bg-stone-900 transition-all duration-300 ${isMenuOpen ? "-rotate-45 -translate-y-[8px]" : ""}`}
+                className={`block h-[1px] w-full bg-stone-900 transition-all duration-300 ${
+                  isMenuOpen ? "-rotate-45 -translate-y-[8px]" : ""
+                }`}
               />
             </div>
           </button>
@@ -162,7 +266,6 @@ export default function Navbar() {
                   strokeLinejoin="round"
                 />
               </motion.svg>
-              {/* Updated to SemiBold (600) for a lighter, more refined editorial balance */}
               <span className="font-['Cormorant_Garamond',serif] font-[600] text-xl text-stone-900 tracking-[-0.01em]">
                 Tawfiq
               </span>
@@ -183,6 +286,14 @@ export default function Navbar() {
                 )}
               </React.Fragment>
             ))}
+            {/* Added Contact Link to Desktop Nav */}
+            <span className="text-stone-400/30 text-[10px] mx-1">•</span>
+            <button
+              onClick={() => setShowContact(true)}
+              className="relative px-5 py-2 font-['Plus_Jakarta_Sans',sans-serif] text-[13px] tracking-[-0.01em] font-medium text-stone-500 hover:text-stone-900 transition-colors duration-300 z-10 cursor-pointer"
+            >
+              Contact
+            </button>
           </div>
 
           {/* DESKTOP RIGHT: CTA Button */}
@@ -229,6 +340,227 @@ export default function Navbar() {
           <div className="block md:hidden w-8" />
         </nav>
       </motion.header>
+
+      {/* =========================================
+          PREMIUM CONTACT EXPERIENCE OVERLAY (OPTION 3)
+          ========================================= */}
+      <AnimatePresence>
+        {showContact && (
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 40 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-0 z-[110] bg-[#F8F6F2] overflow-y-auto overflow-x-hidden flex flex-col pt-24 pb-24 px-6 font-['Plus_Jakarta_Sans',sans-serif]"
+          >
+            {/* Back Button */}
+            <motion.button
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              onClick={() => setShowContact(false)}
+              className="absolute top-8 left-6 sm:top-12 sm:left-12 text-stone-400 hover:text-stone-800 tracking-[0.2em] uppercase text-[10px] sm:text-xs font-semibold py-2 transition-colors cursor-pointer group flex items-center gap-2"
+            >
+              <span className="transform group-hover:-translate-x-1 transition-transform duration-300">
+                ←
+              </span>
+              Back to Site
+            </motion.button>
+
+            {/* Container */}
+            <div className="w-full max-w-3xl mx-auto flex flex-col mt-4 sm:mt-8">
+              {/* Header */}
+              <div className="mb-12">
+                <span className="text-[10px] tracking-[0.25em] uppercase text-[#C6A26B] font-semibold block mb-3">
+                  Support
+                </span>
+                <h2 className="font-['Cormorant_Garamond',serif] font-normal text-3xl sm:text-5xl text-stone-900 tracking-tight leading-snug">
+                  Have a question, found a bug, <br />
+                  <span className="italic text-stone-500 font-light">
+                    or have an idea to improve Tawfiq?
+                  </span>
+                </h2>
+                <p className="mt-4 text-stone-600 text-sm sm:text-base font-light">
+                  We'd love to hear from you.
+                </p>
+              </div>
+
+              {/* Conversation Form */}
+              <form
+                onSubmit={handleContactSubmit}
+                className={`flex flex-col gap-10 ${shaking ? "animate-bounce" : ""}`}
+              >
+                <div className="space-y-12 text-lg sm:text-2xl font-['Cormorant_Garamond',serif] text-stone-800">
+                  {/* Line 1: Name */}
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 flex-wrap">
+                    <span className="text-stone-500 font-light">
+                      Let's get in touch. My name is
+                    </span>
+                    <input
+                      type="text"
+                      placeholder="enter your name"
+                      value={formData.name}
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
+                      className={`font-['Plus_Jakarta_Sans',sans-serif] text-base sm:text-lg bg-transparent border-b ${
+                        formStatus === "error" && !formData.name
+                          ? "border-red-400"
+                          : "border-stone-300 focus:border-[#C6A26B]"
+                      } pb-1 outline-none transition-all duration-300 text-stone-900 placeholder:text-stone-300 flex-1 min-w-[220px]`}
+                    />
+                  </div>
+
+                  {/* Line 2: Email */}
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 flex-wrap">
+                    <span className="text-stone-500 font-light">
+                      You can reply to me at
+                    </span>
+                    <input
+                      type="email"
+                      placeholder="name@example.com"
+                      value={formData.email}
+                      onChange={(e) =>
+                        setFormData({ ...formData, email: e.target.value })
+                      }
+                      className={`font-['Plus_Jakarta_Sans',sans-serif] text-base sm:text-lg bg-transparent border-b ${
+                        formStatus === "error" && !formData.email
+                          ? "border-red-400"
+                          : "border-stone-300 focus:border-[#C6A26B]"
+                      } pb-1 outline-none transition-all duration-300 text-stone-900 placeholder:text-stone-300 flex-1 min-w-[220px]`}
+                    />
+                  </div>
+
+                  {/* Line 3: Category Selectors (Visual Radio Buttons) */}
+                  <div className="flex flex-col gap-4 pt-2">
+                    <span className="text-stone-500 font-light text-base sm:text-xl">
+                      I'm writing because:
+                    </span>
+                    <div className="flex flex-wrap gap-3 font-['Plus_Jakarta_Sans',sans-serif]">
+                      {categories.map((cat) => {
+                        const isSelected = formData.category === cat;
+                        return (
+                          <button
+                            type="button"
+                            key={cat}
+                            onClick={() =>
+                              setFormData({ ...formData, category: cat })
+                            }
+                            className={`flex items-center gap-2.5 px-4 py-2 rounded-full text-xs sm:text-sm tracking-tight transition-all duration-300 cursor-pointer border ${
+                              isSelected
+                                ? "bg-stone-900 text-white border-stone-900 shadow-sm"
+                                : "bg-white/50 text-stone-600 border-stone-200 hover:border-stone-300"
+                            }`}
+                          >
+                            <span
+                              className={`w-2 h-2 rounded-full transition-colors ${
+                                isSelected ? "bg-[#C6A26B]" : "bg-stone-300"
+                              }`}
+                            />
+                            {cat}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Line 4: Dynamic Message Input matching selected category */}
+                  <div className="flex flex-col gap-3 pt-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-stone-500 font-light text-base sm:text-xl">
+                        Tell us more about this{" "}
+                        <span className="text-[#C6A26B] font-normal italic">
+                          ({formData.category})
+                        </span>
+                        :
+                      </span>
+                    </div>
+                    <textarea
+                      rows="4"
+                      placeholder={
+                        categoryConfig[formData.category]?.placeholder ||
+                        "Share your thoughts..."
+                      }
+                      value={formData.message}
+                      onChange={(e) =>
+                        setFormData({ ...formData, message: e.target.value })
+                      }
+                      className={`font-['Plus_Jakarta_Sans',sans-serif] text-base sm:text-base bg-white/40 p-4 rounded-xl border ${
+                        formStatus === "error" && !formData.message
+                          ? "border-red-400"
+                          : "border-stone-200 focus:border-[#C6A26B]"
+                      } outline-none transition-all duration-300 text-stone-900 placeholder:text-stone-300 resize-none`}
+                    />
+                  </div>
+                </div>
+
+                {/* Submit Action */}
+                <div className="pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+                  <motion.button
+                    type="submit"
+                    whileHover={{ y: -2 }}
+                    whileTap={{ scale: 0.98 }}
+                    className={`relative px-8 py-4 rounded-full font-['Plus_Jakarta_Sans',sans-serif] text-sm font-medium tracking-tight cursor-pointer transition-all duration-500 flex items-center justify-center min-w-[200px] ${
+                      formStatus === "success"
+                        ? "bg-[#C6A26B] text-white shadow-[0_0_20px_rgba(198,162,107,0.4)]"
+                        : "bg-stone-900 text-white hover:bg-stone-800"
+                    }`}
+                  >
+                    {formStatus === "idle" && "Send with Salaam →"}
+                    {formStatus === "loading" && (
+                      <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    )}
+                    {formStatus === "success" && "✓ Message sent successfully."}
+                    {formStatus === "error" &&
+                      "Failed. Please fill all fields."}
+                  </motion.button>
+                </div>
+              </form>
+
+              {/* Bottom Support Footer Info */}
+              <div className="mt-24 pt-12 border-t border-stone-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 text-xs text-stone-500 font-['Plus_Jakarta_Sans',sans-serif]">
+                <div>
+                  <p className="text-stone-400 uppercase tracking-widest mb-1 text-[10px]">
+                    Need a quicker answer?
+                  </p>
+                  <a
+                    href="mailto:tawfiq.base44@gmail.com"
+                    className="text-stone-900 font-medium hover:text-[#C6A26B] transition-colors"
+                  >
+                    tawfiq.base44@gmail.com
+                  </a>
+                  <span className="block text-stone-400 mt-0.5">
+                    Average reply &lt; 24 hours
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-6">
+                  <a
+                    href="https://github.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:text-stone-900 transition-colors"
+                  >
+                    GitHub
+                  </a>
+                  <a
+                    href="https://discord.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:text-stone-900 transition-colors"
+                  >
+                    Discord
+                  </a>
+                  <div className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span>Status: All systems operational</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* =========================================
           PREMIUM DOWNLOAD EXPERIENCE OVERLAY
@@ -364,7 +696,7 @@ export default function Navbar() {
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             className="fixed inset-0 z-40 bg-[#F7F5F1] flex flex-col items-center justify-center md:hidden font-['Plus_Jakarta_Sans',sans-serif]"
           >
-            <div className="flex flex-col items-center gap-10">
+            <div className="flex flex-col items-center gap-8">
               {navItems.map((item, i) => (
                 <motion.a
                   key={item.id}
@@ -383,6 +715,24 @@ export default function Navbar() {
                 </motion.a>
               ))}
 
+              {/* Added Contact Link to Mobile Menu */}
+              <motion.button
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  setShowContact(true);
+                }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  delay: 0.3,
+                  duration: 0.5,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="font-['Cormorant_Garamond',serif] font-medium text-4xl text-stone-900 tracking-tight cursor-pointer"
+              >
+                Contact
+              </motion.button>
+
               <motion.button
                 onClick={() => {
                   setIsMenuOpen(false);
@@ -395,7 +745,7 @@ export default function Navbar() {
                   duration: 0.5,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                className="mt-4 font-['Plus_Jakarta_Sans',sans-serif] font-medium text-lg text-[#C6A26B] tracking-tight cursor-pointer"
+                className="mt-2 font-['Plus_Jakarta_Sans',sans-serif] font-medium text-lg text-[#C6A26B] tracking-tight cursor-pointer"
               >
                 Begin with Bismillah
               </motion.button>
