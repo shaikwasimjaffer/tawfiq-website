@@ -518,12 +518,8 @@ export default function Qaza() {
                             strokeLinecap="round"
                             strokeLinejoin="round"
                           >
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <polyline points="12 6 12 12 15 15"></polyline>
                           </svg>
-                          <span className="text-[9px] font-['Manrope'] uppercase tracking-[0.15em] font-semibold">
-                            Takes ~2 mins
-                          </span>
+                       
                         </div>
                       </div>
 
