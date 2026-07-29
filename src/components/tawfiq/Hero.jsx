@@ -330,7 +330,7 @@ export default function Hero() {
           style={{ opacity: introTawfiqOpacity, scale: introTawfiqScale }}
           className="absolute z-35 text-center px-6 max-w-[100vw] overflow-visible"
         >
-          <h2 className="font-['Cormorant_Garamond',serif] text-[3.5rem] xs:text-[4rem] sm:text-[6.5rem] md:text-[8.5rem] lg:text-[10rem] text-stone-900 font-light tracking-[-0.02em] leading-[1.15] select-none whitespace-nowrap">
+          <h2 className="font-['Cormorant_Garamond',serif] text-[3.5rem] xs:text-[4rem] sm:text-[6.5rem] md:text-[8.5rem] lg:text-[10rem] text-stone-900 font-light tracking-[-0.02em] leading-[1.15] select-none sm:whitespace-nowrap">
             Introducing{" "}
             <span className="italic font-normal text-[#C6A26B]">Tawfiq.</span>
           </h2>
