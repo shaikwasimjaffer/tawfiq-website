@@ -160,19 +160,18 @@ const topics = [
   },
 ];
 
-const springTransition = { duration: 1.1, ease: [0.16, 1, 0.3, 1] };
+const springTransition = { duration: 0.8, ease: [0.16, 1, 0.3, 1] };
 
 // --- Custom Generative Animations for Each Topic ---
 function PreviewVisuals({ title }) {
   switch (title) {
     case "Salah":
-      // Prayer timeline filling up
       return (
-        <div className="flex gap-3 sm:gap-6 items-end h-16">
+        <div className="flex gap-4 items-end h-16">
           {[1, 2, 3, 4, 5].map((i) => (
             <motion.div
               key={i}
-              className="w-3 sm:w-4 rounded-t-full bg-stone-300 origin-bottom"
+              className="w-4 rounded-t-full bg-stone-300 origin-bottom"
               animate={{
                 height: ["20%", "100%", "20%"],
                 backgroundColor: ["#e7e5e4", "#C6A26B", "#e7e5e4"],
@@ -188,7 +187,6 @@ function PreviewVisuals({ title }) {
         </div>
       );
     case "Wudu":
-      // Water ripple following a central point
       return (
         <div className="relative w-full h-full flex items-center justify-center">
           {[1, 2, 3].map((i) => (
@@ -208,13 +206,12 @@ function PreviewVisuals({ title }) {
         </div>
       );
     case "Adhan":
-      // Expanding sound waves
       return (
         <div className="flex items-center justify-center gap-2 h-24">
           {[1, 2, 3, 4, 5, 6, 7].map((i) => (
             <motion.div
               key={i}
-              className="w-1.5 sm:w-2 bg-[#C6A26B] rounded-full"
+              className="w-2 bg-[#C6A26B] rounded-full"
               animate={{ height: ["10%", i % 2 === 0 ? "80%" : "100%", "10%"] }}
               transition={{
                 duration: 1.2,
@@ -227,9 +224,8 @@ function PreviewVisuals({ title }) {
         </div>
       );
     case "Hadith":
-      // Pages of a book gently turning
       return (
-        <div className="relative w-24 h-32 sm:w-32 sm:h-40 perspective-[800px] flex">
+        <div className="relative w-28 h-36 perspective-[800px] flex">
           <div className="w-1/2 h-full bg-stone-200 rounded-l-md border-r border-stone-300 shadow-inner" />
           <div className="w-1/2 h-full bg-stone-100 rounded-r-md shadow-md" />
           <motion.div
@@ -240,9 +236,8 @@ function PreviewVisuals({ title }) {
         </div>
       );
     case "Ramadan":
-      // Crescent moon with changing night sky
       return (
-        <div className="relative w-32 h-32 sm:w-48 sm:h-48 rounded-full bg-stone-900 overflow-hidden flex items-center justify-center shadow-2xl">
+        <div className="relative w-40 h-40 rounded-full bg-stone-900 overflow-hidden flex items-center justify-center shadow-2xl">
           {[...Array(12)].map((_, i) => (
             <motion.div
               key={i}
@@ -260,14 +255,13 @@ function PreviewVisuals({ title }) {
             />
           ))}
           <motion.div
-            className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-transparent shadow-[inset_-10px_-4px_0_2px_#C6A26B] sm:shadow-[inset_-14px_-6px_0_2px_#C6A26B]"
+            className="w-14 h-14 rounded-full bg-transparent shadow-[inset_-12px_-5px_0_2px_#C6A26B]"
             animate={{ rotate: [0, 10, 0] }}
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
           />
         </div>
       );
     case "Zakat":
-      // Coins flowing into helping hands
       return (
         <div className="relative w-32 h-40 flex flex-col items-center justify-end pb-8">
           {[1, 2, 3].map((i) => (
@@ -288,9 +282,8 @@ function PreviewVisuals({ title }) {
         </div>
       );
     case "Zakat Calculator":
-      // Numbers counting up smoothly
       return (
-        <div className="flex items-center text-4xl sm:text-6xl font-serif text-[#C6A26B] font-light overflow-hidden h-16 sm:h-20">
+        <div className="flex items-center text-5xl font-serif text-[#C6A26B] font-light overflow-hidden h-16">
           <span>$</span>
           <motion.div
             animate={{ y: ["0%", "-80%"] }}
@@ -298,7 +291,7 @@ function PreviewVisuals({ title }) {
             className="flex flex-col ml-1"
           >
             {["0", "150", "430", "890", "1,250"].map((num, i) => (
-              <span key={i} className="h-16 sm:h-20 flex items-center">
+              <span key={i} className="h-16 flex items-center">
                 {num}
               </span>
             ))}
@@ -306,7 +299,6 @@ function PreviewVisuals({ title }) {
         </div>
       );
     case "Names of Allah":
-      // Arabic calligraphy softly appearing and blurring
       return (
         <motion.div
           animate={{
@@ -317,13 +309,12 @@ function PreviewVisuals({ title }) {
           transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
           className="flex items-center justify-center"
         >
-          <span className="text-6xl sm:text-8xl text-[#C6A26B] font-arabic drop-shadow-lg">
+          <span className="text-7xl text-[#C6A26B] font-arabic drop-shadow-lg">
             الرَّحْمَٰن
           </span>
         </motion.div>
       );
     case "Islamic History":
-      // Timeline drawing itself
       return (
         <div className="relative w-64 h-1 bg-stone-300 rounded-full flex items-center">
           <motion.div
@@ -348,9 +339,8 @@ function PreviewVisuals({ title }) {
         </div>
       );
     case "Learn Arabic":
-      // Arabic words morphing to English
       return (
-        <div className="relative flex items-center justify-center w-full h-24 text-3xl sm:text-5xl font-serif text-[#C6A26B]">
+        <div className="relative flex items-center justify-center w-full h-24 text-4xl font-serif text-[#C6A26B]">
           <motion.span
             className="absolute font-arabic"
             animate={{
@@ -380,7 +370,39 @@ function PreviewVisuals({ title }) {
   }
 }
 
-// --- Wheel Node Component ---
+// --- Icons ---
+const ChevronDown = ({ className = "" }) => (
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="m6 9 6 6 6-6" />
+  </svg>
+);
+
+const CheckIcon = () => (
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#C6A26B"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M20 6 9 17l-5-5" />
+  </svg>
+);
+
+// --- Wheel Node Component (Desktop) ---
 function WheelNode({
   topic,
   index,
@@ -397,7 +419,7 @@ function WheelNode({
 
   return (
     <div
-      className="absolute inset-0 pointer-events-none flex justify-center"
+      className="absolute inset-0 pointer-events-none flex justify-center hidden sm:flex"
       style={{ transform: `rotate(${angle}deg)` }}
     >
       <div className="absolute top-0 -translate-y-1/2 pointer-events-auto origin-center">
@@ -408,10 +430,10 @@ function WheelNode({
           style={{ rotate: counterRotation }}
           animate={{ opacity: isFaded ? 0.2 : 1 }}
           transition={{ duration: 0.6, ease: "easeInOut" }}
-          className="group relative flex flex-col items-center justify-center p-2 sm:p-4 cursor-pointer focus:outline-none touch-manipulation"
+          className="group relative flex flex-col items-center justify-center p-4 cursor-pointer focus:outline-none touch-manipulation"
         >
           <div
-            className={`w-1.5 h-1.5 sm:w-2.5 sm:h-2.5 rounded-full mb-2 sm:mb-3 transition-all duration-700 ${
+            className={`w-2.5 h-2.5 rounded-full mb-3 transition-all duration-700 ${
               isActive && isOpened
                 ? "bg-[#C6A26B] scale-150 shadow-[0_0_24px_rgba(198,162,107,0.8)]"
                 : isActive
@@ -422,8 +444,8 @@ function WheelNode({
           <span
             className={`font-serif tracking-wide transition-all duration-700 whitespace-nowrap ${
               isActive
-                ? "text-base sm:text-xl text-[#C6A26B] font-medium"
-                : "text-[11px] sm:text-base text-stone-400 group-hover:text-stone-700"
+                ? "text-xl text-[#C6A26B] font-medium"
+                : "text-base text-stone-400 group-hover:text-stone-700"
             }`}
           >
             {topic.title}
@@ -435,10 +457,10 @@ function WheelNode({
 }
 
 // --- Main Academy Component ---
-export default function Academy() {
+export default function TawfiqLearningHub() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const [selectedTopic, setSelectedTopic] = useState(topics[0]);
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
 
   const [isLocked, setIsLocked] = useState(false);
   const [isReturning, setIsReturning] = useState(false);
@@ -450,9 +472,24 @@ export default function Academy() {
   const anglePerItem = 360 / N;
   const wheelRotation = useSpring(0, { stiffness: 45, damping: 15, mass: 1.1 });
 
+  const selectedTopic = topics[activeIndex];
+
+  // Map activeIndex to wheel rotation
   useEffect(() => {
     wheelRotation.set(-activeIndex * anglePerItem);
   }, [activeIndex, anglePerItem, wheelRotation]);
+
+  // Lock body scroll when overlays are open
+  useEffect(() => {
+    if (isOverlayOpen || isBottomSheetOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOverlayOpen, isBottomSheetOpen]);
 
   const handleHoverEnter = (index) => {
     if (
@@ -482,7 +519,6 @@ export default function Academy() {
     if (isOverlayOpen || isLocked) return;
 
     if (index === activeIndex) {
-      setSelectedTopic(topics[index]);
       setIsLocked(true);
       setIsOverlayOpen(true);
     } else {
@@ -496,7 +532,6 @@ export default function Academy() {
 
   const closeModule = (e) => {
     if (e) e.stopPropagation();
-
     setIsReturning(true);
     setIsOverlayOpen(false);
 
@@ -510,132 +545,239 @@ export default function Academy() {
     <LayoutGroup>
       <section
         id="academy"
-        className="relative min-h-[100vh] bg-[#F7F5F1] overflow-hidden flex flex-col items-center justify-center font-sans py-20 sm:py-24"
+        className="relative min-h-[100dvh] bg-[#F7F5F1] overflow-hidden flex flex-col items-center font-sans py-16 sm:py-20"
       >
+        {/* Header Label, Title, and Description - Standard Flow to push content down safely */}
         <motion.div
           animate={{ opacity: isOverlayOpen ? 0 : 1 }}
           transition={{ duration: 0.5 }}
-          className="absolute top-10 sm:top-16 text-center z-20"
+          className="relative text-center z-20 w-full px-4 mb-8 sm:mb-12 shrink-0 pt-4"
         >
-          <p className="text-[10px] sm:text-[11px] font-sans tracking-[0.25em] uppercase text-stone-400 mb-4">
+          <p className="text-[10px] sm:text-[11px] font-sans tracking-[0.25em] uppercase text-stone-400 mb-3 sm:mb-4">
             03 — The Academy
+          </p>
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-serif text-stone-900 tracking-tight leading-tight">
+            Structured <span className="text-[#C6A26B] italic">Learning</span>
+          </h2>
+          <p className="mt-3 sm:mt-4 text-sm sm:text-lg font-serif text-stone-600 max-w-lg mx-auto leading-relaxed px-2">
+            Master the essentials of your faith through interactive,
+            step-by-step modules designed for every level.
           </p>
         </motion.div>
 
-        {/* Center Content Display */}
-        <div className="absolute z-30 flex flex-col items-center justify-center w-full max-w-[240px] sm:max-w-md text-center pointer-events-none mt-8 sm:mt-12">
-          <AnimatePresence>
-            {!isOverlayOpen && (
+        {/* --- MAIN INTERACTIVE AREA --- */}
+        <div className="relative flex-1 w-full flex flex-col items-center justify-center min-h-[400px]">
+          {/* CENTER CONTENT (Shared Layout Mobile + Desktop) */}
+          <div className="relative sm:absolute z-30 flex flex-col items-center justify-center w-full max-w-lg sm:max-w-md text-center pointer-events-none px-6">
+            <AnimatePresence mode="wait">
               <motion.div
-                key="wheel-center-wrapper"
-                className="flex flex-col items-center pointer-events-auto"
+                key={`topic-${activeIndex}`}
+                initial={
+                  isReturning
+                    ? false
+                    : { opacity: 0, filter: "blur(4px)", y: 15 }
+                }
+                animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+                exit={{ opacity: 0, filter: "blur(4px)", y: -15 }}
+                transition={{ duration: 0.4 }}
+                className="flex flex-col items-center text-center w-full pointer-events-auto"
               >
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={`topic-${activeIndex}`}
-                    initial={
-                      isReturning
-                        ? false
-                        : { opacity: 0, filter: "blur(4px)", y: 15 }
+                <span
+                  className="font-arabic text-6xl lg:text-7xl text-stone-300/80 mb-6 leading-none"
+                  dir="rtl"
+                >
+                  {selectedTopic.arabic}
+                </span>
+
+                {/* Title / Trigger (Opens Bottom Sheet on Mobile, disabled on Desktop) */}
+                <button
+                  onClick={() => {
+                    if (window.innerWidth < 640) {
+                      setIsBottomSheetOpen(true);
                     }
-                    animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-                    exit={{ opacity: 0, filter: "blur(4px)", y: -15 }}
-                    transition={{ duration: 0.4 }}
-                    className="flex flex-col items-center"
+                  }}
+                  className="flex items-center justify-center gap-2 mb-3 sm:mb-4 text-stone-900 active:opacity-60 transition-opacity sm:pointer-events-none"
+                >
+                  <motion.h2
+                    layoutId={`title-${selectedTopic.title}`}
+                    className="font-serif text-4xl sm:text-5xl tracking-tight leading-none"
                   >
-                    <span
-                      className="font-arabic text-4xl sm:text-6xl lg:text-7xl text-stone-300/80 mb-3 sm:mb-6 leading-none"
-                      dir="rtl"
-                    >
-                      {topics[activeIndex].arabic}
-                    </span>
+                    {selectedTopic.title}
+                  </motion.h2>
+                  <div className="text-stone-400 mt-1 sm:hidden">
+                    <ChevronDown />
+                  </div>
+                </button>
 
-                    <motion.h2
-                      layoutId={`title-${topics[activeIndex].title}`}
-                      className="font-serif text-2xl sm:text-4xl lg:text-5xl text-stone-900 tracking-tight leading-none mb-3 sm:mb-6"
-                    >
-                      {topics[activeIndex].title}
-                    </motion.h2>
-
-                    <motion.p
-                      layoutId={`desc-${topics[activeIndex].title}`}
-                      className="font-serif text-sm sm:text-lg italic font-light text-stone-600 leading-relaxed"
-                    >
-                      {topics[activeIndex].sentence}
-                    </motion.p>
-                  </motion.div>
-                </AnimatePresence>
+                <motion.p
+                  layoutId={`desc-${selectedTopic.title}`}
+                  className="font-serif text-base sm:text-xl italic font-light text-stone-600 leading-relaxed max-w-[280px] sm:max-w-md"
+                >
+                  {selectedTopic.sentence}
+                </motion.p>
               </motion.div>
-            )}
-          </AnimatePresence>
+            </AnimatePresence>
+
+            {/* Mobile "Explore Module" Button (Hidden on Desktop) */}
+            <div className="pointer-events-auto sm:hidden mt-10 mb-6 w-full flex justify-center">
+              <button
+                onClick={() => setIsOverlayOpen(true)}
+                className="bg-stone-900 text-stone-100 px-8 py-4 rounded-full text-xs tracking-[0.15em] uppercase font-semibold active:bg-stone-800 transition-colors shadow-lg"
+              >
+                Explore Module
+              </button>
+            </div>
+          </div>
+
+          {/* --- DESKTOP WHEEL (Hidden on Mobile) --- */}
+          <motion.div
+            className={`hidden sm:flex relative items-center justify-center sm:w-[600px] sm:h-[600px] lg:w-[780px] lg:h-[780px] rounded-full border border-stone-200/70 z-10 ${
+              isLocked ? "pointer-events-none" : ""
+            }`}
+            style={{ rotate: wheelRotation }}
+          >
+            <motion.div
+              animate={{ opacity: isOverlayOpen ? 0 : 1 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="absolute inset-0 w-full h-full pointer-events-none"
+            >
+              <div className="absolute inset-12 rounded-full border-[0.5px] border-stone-200/50" />
+              <div className="absolute inset-24 rounded-full border border-stone-200/40 border-dashed" />
+            </motion.div>
+
+            {topics.map((topic, i) => (
+              <WheelNode
+                key={topic.title}
+                topic={topic}
+                index={i}
+                angle={i * anglePerItem}
+                wheelRotation={wheelRotation}
+                isActive={i === activeIndex}
+                isOpened={isOverlayOpen && selectedTopic.title === topic.title}
+                isFaded={isOverlayOpen && selectedTopic.title !== topic.title}
+                onMouseEnter={() => handleHoverEnter(i)}
+                onMouseLeave={handleHoverLeave}
+                onClick={(e) => handleNodeClick(i, e)}
+              />
+            ))}
+          </motion.div>
         </div>
 
-        {/* The Giant Rotating Wheel */}
-        <motion.div
-          className={`relative flex items-center justify-center w-[90vw] h-[90vw] max-w-[360px] max-h-[360px] sm:max-w-none sm:max-h-none sm:w-[650px] sm:h-[650px] lg:w-[850px] lg:h-[850px] rounded-full border border-stone-200/70 mt-12 sm:mt-24 z-10 ${
-            isLocked ? "pointer-events-none" : ""
-          }`}
-          style={{ rotate: wheelRotation }}
-        >
-          <motion.div
-            animate={{ opacity: isOverlayOpen ? 0 : 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="absolute inset-0 w-full h-full pointer-events-none"
-          >
-            <div className="absolute inset-6 sm:inset-12 rounded-full border-[0.5px] border-stone-200/50" />
-            <div className="absolute inset-12 sm:inset-24 rounded-full border border-stone-200/40 border-dashed" />
-          </motion.div>
+        {/* --- NATIVE BOTTOM SHEET SELECTOR (Mobile Only) --- */}
+        <AnimatePresence>
+          {isBottomSheetOpen && (
+            <>
+              {/* Backdrop */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                onClick={() => setIsBottomSheetOpen(false)}
+                className="fixed inset-0 bg-stone-900/40 z-[100] backdrop-blur-[2px] sm:hidden"
+              />
 
-          {topics.map((topic, i) => (
-            <WheelNode
-              key={topic.title}
-              topic={topic}
-              index={i}
-              angle={i * anglePerItem}
-              wheelRotation={wheelRotation}
-              isActive={i === activeIndex}
-              isOpened={isOverlayOpen && selectedTopic.title === topic.title}
-              isFaded={isOverlayOpen && selectedTopic.title !== topic.title}
-              onMouseEnter={() => handleHoverEnter(i)}
-              onMouseLeave={handleHoverLeave}
-              onClick={(e) => handleNodeClick(i, e)}
-            />
-          ))}
-        </motion.div>
+              {/* Sheet */}
+              <motion.div
+                initial={{ y: "100%" }}
+                animate={{ y: 0 }}
+                exit={{ y: "100%" }}
+                transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                className="fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl z-[101] max-h-[85vh] flex flex-col shadow-2xl sm:hidden"
+              >
+                {/* Drag Handle & Header */}
+                <div className="pt-3 pb-4 border-b border-stone-100 shrink-0">
+                  <div className="w-12 h-1.5 bg-stone-200 rounded-full mx-auto mb-4" />
+                  <h3 className="text-center font-sans font-semibold text-xs text-stone-400 uppercase tracking-widest">
+                    Choose Topic
+                  </h3>
+                </div>
 
-        {/* Full Screen Course Page Overlay */}
+                {/* Scrollable List */}
+                <div className="overflow-y-auto overflow-x-hidden p-4 pb-12 space-y-2">
+                  {topics.map((topic, i) => {
+                    const isActive = i === activeIndex;
+                    return (
+                      <button
+                        key={topic.title}
+                        onClick={() => {
+                          setActiveIndex(i);
+                          setIsBottomSheetOpen(false);
+                        }}
+                        className={`w-full flex items-center justify-between p-4 rounded-2xl transition-colors active:bg-stone-100 ${
+                          isActive
+                            ? "bg-amber-50/50 border border-amber-100/50"
+                            : "bg-transparent"
+                        }`}
+                      >
+                        <div className="flex items-center gap-4 text-left">
+                          <span
+                            className="font-arabic text-xl text-stone-400 w-12 text-center"
+                            dir="rtl"
+                          >
+                            {topic.arabic}
+                          </span>
+                          <span
+                            className={`font-serif text-xl ${
+                              isActive ? "text-[#C6A26B]" : "text-stone-700"
+                            }`}
+                          >
+                            {topic.title}
+                          </span>
+                        </div>
+                        {isActive && <CheckIcon />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+
+        {/* --- FULL SCREEN COURSE OVERLAY (Desktop & Mobile) --- */}
         <AnimatePresence>
           {isOverlayOpen && (
-            <div className="fixed inset-0 z-[99999] overflow-y-auto overflow-x-hidden">
-              {/* Expanding Background Circle */}
+            <div className="fixed inset-0 z-[105] overflow-y-auto overflow-x-hidden bg-[#FAFAFA]">
+              {/* Desktop Expanding Background */}
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 35 }}
                 exit={{ scale: 0 }}
                 transition={springTransition}
-                className="fixed top-1/2 left-1/2 w-48 h-48 bg-[#FAFAFA] rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+                className="hidden sm:block fixed top-1/2 left-1/2 w-48 h-48 bg-[#FAFAFA] rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"
                 style={{ zIndex: -1 }}
               />
 
-              {/* Fixed Back Button */}
+              {/* Mobile Sticky Top Bar (iOS style) */}
+              <div className="sm:hidden sticky top-0 z-50 bg-[#FAFAFA]/90 backdrop-blur-md border-b border-stone-200/50 px-4 py-4 flex items-center">
+                <button
+                  onClick={closeModule}
+                  className="text-stone-500 font-sans text-sm tracking-wide font-medium flex items-center gap-1 active:opacity-60"
+                >
+                  <ChevronDown className="rotate-90" />
+                  Back
+                </button>
+              </div>
+
+              {/* Desktop Fixed Back Button */}
               <motion.button
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20, transition: { duration: 0.3 } }}
                 transition={{ delay: 0.3, duration: 0.6 }}
                 onClick={closeModule}
-                className="fixed top-8 left-6 sm:top-12 sm:left-12 z-50 text-stone-400 hover:text-stone-800 tracking-widest uppercase text-[10px] sm:text-xs font-semibold py-2 transition-colors cursor-pointer pointer-events-auto"
+                className="hidden sm:block fixed top-12 left-12 z-50 text-stone-400 hover:text-stone-800 tracking-widest uppercase text-xs font-semibold py-2 transition-colors cursor-pointer pointer-events-auto"
               >
                 ← Back to Academy
               </motion.button>
 
-              {/* Scrollable Content Container */}
-              <div className="relative z-10 min-h-screen w-full max-w-4xl mx-auto px-6 pt-32 sm:pt-40 pb-32 flex flex-col items-center">
-                {/* Shared Elements Morphing */}
+              {/* Course Content */}
+              <div className="relative w-full max-w-4xl mx-auto px-6 pt-12 sm:pt-40 pb-32 flex flex-col items-center">
                 <motion.h1
                   layoutId={`title-${selectedTopic.title}`}
                   transition={springTransition}
-                  className="font-serif text-5xl sm:text-7xl lg:text-8xl text-[#C6A26B] tracking-tight leading-none mb-6 text-center"
+                  className="font-serif text-5xl sm:text-7xl lg:text-8xl text-[#C6A26B] tracking-tight leading-none mb-4 sm:mb-6 text-center"
                 >
                   {selectedTopic.title}
                 </motion.h1>
@@ -643,24 +785,23 @@ export default function Academy() {
                 <motion.p
                   layoutId={`desc-${selectedTopic.title}`}
                   transition={springTransition}
-                  className="font-serif text-lg sm:text-2xl italic font-light text-stone-600 max-w-xl mx-auto text-center leading-relaxed"
+                  className="font-serif text-lg sm:text-2xl italic font-light text-stone-600 text-center leading-relaxed mb-12 sm:mb-0 max-w-xl"
                 >
                   {selectedTopic.sentence}
                 </motion.p>
 
-                {/* Course Content */}
-                <div className="mt-16 sm:mt-24 w-full border-t border-stone-200/60 pt-16 sm:pt-20 flex flex-col items-center pointer-events-auto">
+                <div className="w-full border-t border-stone-200/60 pt-12 sm:pt-20 sm:mt-24 flex flex-col items-center">
                   <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 15 }}
                     transition={{ duration: 0.6, delay: 0.2 }}
-                    className="text-center mb-16 sm:mb-24 px-4"
+                    className="text-center mb-12 sm:mb-24 px-4"
                   >
-                    <h3 className="text-2xl sm:text-3xl font-serif text-stone-900 mb-6">
+                    <h3 className="text-2xl sm:text-3xl font-serif text-stone-900 mb-4 sm:mb-6">
                       {selectedTopic.subtitle}
                     </h3>
-                    <p className="text-stone-600 font-light text-lg sm:text-xl leading-relaxed max-w-2xl mx-auto">
+                    <p className="text-stone-600 font-light text-base sm:text-xl leading-relaxed max-w-2xl mx-auto">
                       {selectedTopic.intro}
                     </p>
                   </motion.div>
@@ -670,18 +811,18 @@ export default function Academy() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 15 }}
                     transition={{ duration: 0.6, delay: 0.3 }}
-                    className="w-full max-w-3xl mb-16 sm:mb-24"
+                    className="w-full max-w-3xl mb-12 sm:mb-24"
                   >
-                    <p className="text-xs tracking-[0.2em] uppercase text-stone-400 mb-8 text-center font-semibold">
+                    <p className="text-[10px] sm:text-xs tracking-[0.2em] uppercase text-stone-400 mb-6 sm:mb-8 text-center font-semibold">
                       Inside Tawfiq
                     </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6">
                       {selectedTopic.features.map((feature, idx) => (
                         <div
                           key={idx}
-                          className="bg-white border border-stone-200/60 p-6 rounded-2xl text-center shadow-sm"
+                          className="bg-white border border-stone-200/60 p-4 sm:p-6 rounded-xl sm:rounded-2xl text-center shadow-sm"
                         >
-                          <p className="text-stone-800 font-light text-lg">
+                          <p className="text-stone-800 font-light text-base sm:text-lg">
                             {feature}
                           </p>
                         </div>
@@ -695,7 +836,7 @@ export default function Academy() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 15 }}
                     transition={{ duration: 0.6, delay: 0.4 }}
-                    className="w-full h-64 sm:h-96 bg-gradient-to-br from-stone-100 to-[#F7F5F1] rounded-3xl flex items-center justify-center mb-16 sm:mb-24 border border-stone-200/50 shadow-inner overflow-hidden relative"
+                    className="w-full h-64 sm:h-96 bg-gradient-to-br from-stone-100 to-[#F7F5F1] rounded-3xl flex items-center justify-center mb-12 sm:mb-24 border border-stone-200/50 shadow-inner overflow-hidden relative"
                   >
                     <PreviewVisuals title={selectedTopic.title} />
                   </motion.div>
@@ -705,23 +846,23 @@ export default function Academy() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 15 }}
                     transition={{ duration: 0.6, delay: 0.5 }}
-                    className="text-center mb-16 sm:mb-24 max-w-2xl px-4"
+                    className="text-center mb-12 sm:mb-24 px-4 max-w-2xl"
                   >
-                    <div className="w-12 h-[1px] bg-[#C6A26B] mx-auto mb-8" />
-                    <p className="text-2xl sm:text-3xl font-serif text-stone-800 font-light italic leading-relaxed">
+                    <div className="w-8 sm:w-12 h-[1px] bg-[#C6A26B] mx-auto mb-6 sm:mb-8" />
+                    <p className="text-xl sm:text-3xl font-serif text-stone-800 font-light italic leading-relaxed">
                       "{selectedTopic.statistic}"
                     </p>
                   </motion.div>
 
                   <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.9 }}
                     transition={{ duration: 0.6, delay: 0.6 }}
-                    className="pb-12"
+                    className="pb-12 w-full sm:w-auto"
                   >
-                    <button className="bg-stone-900 text-stone-100 px-10 py-4 rounded-full text-xs sm:text-sm tracking-[0.2em] uppercase font-semibold hover:bg-[#C6A26B] hover:text-white transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-1 cursor-pointer">
-                      Open Tawfiq
+                    <button className="w-full sm:w-auto bg-stone-900 text-stone-100 px-10 py-4 rounded-xl sm:rounded-full text-xs sm:text-sm tracking-[0.15em] sm:tracking-[0.2em] uppercase font-semibold hover:bg-[#C6A26B] hover:text-white transition-all duration-300 shadow-xl sm:hover:shadow-2xl sm:hover:-translate-y-1 cursor-pointer active:bg-stone-800">
+                      Open in Tawfiq
                     </button>
                   </motion.div>
                 </div>

@@ -332,11 +332,11 @@ export default function Quran() {
             </p>
           </motion.div>
 
-          {/* Sub-Navigation Tabs */}
-          <div className="flex flex-wrap items-center justify-center gap-2 mt-8 bg-stone-200/50 p-1.5 rounded-full border border-stone-300/40 w-fit mx-auto">
+          {/* Sub-Navigation Tabs - FIXED FOR MOBILE */}
+          <div className="flex flex-nowrap items-center justify-start sm:justify-center gap-1 sm:gap-2 mt-8 bg-stone-200/50 p-1.5 rounded-full border border-stone-300/40 w-max max-w-full overflow-x-auto mx-auto scrollbar-hide">
             <button
               onClick={() => setActiveTab("reading")}
-              className={`px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer ${
+              className={`whitespace-nowrap px-3 sm:px-5 py-2 rounded-full text-[10px] sm:text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer ${
                 activeTab === "reading"
                   ? "bg-stone-900 text-stone-100 shadow-sm"
                   : "text-stone-600 hover:text-stone-900"
@@ -346,7 +346,7 @@ export default function Quran() {
             </button>
             <button
               onClick={() => setActiveTab("themes")}
-              className={`px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer ${
+              className={`whitespace-nowrap px-3 sm:px-5 py-2 rounded-full text-[10px] sm:text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer ${
                 activeTab === "themes"
                   ? "bg-stone-900 text-stone-100 shadow-sm"
                   : "text-stone-600 hover:text-stone-900"
@@ -356,7 +356,7 @@ export default function Quran() {
             </button>
             <button
               onClick={() => setActiveTab("memorization")}
-              className={`px-5 py-2 rounded-full text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer ${
+              className={`whitespace-nowrap px-3 sm:px-5 py-2 rounded-full text-[10px] sm:text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer ${
                 activeTab === "memorization"
                   ? "bg-stone-900 text-stone-100 shadow-sm"
                   : "text-stone-600 hover:text-stone-900"
@@ -368,7 +368,7 @@ export default function Quran() {
         </div>
       </div>
 
-      <div className="relative max-w-[1400px] mx-auto px-6 lg:px-10">
+      <div className="relative max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10">
         <AnimatePresence mode="wait">
           {/* TAB 1: MUSHAF READING EXPERIENCE */}
           {activeTab === "reading" && (
@@ -389,10 +389,11 @@ export default function Quran() {
                   />
                 </div>
 
-                <div className="p-10 sm:p-16">
-                  <div className="flex items-baseline justify-between mb-16 pb-6 border-b border-stone-200/60">
+                {/* Adjusted padding for mobile */}
+                <div className="p-6 sm:p-10 md:p-16">
+                  <div className="flex items-baseline justify-between mb-10 sm:mb-16 pb-6 border-b border-stone-200/60">
                     <div>
-                      <h3 className="font-serif text-2xl text-stone-900">
+                      <h3 className="font-serif text-xl sm:text-2xl text-stone-900">
                         Surah <span className="text-[#C6A26B]">Al-Fatiha</span>
                       </h3>
                       <div className="flex items-center gap-3 mt-1.5 text-[10px] font-sans text-stone-400 uppercase tracking-widest">
@@ -416,7 +417,7 @@ export default function Quran() {
                           Ghunnah
                         </span>
                       </div>
-                      <div className="flex items-center gap-6">
+                      <div className="flex items-center gap-4 sm:gap-6">
                         <Waveform isPlaying={isPlaying} />
                         <CircularProgress percentage={overallPercentage} />
                       </div>
@@ -476,7 +477,7 @@ export default function Quran() {
                                     >
                                       {a.translation}
                                     </p>
-                                    <span className="text-[10px] text-[#C6A26B] opacity-0 group-hover:opacity-100 transition-opacity uppercase tracking-wider font-semibold">
+                                    <span className="hidden sm:block text-[10px] text-[#C6A26B] opacity-0 group-hover:opacity-100 transition-opacity uppercase tracking-wider font-semibold ml-4 shrink-0">
                                       Tap for Tafsir →
                                     </span>
                                   </div>
@@ -538,8 +539,8 @@ export default function Quran() {
                   </AnimatePresence>
                 </div>
 
-                {/* Control bar */}
-                <div className="flex items-center justify-between gap-4 px-10 sm:px-16 py-6 border-t border-stone-200/60 bg-stone-50/40">
+                {/* Control bar - adjusted padding for mobile */}
+                <div className="flex items-center justify-between gap-4 px-6 sm:px-10 md:px-16 py-4 sm:py-6 border-t border-stone-200/60 bg-stone-50/40">
                   <button
                     onClick={toggle}
                     className="group relative inline-flex items-center gap-3 transition-colors duration-300 cursor-pointer"
@@ -555,7 +556,7 @@ export default function Quran() {
                         }}
                       />
                     )}
-                    <div className="w-11 h-11 rounded-full bg-stone-900 flex items-center justify-center text-stone-50 transition-all duration-300 hover:bg-stone-800 active:scale-95 group-hover:scale-105">
+                    <div className="w-11 h-11 rounded-full bg-stone-900 flex items-center justify-center text-stone-50 transition-all duration-300 hover:bg-stone-800 active:scale-95 group-hover:scale-105 shrink-0">
                       {isPlaying ? (
                         <Pause size={16} strokeWidth={2} />
                       ) : (
@@ -582,16 +583,16 @@ export default function Quran() {
                     </div>
                   </button>
 
-                  <div className="flex items-center gap-6">
+                  <div className="flex items-center gap-3 sm:gap-6">
                     <button
                       onClick={() => setShowTranslation((s) => !s)}
-                      className="text-[11px] font-sans text-stone-400 hover:text-stone-900 transition-colors cursor-pointer"
+                      className="text-[10px] sm:text-[11px] font-sans text-stone-400 hover:text-stone-900 transition-colors cursor-pointer"
                     >
                       {showTranslation
                         ? "Hide Translation"
                         : "Show Translation"}
                     </button>
-                    <div className="text-[11px] font-sans tracking-[0.12em] uppercase px-3 py-1.5 rounded-full border border-stone-200 text-stone-400">
+                    <div className="text-[10px] sm:text-[11px] font-sans tracking-[0.12em] uppercase px-3 py-1.5 rounded-full border border-stone-200 text-stone-400">
                       Tawfiq
                     </div>
                   </div>
@@ -608,13 +609,13 @@ export default function Quran() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.5 }}
-              className="max-w-3xl mx-auto bg-white border border-stone-200/80 rounded-2xl p-8 sm:p-12 shadow-sm"
+              className="max-w-3xl mx-auto bg-white border border-stone-200/80 rounded-2xl p-6 sm:p-12 shadow-sm"
             >
-              <div className="text-center mb-10">
+              <div className="text-center mb-8 sm:mb-10">
                 <span className="text-xs uppercase tracking-[0.2em] text-[#C6A26B] font-semibold">
                   Quranic Themes
                 </span>
-                <h3 className="font-serif text-3xl text-stone-900 mt-2">
+                <h3 className="font-serif text-2xl sm:text-3xl text-stone-900 mt-2">
                   Study by Subject
                 </h3>
                 <p className="text-stone-500 font-light text-sm mt-1">
@@ -623,7 +624,7 @@ export default function Quran() {
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
                 {[
                   {
                     name: "Mercy",
@@ -665,15 +666,15 @@ export default function Quran() {
                   <div
                     key={i}
                     onClick={() => setSelectedVerseForPanel(ayahs[0])}
-                    className="bg-[#F7F5F1] hover:bg-amber-50/50 border border-stone-200/60 rounded-xl p-5 text-center cursor-pointer transition-all duration-300 group hover:-translate-y-1 shadow-sm"
+                    className="bg-[#F7F5F1] hover:bg-amber-50/50 border border-stone-200/60 rounded-xl p-4 sm:p-5 text-center cursor-pointer transition-all duration-300 group hover:-translate-y-1 shadow-sm"
                   >
-                    <span className="font-arabic text-xl text-[#C6A26B] block mb-1">
+                    <span className="font-arabic text-lg sm:text-xl text-[#C6A26B] block mb-1">
                       {theme.arabic}
                     </span>
-                    <h4 className="font-serif text-stone-900 font-medium text-lg group-hover:text-[#C6A26B]">
+                    <h4 className="font-serif text-stone-900 font-medium text-base sm:text-lg group-hover:text-[#C6A26B]">
                       {theme.name}
                     </h4>
-                    <p className="text-stone-500 text-xs mt-1 font-light">
+                    <p className="text-stone-500 text-[11px] sm:text-xs mt-1 font-light">
                       {theme.desc}
                     </p>
                     <span className="inline-block mt-3 text-[10px] text-stone-400 font-sans tracking-wider uppercase">
@@ -693,12 +694,12 @@ export default function Quran() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.5 }}
-              className="max-w-2xl mx-auto bg-white border border-stone-200/80 rounded-2xl p-8 sm:p-12 shadow-sm text-center"
+              className="max-w-2xl mx-auto bg-white border border-stone-200/80 rounded-2xl p-6 sm:p-12 shadow-sm text-center"
             >
               <span className="text-xs uppercase tracking-[0.2em] text-[#C6A26B] font-semibold">
                 Hifdh Assistant
               </span>
-              <h3 className="font-serif text-3xl text-stone-900 mt-2 mb-4">
+              <h3 className="font-serif text-2xl sm:text-3xl text-stone-900 mt-2 mb-4">
                 Memorization Mode
               </h3>
               <p className="text-stone-500 text-sm font-light mb-8 max-w-lg mx-auto">
@@ -716,7 +717,7 @@ export default function Quran() {
                   <button
                     key={m.id}
                     onClick={() => setMemorizationMode(m.id)}
-                    className={`px-4 py-2 rounded-full text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer ${
+                    className={`px-3 sm:px-4 py-2 rounded-full text-[10px] sm:text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer ${
                       memorizationMode === m.id
                         ? "bg-[#C6A26B] text-white shadow-sm"
                         : "bg-stone-100 text-stone-600 hover:bg-stone-200"
@@ -728,13 +729,13 @@ export default function Quran() {
               </div>
 
               {/* Sample Verse Exercise Card */}
-              <div className="bg-[#F7F5F1] border border-stone-200 rounded-2xl p-8 mb-8 text-center">
+              <div className="bg-[#F7F5F1] border border-stone-200 rounded-2xl p-6 sm:p-8 mb-8 text-center">
                 <span className="text-[10px] font-sans text-stone-400 uppercase tracking-widest block mb-4">
                   Ayah 1 of Al-Fatiha
                 </span>
                 {memorizationMode !== "hide-arabic" ? (
                   <p
-                    className="font-arabic text-3xl text-stone-900 mb-4"
+                    className="font-arabic text-2xl sm:text-3xl text-stone-900 mb-4 leading-relaxed"
                     dir="rtl"
                   >
                     بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
@@ -761,7 +762,7 @@ export default function Quran() {
                 onClick={() =>
                   alert("Great effort! Keep practicing with Tawfiq Hifdh.")
                 }
-                className="bg-stone-900 text-white px-8 py-3 rounded-full text-xs font-semibold tracking-widest uppercase hover:bg-[#C6A26B] transition-colors cursor-pointer"
+                className="bg-stone-900 text-white px-6 sm:px-8 py-3 rounded-full text-[10px] sm:text-xs font-semibold tracking-widest uppercase hover:bg-[#C6A26B] transition-colors cursor-pointer"
               >
                 I Recited Correctly ✓
               </button>
@@ -779,14 +780,14 @@ export default function Quran() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full max-w-lg bg-[#FAFAFA] h-full shadow-2xl flex flex-col overflow-y-auto p-8 sm:p-10 border-l border-stone-200"
+              className="w-full max-w-lg bg-[#FAFAFA] h-full shadow-2xl flex flex-col overflow-y-auto p-6 sm:p-10 border-l border-stone-200"
             >
-              <div className="flex justify-between items-center pb-6 border-b border-stone-200 mb-8">
+              <div className="flex justify-between items-center pb-4 sm:pb-6 border-b border-stone-200 mb-6 sm:mb-8">
                 <div>
                   <span className="text-[10px] uppercase tracking-widest text-[#C6A26B] font-semibold">
                     Interactive Verse Study
                   </span>
-                  <h4 className="font-serif text-2xl text-stone-900 mt-1">
+                  <h4 className="font-serif text-xl sm:text-2xl text-stone-900 mt-1">
                     Ayah {selectedVerseForPanel.n}
                   </h4>
                 </div>
@@ -800,25 +801,25 @@ export default function Quran() {
 
               <div
                 dir="rtl"
-                className="bg-white border border-stone-200 rounded-2xl p-6 mb-6 shadow-sm"
+                className="bg-white border border-stone-200 rounded-2xl p-5 sm:p-6 mb-6 shadow-sm"
               >
-                <p className="font-arabic text-2xl text-stone-900 leading-[2.2] text-center">
+                <p className="font-arabic text-xl sm:text-2xl text-stone-900 leading-[2.2] text-center">
                   <Tajweed segments={selectedVerseForPanel.segments} />
                 </p>
               </div>
 
               <div className="mb-6">
-                <h5 className="text-xs uppercase tracking-wider text-stone-400 font-semibold mb-2">
+                <h5 className="text-[10px] sm:text-xs uppercase tracking-wider text-stone-400 font-semibold mb-2">
                   Translation
                 </h5>
-                <p className="font-serif italic text-stone-700 text-base">
+                <p className="font-serif italic text-stone-700 text-sm sm:text-base">
                   "{selectedVerseForPanel.translation}"
                 </p>
               </div>
 
               {/* Word-by-Word Breakdown */}
               <div className="mb-6">
-                <h5 className="text-xs uppercase tracking-wider text-stone-400 font-semibold mb-3">
+                <h5 className="text-[10px] sm:text-xs uppercase tracking-wider text-stone-400 font-semibold mb-3">
                   Word Meanings & Roots
                 </h5>
                 <div className="grid grid-cols-2 gap-2">
@@ -828,42 +829,42 @@ export default function Quran() {
                       className="bg-white border border-stone-200/80 p-3 rounded-xl"
                     >
                       <span
-                        className="font-arabic text-base text-[#C6A26B] block mb-0.5"
+                        className="font-arabic text-sm sm:text-base text-[#C6A26B] block mb-0.5"
                         dir="rtl"
                       >
                         {w.word}
                       </span>
-                      <span className="text-xs text-stone-700 font-medium">
+                      <span className="text-[10px] sm:text-xs text-stone-700 font-medium">
                         {w.meaning}
                       </span>
                     </div>
                   ))}
                 </div>
-                <p className="text-[11px] text-stone-400 mt-2 font-mono">
+                <p className="text-[10px] text-stone-400 mt-2 font-mono">
                   Root mapping: {selectedVerseForPanel.root}
                 </p>
               </div>
 
               {/* Tafsir / Reflection */}
-              <div className="bg-amber-50/60 border border-amber-200/60 rounded-2xl p-6 mb-8">
-                <h5 className="text-xs uppercase tracking-wider text-amber-800 font-semibold mb-2 flex items-center gap-2">
+              <div className="bg-amber-50/60 border border-amber-200/60 rounded-2xl p-5 sm:p-6 mb-8">
+                <h5 className="text-[10px] sm:text-xs uppercase tracking-wider text-amber-800 font-semibold mb-2 flex items-center gap-2">
                   <Sparkles size={14} /> Authentic Tafsir Summary
                 </h5>
-                <p className="font-serif text-stone-700 text-sm leading-relaxed">
+                <p className="font-serif text-stone-700 text-xs sm:text-sm leading-relaxed">
                   {selectedVerseForPanel.tafsir}
                 </p>
               </div>
 
-              <div className="mt-auto pt-6 border-t border-stone-200 flex gap-4">
+              <div className="mt-auto pt-4 sm:pt-6 border-t border-stone-200 flex gap-3 sm:gap-4">
                 <button
                   onClick={() => alert("Verse bookmarked to My Favorites!")}
-                  className="flex-1 bg-stone-900 text-white py-3 rounded-full text-xs font-semibold uppercase tracking-wider hover:bg-[#C6A26B] transition-colors cursor-pointer"
+                  className="flex-1 bg-stone-900 text-white py-3 rounded-full text-[10px] sm:text-xs font-semibold uppercase tracking-wider hover:bg-[#C6A26B] transition-colors cursor-pointer"
                 >
                   Bookmark Verse
                 </button>
                 <button
                   onClick={() => setSelectedVerseForPanel(null)}
-                  className="px-6 border border-stone-300 text-stone-700 py-3 rounded-full text-xs font-semibold uppercase tracking-wider hover:bg-stone-100 transition-colors cursor-pointer"
+                  className="px-5 sm:px-6 border border-stone-300 text-stone-700 py-3 rounded-full text-[10px] sm:text-xs font-semibold uppercase tracking-wider hover:bg-stone-100 transition-colors cursor-pointer"
                 >
                   Close
                 </button>
@@ -878,7 +879,7 @@ export default function Quran() {
         onEnded={handleEnded}
         onTimeUpdate={handleTime}
         preload="none"
-    />
+      />
     </section>
   );
 }

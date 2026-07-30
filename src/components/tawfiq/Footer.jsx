@@ -89,7 +89,7 @@ export default function Footer() {
               leading-[0.88]
               tracking-[-0.04em]
               text-[#1B140F]
-              text-[clamp(6rem,18vw,12rem)]
+              text-[clamp(3.5rem,15vw,12rem)]
               select-none
             "
           >
