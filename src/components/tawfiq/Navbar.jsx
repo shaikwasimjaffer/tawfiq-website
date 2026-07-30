@@ -11,10 +11,12 @@ const EMAILJS_SERVICE_ID = "service_8msblsf";
 const EMAILJS_TEMPLATE_ID = "template_9gd6lm2";
 const EMAILJS_PUBLIC_KEY = "5iuNuXg40cmMgueNJ";
 
+// --- Added Tawfiq AI to the navItems array ---
 const navItems = [
   { id: "qaza", label: "Qaza", href: "#qaza" },
   { id: "quran", label: "Quran", href: "#quran" },
   { id: "academy", label: "Academy", href: "#academy" },
+  { id: "tawfiq-ai", label: "Tawfiq AI", href: "#tawfiq-ai" }, 
 ];
 
 const categoryConfig = {
