@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import { Check } from "lucide-react";
 
 // --- MOCK DATA: GOLDEN PATH DEMO ---
@@ -7,7 +7,7 @@ const answers = {
   Simple: {
     quick:
       "The Prophet ﷺ began his mornings with remembrance of Allah, gratitude, and preparation for prayer.",
-    simple:
+    explanation:
       "The first thing the Prophet ﷺ did after waking wasn't checking the world around him—it was remembering Allah. This teaches Muslims that the beginning of the day shapes everything that follows.",
     sequence: [
       "He recited the waking dua.",
@@ -15,7 +15,9 @@ const answers = {
       "Performed Wudu (ablution).",
       "Prayed the Sunnah before Fajr.",
     ],
-    evidence: "Based on authentic narrations from Sahih al-Bukhari and Muslim.",
+    evidence: [
+      "Based on authentic narrations from Sahih al-Bukhari and Muslim.",
+    ],
     lessons: [
       "Start the day with gratitude.",
       "Physical purity is tied to spiritual readiness.",
@@ -23,24 +25,47 @@ const answers = {
   },
   Detailed: {
     quick:
-      "The Prophet ﷺ began his mornings with remembrance of Allah, gratitude, and preparation for prayer.",
-    simple:
-      "The first thing the Prophet ﷺ did after waking wasn't checking the world around him—it was remembering Allah. This teaches Muslims that the beginning of the day shapes everything that follows.",
+      "The Prophet ﷺ established a profound morning routine centered around spiritual awakening, physical purification, and solitary worship before engaging with the community.",
+    explanation:
+      "Upon waking, before any worldly engagement, the Prophet ﷺ consciously redirected his focus to Allah. The transition from sleep—often referred to as a minor death in Islamic theology—to wakefulness was marked by deep gratitude. This routine wasn't merely habitual; it was a deliberate spiritual grounding that prepared him for the heavy responsibilities of prophethood, bridging physical hygiene with spiritual readiness.",
     sequence: [
-      "He recited the waking dua: 'Alhamdulillahil-ladhi ahyana...'",
-      "Used the siwak immediately upon waking.",
-      "Performed Wudu.",
-      "Prayed the 2 Rak'ah Sunnah of Fajr at home.",
+      "Waking Remembrance: He immediately recited the dua for waking up: 'Alhamdulillahil-ladhi ahyana ba'da ma amatana...'",
+      "Contemplation: He would look up at the sky and recite the final ten verses of Surah Ali 'Imran (3:190-200).",
+      "Physical Purification: He rigorously used the Siwak to clean his mouth, followed by a complete and thorough Wudu.",
+      "Voluntary Prayer: He prayed the two emphasized Rak'ahs of Sunnah for Fajr in the privacy of his home, often reciting Surah Al-Kafirun and Surah Al-Ikhlas.",
     ],
-    evidence:
-      "Narrated by Hudhaifa (RA): Whenever the Prophet ﷺ got up for Fajr, he used to clean his mouth with a Siwak. (Sahih al-Bukhari 246)",
+    evidence: [
+      "Ibn Abbas (RA) narrated: 'The Prophet ﷺ woke up, sat, wiped the sleep from his face with his hands, and looked at the sky reciting the last ten verses of Surah Ali Imran.' (Sahih Muslim 763)",
+      "Hudhaifa (RA) narrated: 'Whenever the Prophet ﷺ got up for Fajr, he used to clean his mouth with a Siwak.' (Sahih al-Bukhari 246)",
+    ],
     lessons: [
-      "Prioritize spiritual connection before worldly affairs.",
-      "Maintain consistent physical hygiene.",
-      "Establish a routine that anchors your day.",
+      "Spiritual Primacy: The very first thoughts and words of the day should be anchored in Divine remembrance rather than worldly anxieties.",
+      "Mindful Transitions: Moving from sleep to wakefulness is a conscious act of gratitude.",
+      "Privacy in Worship: Performing voluntary prayers at home establishes a sacred, spiritually alive environment within the household.",
     ],
   },
-  // Scholarly mode would have different data, structured similarly
+  Scholarly: {
+    quick:
+      "The Prophetic morning (Istiyqath) is categorized by classical jurists and scholars of Seerah as a sequence of Sunnahs encompassing Adhkar, Taharah, and Nawafil.",
+    explanation:
+      "Classical texts of Seerah and Shama'il emphasize that the Prophet's ﷺ waking routine was a highly structured sequence governed by presence of heart (Hudur al-Qalb). Scholars of Usul derive multiple distinct rulings from this brief period, analyzing whether actions like the use of the Siwak upon waking are Sunnah Mu'akkadah (emphasized) strictly for the prayer or for the act of waking itself. The intentionality behind his transition from rest to worship establishes the jurisprudential baseline for daily Muslim practice.",
+    sequence: [
+      "Al-Istiyqath (Waking): Immediate pronouncement of the Ma'thur (transmitted) supplications.",
+      "Al-Tafakkur (Reflection): Recitation of Ali 'Imran 3:190-200, which scholars note connects cosmic reflection with personal accountability.",
+      "Al-Istiak (Tooth-stick): Used longitudinally along the teeth; a purification for the mouth and pleasing to the Lord.",
+      "Al-Taharah (Purification): Renewal of Wudu, washing away the 'knots of Shaytan' tied during sleep.",
+      "Rak'atay al-Fajr: Two brief units of prayer at home, widely considered the most stressed of all rawatib (affiliated) prayers.",
+    ],
+    evidence: [
+      "Abu Huraira (RA) reported the Prophet ﷺ said: 'Satan puts three knots at the back of the head of any of you if he is asleep... if he wakes up and remembers Allah, one knot is undone...' (Sahih al-Bukhari 1142)",
+      "Imam an-Nawawi states in Al-Minhaj regarding the Muslim narration of Ibn Abbas: 'This contains the recommendation of reciting these verses upon waking up, and brushing sleep away from the face.'",
+    ],
+    lessons: [
+      "Tazkiyah (Purification): The integration of external cleanliness (Siwak/Wudu) with internal vigilance.",
+      "Tawqif (Divine Instruction): Adherence to the exact sequence and phrasing of the Prophetic tradition ensures maximum spiritual benefit.",
+      "Fiqh of Nawafil: The establishment of the Sunnah of Fajr at home serves as a barrier against rendering houses into metaphorical graveyards.",
+    ],
+  },
 };
 
 const scholarlyOpinions = [
@@ -71,13 +96,23 @@ const scholarlyOpinions = [
 ];
 
 export default function LandingPageDemo() {
-  const [phase, setPhase] = useState("typing"); // typing, sending, thinking, answering
+  const containerRef = useRef(null);
+  const isInView = useInView(containerRef, { once: true, amount: 0.2 });
+
+  const [phase, setPhase] = useState("idle");
   const [typedText, setTypedText] = useState("");
   const [mode, setMode] = useState("Detailed");
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [thinkingStep, setThinkingStep] = useState(0);
 
   const fullQuestion = "How did Prophet ﷺ spend his mornings?";
+
+  // 0. Wait for scroll
+  useEffect(() => {
+    if (isInView && phase === "idle") {
+      setTimeout(() => setPhase("typing"), 500); // slight delay after scroll
+    }
+  }, [isInView, phase]);
 
   // 1. Typing Effect
   useEffect(() => {
@@ -91,7 +126,7 @@ export default function LandingPageDemo() {
         clearInterval(typingInterval);
         setTimeout(() => setPhase("sending"), 300);
       }
-    }, 70); // ~70ms per char
+    }, 70);
 
     return () => clearInterval(typingInterval);
   }, [phase]);
@@ -103,12 +138,12 @@ export default function LandingPageDemo() {
     }
   }, [phase]);
 
-  // 3. Thinking Steps (Quran -> Hadith -> Seerah -> Building)
+  // 3. Thinking Steps
   useEffect(() => {
     if (phase === "thinking" || isRegenerating) {
       setThinkingStep(0);
 
-      const timings = [500, 1000, 1500, 2000]; // Staggered checkmarks
+      const timings = [500, 1000, 1500, 2000];
       timings.forEach((time, index) => {
         setTimeout(() => setThinkingStep(index + 1), time);
       });
@@ -120,7 +155,6 @@ export default function LandingPageDemo() {
     }
   }, [phase, isRegenerating]);
 
-  // Handle Mode Change (Regeneration)
   const handleModeChange = (newMode) => {
     if (newMode === mode || isRegenerating) return;
     setMode(newMode);
@@ -130,16 +164,37 @@ export default function LandingPageDemo() {
   const currentData = answers[mode] || answers.Detailed;
 
   return (
-    <section className="min-h-screen bg-[#F7F5F1] py-24 px-6 font-['Manrope'] selection:bg-[#C6A26B] selection:text-white flex justify-center">
+    <section
+      ref={containerRef}
+      className="min-h-screen bg-[#F7F5F1] py-24 px-6 font-['Manrope'] selection:bg-[#C6A26B] selection:text-white flex flex-col items-center"
+    >
+      {/* Visual Title Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="text-center mb-16 max-w-4xl"
+      >
+        <h2 className="text-5xl sm:text-6xl md:text-7xl font-serif text-stone-900 leading-[1.15] tracking-tight">
+          Learn Islam with{" "}
+          <span className="text-[#C6A26B] italic">Tawfiq AI</span>
+          <br />
+       
+        </h2>
+      </motion.div>
+
       <div className="w-full max-w-3xl flex flex-col gap-6">
         {/* User Input / Bubble */}
         <div className="flex justify-end min-h-[60px]">
           <AnimatePresence mode="wait">
-            {phase === "typing" ? (
+            {phase === "idle" || phase === "typing" ? (
               <motion.div
                 key="input"
                 initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
+                animate={{
+                  opacity: phase === "idle" ? 0 : 1,
+                  y: phase === "idle" ? 10 : 0,
+                }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 className="w-full bg-white p-5 rounded-2xl border border-stone-200 shadow-sm text-stone-900 text-lg flex items-center"
               >
@@ -237,15 +292,29 @@ export default function LandingPageDemo() {
 
                   <Divider delay={0.3} />
 
-                  <Section delay={0.4} title="In Simple Terms">
+                  <Section
+                    delay={0.4}
+                    title={
+                      mode === "Simple"
+                        ? "In Simple Terms"
+                        : "Context & Explanation"
+                    }
+                  >
                     <p className="font-serif text-stone-600 text-lg leading-relaxed">
-                      {currentData.simple}
+                      {currentData.explanation}
                     </p>
                   </Section>
 
                   <Divider delay={0.5} />
 
-                  <Section delay={0.6} title="What Happened Next?">
+                  <Section
+                    delay={0.6}
+                    title={
+                      mode === "Simple"
+                        ? "What Happened Next?"
+                        : "The Step-by-Step Routine"
+                    }
+                  >
                     <ul className="space-y-3">
                       {currentData.sequence.map((item, i) => (
                         <li key={i} className="flex gap-4">
@@ -262,16 +331,26 @@ export default function LandingPageDemo() {
 
                   <Divider delay={0.7} />
 
-                  <Section delay={0.8} title="Evidence">
-                    <p className="font-serif text-stone-600 italic text-lg border-l-2 border-stone-200 pl-4">
-                      {currentData.evidence}
-                    </p>
+                  <Section delay={0.8} title="Evidence & Sources">
+                    <div className="space-y-4">
+                      {currentData.evidence.map((ev, i) => (
+                        <p
+                          key={i}
+                          className="font-serif text-stone-600 italic text-lg border-l-2 border-[#C6A26B]/50 pl-4"
+                        >
+                          {ev}
+                        </p>
+                      ))}
+                    </div>
                   </Section>
 
                   {mode === "Scholarly" && (
                     <>
                       <Divider delay={0.9} />
-                      <Section delay={1.0} title="Scholarly Opinions">
+                      <Section
+                        delay={1.0}
+                        title="Scholarly Opinions (Fajr Sunnah)"
+                      >
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                           {scholarlyOpinions.map((op, i) => (
                             <motion.div
@@ -303,7 +382,7 @@ export default function LandingPageDemo() {
 
                   <Section
                     delay={mode === "Scholarly" ? 1.5 : 1.0}
-                    title="Lessons"
+                    title="Practical Lessons"
                   >
                     <ul className="space-y-3">
                       {currentData.lessons.map((item, i) => (
