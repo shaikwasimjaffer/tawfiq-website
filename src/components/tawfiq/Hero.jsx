@@ -224,15 +224,15 @@ export default function Hero() {
         {/* ==================================================================== */}
         <motion.div
           style={{ opacity: heroTextOpacity, y: heroTextY }}
-          className="absolute z-10 max-w-[1200px] w-full px-4 text-center flex flex-col items-center"
+          className="absolute z-10 w-full px-4 text-center flex flex-col items-center"
         >
-          <h1 className="font-['Cormorant_Garamond',serif] font-medium text-[2.8rem] xs:text-[3.2rem] sm:text-[5.2rem] md:text-[6.8rem] lg:text-[8rem] leading-[1.1] sm:leading-[0.92] tracking-[-0.02em] text-stone-900 max-w-[22ch]">
-            <span className="block font-normal text-stone-900">
+          <h1 className="font-['Cormorant_Garamond',serif] font-medium text-[2.1rem] xs:text-[2.5rem] sm:text-[5.2rem] md:text-[6.8rem] lg:text-[8rem] leading-[1.2] sm:leading-[0.92] tracking-[-0.02em] text-stone-900">
+            <span className="block font-normal text-stone-900 whitespace-nowrap sm:whitespace-normal">
               How long has it been
             </span>
-            <span className="block font-normal text-stone-900 mt-1 sm:mt-2">
+            <span className="block font-normal text-stone-900 mt-1 sm:mt-2 whitespace-nowrap sm:whitespace-normal">
               since your{" "}
-              <span className="inline-block whitespace-nowrap italic font-normal text-[#C6A26B]">
+              <span className="inline-block italic font-normal text-[#C6A26B]">
                 last prayer?
               </span>
             </span>

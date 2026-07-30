@@ -169,18 +169,28 @@ export default function LandingPageDemo() {
       className="min-h-screen bg-[#F7F5F1] py-24 px-6 font-['Manrope'] selection:bg-[#C6A26B] selection:text-white flex flex-col items-center"
     >
       {/* Visual Title Header */}
+      {/* Visual Title Header */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="text-center mb-16 max-w-4xl"
+        className="text-center mb-16 max-w-4xl mx-auto flex flex-col items-center"
       >
         <h2 className="text-5xl sm:text-6xl md:text-7xl font-serif text-stone-900 leading-[1.15] tracking-tight">
           Learn Islam with{" "}
           <span className="text-[#C6A26B] italic">Tawfiq AI</span>
-          <br />
-       
         </h2>
+
+        {/* Added Description */}
+        <motion.p
+          initial={{ opacity: 0, y: 15 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+          transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
+          className="mt-6 text-lg sm:text-xl font-serif text-stone-600 max-w-2xl leading-relaxed"
+        >
+          An intelligent guide for your spiritual journey, delivering authentic
+          Islamic insights tailored to your level of understanding.
+        </motion.p>
       </motion.div>
 
       <div className="w-full max-w-3xl flex flex-col gap-6">
