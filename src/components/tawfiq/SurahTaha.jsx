@@ -212,7 +212,7 @@ export default function BreathingVerses() {
   }, []);
 
   return (
-    <section className="relative bg-[#F7F5F1] py-40 md:py-56 overflow-hidden min-h-[600px] flex items-center justify-center">
+    <section className="relative bg-[#F0FDF4] py-40 md:py-56 overflow-hidden min-h-[600px] flex items-center justify-center">
       <div className="relative max-w-3xl mx-auto px-6 text-center w-full">
         {/* mode="wait" ensures the exiting verse slides out cleanly before the next slides in. */}
         <AnimatePresence mode="wait">
@@ -225,20 +225,20 @@ export default function BreathingVerses() {
             className="flex flex-col items-center"
           >
             {/* Eyebrow Label */}
-            <p className="text-[11px] font-sans tracking-[0.25em] uppercase text-[#A6A6A6] mb-16 md:mb-20">
+            <p className="text-[11px] font-sans tracking-[0.25em] uppercase text-green-600 mb-16 md:mb-20">
               {verses[currentIndex].reference}
             </p>
 
             {/* Arabic Text */}
             <p
-              className="font-arabic text-[clamp(2rem,6vw,4.25rem)] leading-[1.9] text-[#1a1a1a]"
+              className="font-arabic text-[clamp(2rem,6vw,4.25rem)] leading-[1.9] text-green-950"
               dir="rtl"
             >
               {verses[currentIndex].arabic}
             </p>
 
             {/* English Translation */}
-            <p className="font-serif text-xl md:text-2xl italic font-light text-[#8C8C8C] leading-relaxed mt-16 md:mt-20">
+            <p className="font-serif text-xl md:text-2xl italic font-light text-green-700 leading-relaxed mt-16 md:mt-20">
               {verses[currentIndex].english}
             </p>
           </motion.div>

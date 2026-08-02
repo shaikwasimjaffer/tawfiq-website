@@ -13,14 +13,14 @@ const BismillahButton = ({
     rel="noopener noreferrer"
     className={`group inline-flex items-center gap-3 ${className}`}
   >
-    <span className="w-0 group-hover:w-6 h-px bg-[#1B140F] transition-all duration-500" />
+    <span className="w-0 group-hover:w-6 h-px bg-green-950 transition-all duration-500" />
 
     <svg
       viewBox="0 0 24 24"
       width={iconSize}
       height={iconSize}
       fill="none"
-      className="text-[#1B140F] transition-transform duration-500 group-hover:rotate-12"
+      className="text-green-950 transition-transform duration-500 group-hover:rotate-12"
     >
       <circle cx="12" cy="12" r="9.5" stroke="currentColor" strokeWidth="1.2" />
 
@@ -36,18 +36,18 @@ const BismillahButton = ({
       <circle cx="12" cy="12" r="0.7" fill="currentColor" />
     </svg>
 
-    <span className={`font-serif ${textSize} text-[#1B140F] tracking-tight`}>
+    <span className={`font-serif ${textSize} text-green-950 tracking-tight`}>
       Begin with Bismillah
     </span>
 
-    <span className="w-0 group-hover:w-6 h-px bg-[#1B140F] transition-all duration-500" />
+    <span className="w-0 group-hover:w-6 h-px bg-green-950 transition-all duration-500" />
   </a>
 );
 
 export default function Footer() {
   return (
-    <footer className="relative overflow-hidden bg-[#F5F2EF] pt-36 pb-16">
-      <div className="absolute inset-0 pointer-events-none opacity-[0.025] bg-[radial-gradient(circle_at_center,#000_1px,transparent_1px)] bg-[length:24px_24px]" />
+    <footer className="relative overflow-hidden bg-[#F0FDF4] pt-36 pb-16">
+      <div className="absolute inset-0 pointer-events-none opacity-[0.035] bg-[radial-gradient(circle_at_center,#16A34A_1px,transparent_1px)] bg-[length:24px_24px]" />
 
       <div className="relative max-w-7xl mx-auto px-6 text-center">
         <motion.p
@@ -55,7 +55,7 @@ export default function Footer() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1.2 }}
-          className="font-serif italic font-light text-xl md:text-3xl text-[#786B63]"
+          className="font-serif italic font-light text-xl md:text-3xl text-green-700"
         >
           Closer with every sajdah.
         </motion.p>
@@ -70,7 +70,7 @@ export default function Footer() {
           <p
             className="
               font-arabic
-              text-[#64584F]
+              text-[#16A34A]
               text-5xl
               md:text-6xl
               mb-4
@@ -88,7 +88,7 @@ export default function Footer() {
               font-normal
               leading-[0.88]
               tracking-[-0.04em]
-              text-[#1B140F]
+              text-green-950
               text-[clamp(3.5rem,15vw,12rem)]
               select-none
             "
@@ -110,30 +110,30 @@ export default function Footer() {
           <BismillahButton />
         </motion.div>
 
-        <div className="mt-28 border-t border-stone-300/50 pt-8 flex flex-wrap justify-center gap-10 text-[11px] tracking-[0.18em] uppercase text-[#6E635B]">
+        <div className="mt-28 border-t border-green-200/60 pt-8 flex flex-wrap justify-center gap-10 text-[11px] tracking-[0.18em] uppercase text-green-700">
           <Link
             to="/privacy"
-            className="transition-all duration-300 hover:text-[#1B140F]"
+            className="transition-all duration-300 hover:text-green-950"
           >
             Privacy
           </Link>
 
           <Link
             to="/terms"
-            className="transition-all duration-300 hover:text-[#1B140F]"
+            className="transition-all duration-300 hover:text-green-950"
           >
             Terms
           </Link>
 
           <a
             href="mailto:tawfiq.base44@gmail.com"
-            className="transition-all duration-300 hover:text-[#1B140F]"
+            className="transition-all duration-300 hover:text-green-950"
           >
             Support
           </a>
         </div>
 
-        <p className="mt-10 text-[10px] uppercase tracking-[0.22em] text-[#A79B92]">
+        <p className="mt-10 text-[10px] uppercase tracking-[0.22em] text-green-600">
           تَوْفِيق · Made with intention
         </p>
       </div>

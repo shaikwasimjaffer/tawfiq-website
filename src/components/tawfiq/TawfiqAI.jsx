@@ -166,7 +166,7 @@ export default function LandingPageDemo() {
   return (
     <section
       ref={containerRef}
-      className="min-h-screen bg-[#F7F5F1] py-16 sm:py-24 px-4 sm:px-6 font-['Manrope'] selection:bg-[#C6A26B] selection:text-white flex flex-col items-center"
+      className="min-h-screen bg-[#F0FDF4] py-16 sm:py-24 px-4 sm:px-6 font-['Manrope'] selection:bg-[#16A34A] selection:text-white flex flex-col items-center"
     >
       {/* Visual Title Header */}
       <motion.div
@@ -175,9 +175,9 @@ export default function LandingPageDemo() {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="text-center mb-12 sm:mb-16 max-w-4xl mx-auto flex flex-col items-center"
       >
-        <h2 className="text-3xl leading-[1.2] sm:text-6xl md:text-7xl font-serif text-stone-900 sm:leading-[1.15] tracking-tight">
+        <h2 className="text-3xl leading-[1.2] sm:text-6xl md:text-7xl font-serif text-green-950 sm:leading-[1.15] tracking-tight">
           Learn Islam <br className="block sm:hidden" /> with{" "}
-          <span className="text-[#C6A26B] italic">Tawfiq AI</span>
+          <span className="text-[#16A34A] italic">Tawfiq AI</span>
         </h2>
 
         {/* Added Description */}
@@ -185,7 +185,7 @@ export default function LandingPageDemo() {
           initial={{ opacity: 0, y: 15 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
           transition={{ duration: 0.8, delay: 0.15, ease: "easeOut" }}
-          className="mt-3 sm:mt-6 text-sm sm:text-xl font-serif text-stone-600 max-w-xl leading-relaxed px-2 sm:px-0"
+          className="mt-3 sm:mt-6 text-sm sm:text-xl font-serif text-green-700 max-w-xl leading-relaxed px-2 sm:px-0"
         >
           An intelligent guide for your spiritual journey, delivering authentic
           Islamic insights tailored to your level of understanding.
@@ -205,13 +205,13 @@ export default function LandingPageDemo() {
                   y: phase === "idle" ? 10 : 0,
                 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="w-full bg-white p-4 sm:p-5 rounded-2xl border border-stone-200 shadow-sm text-stone-900 text-base sm:text-lg flex items-center"
+                className="w-full bg-white p-4 sm:p-5 rounded-2xl border border-green-200 shadow-sm text-green-950 text-base sm:text-lg flex items-center"
               >
                 {typedText}
                 <motion.span
                   animate={{ opacity: [1, 0] }}
                   transition={{ repeat: Infinity, duration: 0.8 }}
-                  className="inline-block w-0.5 h-5 sm:h-6 bg-stone-400 ml-1"
+                  className="inline-block w-0.5 h-5 sm:h-6 bg-green-500 ml-1"
                 />
               </motion.div>
             ) : (
@@ -219,7 +219,7 @@ export default function LandingPageDemo() {
                 key="bubble"
                 initial={{ opacity: 0, y: 20, scale: 0.9 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                className="bg-stone-900 text-white p-4 sm:p-5 rounded-2xl rounded-tr-sm shadow-sm text-base sm:text-lg max-w-[90%] sm:max-w-[85%] flex gap-3 sm:gap-4 items-start"
+                className="bg-green-950 text-white p-4 sm:p-5 rounded-2xl rounded-tr-sm shadow-sm text-base sm:text-lg max-w-[90%] sm:max-w-[85%] flex gap-3 sm:gap-4 items-start"
               >
                 <div className="mt-1 opacity-50 text-sm shrink-0">👤</div>
                 <div>{fullQuestion}</div>
@@ -234,12 +234,12 @@ export default function LandingPageDemo() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="w-full bg-white rounded-3xl p-6 sm:p-12 shadow-[0_10px_40px_-20px_rgba(0,0,0,0.05)] border border-stone-200/60"
+              className="w-full bg-white rounded-3xl p-6 sm:p-12 shadow-[0_10px_40px_-20px_rgba(22,163,74,0.05)] border border-green-200/60"
             >
               {/* Thinking State */}
               {phase === "thinking" || isRegenerating ? (
-                <div className="flex flex-col gap-3 py-4 text-stone-500 font-serif">
-                  <div className="text-xs uppercase tracking-widest font-sans font-bold text-stone-400 mb-2">
+                <div className="flex flex-col gap-3 py-4 text-green-600 font-serif">
+                  <div className="text-xs uppercase tracking-widest font-sans font-bold text-green-500 mb-2">
                     ✦ Tawfiq AI
                   </div>
                   <ThinkingLine
@@ -257,7 +257,7 @@ export default function LandingPageDemo() {
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: thinkingStep >= 4 ? 1 : 0 }}
-                    className="text-[#C6A26B] italic mt-2"
+                    className="text-[#16A34A] italic mt-2"
                   >
                     Building explanation...
                   </motion.div>
@@ -271,19 +271,19 @@ export default function LandingPageDemo() {
                   className="flex flex-col gap-8"
                 >
                   {/* Reading Mode Selector */}
-                  <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 border-b border-stone-100 pb-6">
-                    <span className="text-[10px] uppercase tracking-widest text-stone-400 font-bold shrink-0">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 border-b border-green-100 pb-6">
+                    <span className="text-[10px] uppercase tracking-widest text-green-500 font-bold shrink-0">
                       Read this as
                     </span>
-                    <div className="flex flex-wrap gap-1 bg-stone-100 p-1 rounded-2xl sm:rounded-full w-full sm:w-auto">
+                    <div className="flex flex-wrap gap-1 bg-green-100/60 p-1 rounded-2xl sm:rounded-full w-full sm:w-auto">
                       {["Simple", "Detailed", "Scholarly"].map((m) => (
                         <button
                           key={m}
                           onClick={() => handleModeChange(m)}
                           className={`flex-1 sm:flex-none px-3 sm:px-4 py-1.5 rounded-xl sm:rounded-full text-[10px] sm:text-xs font-sans uppercase tracking-wider font-bold transition-all ${
                             mode === m
-                              ? "bg-white text-stone-900 shadow-sm"
-                              : "text-stone-500 hover:text-stone-700"
+                              ? "bg-white text-green-950 shadow-sm"
+                              : "text-green-600 hover:text-green-800"
                           }`}
                         >
                           {mode === m ? "●" : "○"} {m}
@@ -294,7 +294,7 @@ export default function LandingPageDemo() {
 
                   {/* Staggered Sections */}
                   <Section delay={0.2} title="Quick Answer">
-                    <p className="font-serif text-lg sm:text-2xl text-stone-900 leading-snug">
+                    <p className="font-serif text-lg sm:text-2xl text-green-950 leading-snug">
                       {currentData.quick}
                     </p>
                   </Section>
@@ -309,7 +309,7 @@ export default function LandingPageDemo() {
                         : "Context & Explanation"
                     }
                   >
-                    <p className="font-serif text-stone-600 text-base sm:text-lg leading-relaxed">
+                    <p className="font-serif text-green-700 text-base sm:text-lg leading-relaxed">
                       {currentData.explanation}
                     </p>
                   </Section>
@@ -327,10 +327,10 @@ export default function LandingPageDemo() {
                     <ul className="space-y-3">
                       {currentData.sequence.map((item, i) => (
                         <li key={i} className="flex gap-3 sm:gap-4">
-                          <span className="text-[#C6A26B] font-bold text-sm mt-0.5 sm:mt-1">
+                          <span className="text-[#16A34A] font-bold text-sm mt-0.5 sm:mt-1">
                             •
                           </span>
-                          <span className="font-serif text-stone-700 text-base sm:text-lg">
+                          <span className="font-serif text-green-800 text-base sm:text-lg">
                             {item}
                           </span>
                         </li>
@@ -345,7 +345,7 @@ export default function LandingPageDemo() {
                       {currentData.evidence.map((ev, i) => (
                         <p
                           key={i}
-                          className="font-serif text-stone-600 italic text-base sm:text-lg border-l-2 border-[#C6A26B]/50 pl-4"
+                          className="font-serif text-green-700 italic text-base sm:text-lg border-l-2 border-[#16A34A]/50 pl-4"
                         >
                           {ev}
                         </p>
@@ -367,17 +367,17 @@ export default function LandingPageDemo() {
                               initial={{ opacity: 0, y: 10 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ delay: 1.0 + i * 0.15 }}
-                              className="p-4 sm:p-5 border border-stone-200 rounded-xl bg-stone-50"
+                              className="p-4 sm:p-5 border border-green-200 rounded-xl bg-[#F0FDF4]"
                             >
-                              <div className="flex justify-between items-end mb-3 pb-3 border-b border-stone-200">
-                                <span className="font-serif text-base sm:text-lg text-stone-900">
+                              <div className="flex justify-between items-end mb-3 pb-3 border-b border-green-200">
+                                <span className="font-serif text-base sm:text-lg text-green-950">
                                   {op.school}
                                 </span>
-                                <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-[#C6A26B]">
+                                <span className="text-[10px] font-sans font-bold uppercase tracking-widest text-[#16A34A]">
                                   {op.view}
                                 </span>
                               </div>
-                              <p className="font-serif text-sm text-stone-600 leading-relaxed">
+                              <p className="font-serif text-sm text-green-700 leading-relaxed">
                                 {op.detail}
                               </p>
                             </motion.div>
@@ -396,8 +396,8 @@ export default function LandingPageDemo() {
                     <ul className="space-y-3">
                       {currentData.lessons.map((item, i) => (
                         <li key={i} className="flex gap-3 sm:gap-4 items-start">
-                          <div className="w-1.5 h-1.5 rounded-full bg-stone-400 mt-2 sm:mt-2.5 shrink-0" />
-                          <span className="font-serif text-stone-700 text-base sm:text-lg">
+                          <div className="w-1.5 h-1.5 rounded-full bg-green-400 mt-2 sm:mt-2.5 shrink-0" />
+                          <span className="font-serif text-green-800 text-base sm:text-lg">
                             {item}
                           </span>
                         </li>
@@ -423,7 +423,11 @@ const ThinkingLine = ({ text, active }) => (
     className="flex items-center gap-3 text-base sm:text-lg"
   >
     <div
-      className={`w-5 h-5 rounded-full flex items-center justify-center border transition-colors duration-500 ${active ? "bg-[#C6A26B] border-[#C6A26B] text-white" : "border-stone-300 text-transparent"}`}
+      className={`w-5 h-5 rounded-full flex items-center justify-center border transition-colors duration-500 ${
+        active
+          ? "bg-[#16A34A] border-[#16A34A] text-white"
+          : "border-green-300 text-transparent"
+      }`}
     >
       <Check size={12} strokeWidth={3} />
     </div>
@@ -437,7 +441,7 @@ const Section = ({ title, children, delay }) => (
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay, duration: 0.5 }}
   >
-    <div className="text-[10px] uppercase tracking-widest font-sans font-bold text-stone-400 mb-3 sm:mb-4">
+    <div className="text-[10px] uppercase tracking-widest font-sans font-bold text-green-500 mb-3 sm:mb-4">
       {title}
     </div>
     {children}
@@ -449,6 +453,6 @@ const Divider = ({ delay }) => (
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     transition={{ delay }}
-    className="border-t border-stone-200/80"
+    className="border-t border-green-200/80"
   />
 );

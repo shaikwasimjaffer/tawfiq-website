@@ -16,7 +16,7 @@ const navItems = [
   { id: "qaza", label: "Qaza", href: "#qaza" },
   { id: "quran", label: "Quran", href: "#quran" },
   { id: "academy", label: "Academy", href: "#academy" },
-  { id: "tawfiq-ai", label: "Tawfiq AI", href: "#tawfiq-ai" }, 
+  { id: "tawfiq-ai", label: "Tawfiq AI", href: "#tawfiq-ai" },
 ];
 
 const categoryConfig = {
@@ -53,8 +53,8 @@ function NavLink({ item, isActive, onClick }) {
       href={item.href}
       onClick={onClick}
       className="relative px-5 py-2 font-['Plus_Jakarta_Sans',sans-serif] text-[13px] tracking-[-0.01em] font-medium transition-colors duration-300 z-10 cursor-pointer"
-      style={{ color: isActive ? "#1c1917" : "#78716c" }}
-      whileHover={{ color: "#1c1917" }}
+      style={{ color: isActive ? "#052E16" : "#15803D" }}
+      whileHover={{ color: "#052E16" }}
     >
       <span className="relative z-10">{item.label}</span>
 
@@ -62,7 +62,7 @@ function NavLink({ item, isActive, onClick }) {
       {isActive && (
         <motion.div
           layoutId="navActiveDot"
-          className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#C6A26B]"
+          className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#16A34A]"
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
         />
       )}
@@ -208,7 +208,7 @@ export default function Navbar() {
         transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.1 }}
         className={`fixed top-0 inset-x-0 z-50 transition-all duration-700 ${
           scrolled || isMenuOpen
-            ? "bg-white/60 backdrop-blur-xl border-b border-white/40 shadow-[0_4px_20px_rgba(0,0,0,0.02)]"
+            ? "bg-white/80 backdrop-blur-xl border-b border-green-100/40 shadow-[0_4px_20px_rgba(22,163,74,0.02)]"
             : "bg-transparent border-b border-transparent"
         }`}
       >
@@ -216,22 +216,22 @@ export default function Navbar() {
           {/* MOBILE LEFT: Premium Editorial Menu Icon */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden relative z-50 p-2 -ml-2 text-stone-900 focus:outline-none cursor-pointer"
+            className="md:hidden relative z-50 p-2 -ml-2 text-green-950 focus:outline-none cursor-pointer"
             aria-label="Toggle Menu"
           >
             <div className="w-5 h-4 flex flex-col justify-between">
               <span
-                className={`block h-[1px] w-full bg-stone-900 transition-all duration-300 ${
+                className={`block h-[1px] w-full bg-green-950 transition-all duration-300 ${
                   isMenuOpen ? "rotate-45 translate-y-[7px]" : ""
                 }`}
               />
               <span
-                className={`block h-[1px] bg-stone-900 transition-all duration-300 ${
+                className={`block h-[1px] bg-green-950 transition-all duration-300 ${
                   isMenuOpen ? "w-0 opacity-0" : "w-full"
                 }`}
               />
               <span
-                className={`block h-[1px] w-full bg-stone-900 transition-all duration-300 ${
+                className={`block h-[1px] w-full bg-green-950 transition-all duration-300 ${
                   isMenuOpen ? "-rotate-45 -translate-y-[8px]" : ""
                 }`}
               />
@@ -250,7 +250,7 @@ export default function Navbar() {
                 height="22"
                 viewBox="0 0 22 22"
                 fill="none"
-                className="text-stone-900"
+                className="text-green-950"
                 whileHover={{ rotate: 5, x: 2 }}
                 transition={{ type: "spring", stiffness: 300, damping: 15 }}
               >
@@ -268,7 +268,7 @@ export default function Navbar() {
                   strokeLinejoin="round"
                 />
               </motion.svg>
-              <span className="font-['Cormorant_Garamond',serif] font-[600] text-xl text-stone-900 tracking-[-0.01em]">
+              <span className="font-['Cormorant_Garamond',serif] font-[600] text-xl text-green-950 tracking-[-0.01em]">
                 Tawfiq
               </span>
             </Link>
@@ -284,15 +284,15 @@ export default function Navbar() {
                   onClick={() => setActiveItem(item.id)}
                 />
                 {index < navItems.length - 1 && (
-                  <span className="text-stone-400/30 text-[10px] mx-1">•</span>
+                  <span className="text-green-400/40 text-[10px] mx-1">•</span>
                 )}
               </React.Fragment>
             ))}
             {/* Added Contact Link to Desktop Nav */}
-            <span className="text-stone-400/30 text-[10px] mx-1">•</span>
+            <span className="text-green-400/40 text-[10px] mx-1">•</span>
             <button
               onClick={() => setShowContact(true)}
-              className="relative px-5 py-2 font-['Plus_Jakarta_Sans',sans-serif] text-[13px] tracking-[-0.01em] font-medium text-stone-500 hover:text-stone-900 transition-colors duration-300 z-10 cursor-pointer"
+              className="relative px-5 py-2 font-['Plus_Jakarta_Sans',sans-serif] text-[13px] tracking-[-0.01em] font-medium text-green-700 hover:text-green-950 transition-colors duration-300 z-10 cursor-pointer"
             >
               Contact
             </button>
@@ -302,15 +302,15 @@ export default function Navbar() {
           <div className="hidden md:block">
             <button
               onClick={() => setShowScanner(true)}
-              className="group inline-flex items-center gap-2.5 text-[13px] text-stone-900 transition-all duration-300 cursor-pointer focus:outline-none"
+              className="group inline-flex items-center gap-2.5 text-[13px] text-green-950 transition-all duration-300 cursor-pointer focus:outline-none"
             >
-              <span className="w-0 group-hover:w-4 h-[1px] bg-[#C6A26B] transition-all duration-500" />
+              <span className="w-0 group-hover:w-4 h-[1px] bg-[#16A34A] transition-all duration-500" />
               <svg
                 viewBox="0 0 24 24"
                 width="15"
                 height="15"
                 fill="none"
-                className="text-stone-900 transition-colors duration-500 group-hover:text-[#C6A26B]"
+                className="text-green-950 transition-colors duration-500 group-hover:text-[#16A34A]"
               >
                 <circle
                   cx="12"
@@ -331,11 +331,11 @@ export default function Navbar() {
                 />
                 <circle cx="12" cy="12" r="0.7" fill="currentColor" />
               </svg>
-              <span className="relative font-['Plus_Jakarta_Sans',sans-serif] font-medium text-[13px] tracking-tight group-hover:text-[#6B4F37] transition-colors duration-500">
+              <span className="relative font-['Plus_Jakarta_Sans',sans-serif] font-medium text-[13px] tracking-tight group-hover:text-[#16A34A] transition-colors duration-500">
                 Begin with Bismillah
-                <span className="absolute left-0 -bottom-1 h-[1px] w-0 bg-[#C6A26B] transition-all duration-500 group-hover:w-full" />
+                <span className="absolute left-0 -bottom-1 h-[1px] w-0 bg-[#16A34A] transition-all duration-500 group-hover:w-full" />
               </span>
-              <span className="w-0 group-hover:w-4 h-[1px] bg-[#C6A26B] transition-all duration-500" />
+              <span className="w-0 group-hover:w-4 h-[1px] bg-[#16A34A] transition-all duration-500" />
             </button>
           </div>
 
@@ -353,7 +353,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 40 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-[110] bg-[#F8F6F2] overflow-y-auto overflow-x-hidden flex flex-col pt-24 pb-24 px-6 font-['Plus_Jakarta_Sans',sans-serif]"
+            className="fixed inset-0 z-[110] bg-[#F0FDF4] overflow-y-auto overflow-x-hidden flex flex-col pt-24 pb-24 px-6 font-['Plus_Jakarta_Sans',sans-serif]"
           >
             {/* Back Button */}
             <motion.button
@@ -361,7 +361,7 @@ export default function Navbar() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2, duration: 0.5 }}
               onClick={() => setShowContact(false)}
-              className="absolute top-8 left-6 sm:top-12 sm:left-12 text-stone-400 hover:text-stone-800 tracking-[0.2em] uppercase text-[10px] sm:text-xs font-semibold py-2 transition-colors cursor-pointer group flex items-center gap-2"
+              className="absolute top-8 left-6 sm:top-12 sm:left-12 text-green-600 hover:text-green-950 tracking-[0.2em] uppercase text-[10px] sm:text-xs font-semibold py-2 transition-colors cursor-pointer group flex items-center gap-2"
             >
               <span className="transform group-hover:-translate-x-1 transition-transform duration-300">
                 ←
@@ -373,16 +373,16 @@ export default function Navbar() {
             <div className="w-full max-w-3xl mx-auto flex flex-col mt-4 sm:mt-8">
               {/* Header */}
               <div className="mb-12">
-                <span className="text-[10px] tracking-[0.25em] uppercase text-[#C6A26B] font-semibold block mb-3">
+                <span className="text-[10px] tracking-[0.25em] uppercase text-[#16A34A] font-semibold block mb-3">
                   Support
                 </span>
-                <h2 className="font-['Cormorant_Garamond',serif] font-normal text-3xl sm:text-5xl text-stone-900 tracking-tight leading-snug">
+                <h2 className="font-['Cormorant_Garamond',serif] font-normal text-3xl sm:text-5xl text-green-950 tracking-tight leading-snug">
                   Have a question, found a bug, <br />
-                  <span className="italic text-stone-500 font-light">
+                  <span className="italic text-green-700 font-light">
                     or have an idea to improve Tawfiq?
                   </span>
                 </h2>
-                <p className="mt-4 text-stone-600 text-sm sm:text-base font-light">
+                <p className="mt-4 text-green-700 text-sm sm:text-base font-light">
                   We'd love to hear from you.
                 </p>
               </div>
@@ -392,10 +392,10 @@ export default function Navbar() {
                 onSubmit={handleContactSubmit}
                 className={`flex flex-col gap-10 ${shaking ? "animate-bounce" : ""}`}
               >
-                <div className="space-y-12 text-lg sm:text-2xl font-['Cormorant_Garamond',serif] text-stone-800">
+                <div className="space-y-12 text-lg sm:text-2xl font-['Cormorant_Garamond',serif] text-green-900">
                   {/* Line 1: Name */}
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 flex-wrap">
-                    <span className="text-stone-500 font-light">
+                    <span className="text-green-700 font-light">
                       Let's get in touch. My name is
                     </span>
                     <input
@@ -408,14 +408,14 @@ export default function Navbar() {
                       className={`font-['Plus_Jakarta_Sans',sans-serif] text-base sm:text-lg bg-transparent border-b ${
                         formStatus === "error" && !formData.name
                           ? "border-red-400"
-                          : "border-stone-300 focus:border-[#C6A26B]"
-                      } pb-1 outline-none transition-all duration-300 text-stone-900 placeholder:text-stone-300 flex-1 min-w-[220px]`}
+                          : "border-green-300 focus:border-[#16A34A]"
+                      } pb-1 outline-none transition-all duration-300 text-green-950 placeholder:text-green-400 flex-1 min-w-[220px]`}
                     />
                   </div>
 
                   {/* Line 2: Email */}
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 flex-wrap">
-                    <span className="text-stone-500 font-light">
+                    <span className="text-green-700 font-light">
                       You can reply to me at
                     </span>
                     <input
@@ -428,14 +428,14 @@ export default function Navbar() {
                       className={`font-['Plus_Jakarta_Sans',sans-serif] text-base sm:text-lg bg-transparent border-b ${
                         formStatus === "error" && !formData.email
                           ? "border-red-400"
-                          : "border-stone-300 focus:border-[#C6A26B]"
-                      } pb-1 outline-none transition-all duration-300 text-stone-900 placeholder:text-stone-300 flex-1 min-w-[220px]`}
+                          : "border-green-300 focus:border-[#16A34A]"
+                      } pb-1 outline-none transition-all duration-300 text-green-950 placeholder:text-green-400 flex-1 min-w-[220px]`}
                     />
                   </div>
 
                   {/* Line 3: Category Selectors (Visual Radio Buttons) */}
                   <div className="flex flex-col gap-4 pt-2">
-                    <span className="text-stone-500 font-light text-base sm:text-xl">
+                    <span className="text-green-700 font-light text-base sm:text-xl">
                       I'm writing because:
                     </span>
                     <div className="flex flex-wrap gap-3 font-['Plus_Jakarta_Sans',sans-serif]">
@@ -450,13 +450,13 @@ export default function Navbar() {
                             }
                             className={`flex items-center gap-2.5 px-4 py-2 rounded-full text-xs sm:text-sm tracking-tight transition-all duration-300 cursor-pointer border ${
                               isSelected
-                                ? "bg-stone-900 text-white border-stone-900 shadow-sm"
-                                : "bg-white/50 text-stone-600 border-stone-200 hover:border-stone-300"
+                                ? "bg-green-950 text-white border-green-950 shadow-sm"
+                                : "bg-white/50 text-green-800 border-green-200 hover:border-green-300"
                             }`}
                           >
                             <span
                               className={`w-2 h-2 rounded-full transition-colors ${
-                                isSelected ? "bg-[#C6A26B]" : "bg-stone-300"
+                                isSelected ? "bg-[#16A34A]" : "bg-green-300"
                               }`}
                             />
                             {cat}
@@ -469,9 +469,9 @@ export default function Navbar() {
                   {/* Line 4: Dynamic Message Input matching selected category */}
                   <div className="flex flex-col gap-3 pt-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-stone-500 font-light text-base sm:text-xl">
+                      <span className="text-green-700 font-light text-base sm:text-xl">
                         Tell us more about this{" "}
-                        <span className="text-[#C6A26B] font-normal italic">
+                        <span className="text-[#16A34A] font-normal italic">
                           ({formData.category})
                         </span>
                         :
@@ -487,11 +487,11 @@ export default function Navbar() {
                       onChange={(e) =>
                         setFormData({ ...formData, message: e.target.value })
                       }
-                      className={`font-['Plus_Jakarta_Sans',sans-serif] text-base sm:text-base bg-white/40 p-4 rounded-xl border ${
+                      className={`font-['Plus_Jakarta_Sans',sans-serif] text-base sm:text-base bg-white/60 p-4 rounded-xl border ${
                         formStatus === "error" && !formData.message
                           ? "border-red-400"
-                          : "border-stone-200 focus:border-[#C6A26B]"
-                      } outline-none transition-all duration-300 text-stone-900 placeholder:text-stone-300 resize-none`}
+                          : "border-green-200 focus:border-[#16A34A]"
+                      } outline-none transition-all duration-300 text-green-950 placeholder:text-green-400/60 resize-none`}
                     />
                   </div>
                 </div>
@@ -504,8 +504,8 @@ export default function Navbar() {
                     whileTap={{ scale: 0.98 }}
                     className={`relative px-8 py-4 rounded-full font-['Plus_Jakarta_Sans',sans-serif] text-sm font-medium tracking-tight cursor-pointer transition-all duration-500 flex items-center justify-center min-w-[200px] ${
                       formStatus === "success"
-                        ? "bg-[#C6A26B] text-white shadow-[0_0_20px_rgba(198,162,107,0.4)]"
-                        : "bg-stone-900 text-white hover:bg-stone-800"
+                        ? "bg-[#16A34A] text-white shadow-[0_0_20px_rgba(22,163,74,0.4)]"
+                        : "bg-green-950 text-white hover:bg-green-900"
                     }`}
                   >
                     {formStatus === "idle" && "Send with Salaam →"}
@@ -520,18 +520,18 @@ export default function Navbar() {
               </form>
 
               {/* Bottom Support Footer Info */}
-              <div className="mt-24 pt-12 border-t border-stone-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 text-xs text-stone-500 font-['Plus_Jakarta_Sans',sans-serif]">
+              <div className="mt-24 pt-12 border-t border-green-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 text-xs text-green-700 font-['Plus_Jakarta_Sans',sans-serif]">
                 <div>
-                  <p className="text-stone-400 uppercase tracking-widest mb-1 text-[10px]">
+                  <p className="text-green-600 uppercase tracking-widest mb-1 text-[10px]">
                     Need a quicker answer?
                   </p>
                   <a
                     href="mailto:tawfiq.base44@gmail.com"
-                    className="text-stone-900 font-medium hover:text-[#C6A26B] transition-colors"
+                    className="text-green-950 font-medium hover:text-[#16A34A] transition-colors"
                   >
                     tawfiq.base44@gmail.com
                   </a>
-                  <span className="block text-stone-400 mt-0.5">
+                  <span className="block text-green-600 mt-0.5">
                     Average reply &lt; 24 hours
                   </span>
                 </div>
@@ -541,7 +541,7 @@ export default function Navbar() {
                     href="https://github.com"
                     target="_blank"
                     rel="noreferrer"
-                    className="hover:text-stone-900 transition-colors"
+                    className="hover:text-green-950 transition-colors"
                   >
                     GitHub
                   </a>
@@ -549,7 +549,7 @@ export default function Navbar() {
                     href="https://discord.com"
                     target="_blank"
                     rel="noreferrer"
-                    className="hover:text-stone-900 transition-colors"
+                    className="hover:text-green-950 transition-colors"
                   >
                     Discord
                   </a>
@@ -574,7 +574,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 40 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-[100] bg-[#f4f5f4] overflow-y-auto overflow-x-hidden flex flex-col items-center pt-24 pb-16 px-6 font-['Plus_Jakarta_Sans',sans-serif]"
+            className="fixed inset-0 z-[100] bg-[#F0FDF4] overflow-y-auto overflow-x-hidden flex flex-col items-center pt-24 pb-16 px-6 font-['Plus_Jakarta_Sans',sans-serif]"
           >
             {/* Back Button */}
             <motion.button
@@ -582,7 +582,7 @@ export default function Navbar() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2, duration: 0.5 }}
               onClick={() => setShowScanner(false)}
-              className="absolute top-8 left-6 sm:top-12 sm:left-12 text-stone-400 hover:text-stone-800 tracking-[0.2em] uppercase text-[10px] sm:text-xs font-semibold py-2 transition-colors cursor-pointer group flex items-center gap-2"
+              className="absolute top-8 left-6 sm:top-12 sm:left-12 text-green-600 hover:text-green-950 tracking-[0.2em] uppercase text-[10px] sm:text-xs font-semibold py-2 transition-colors cursor-pointer group flex items-center gap-2"
             >
               <span className="transform group-hover:-translate-x-1 transition-transform duration-300">
                 ←
@@ -596,10 +596,10 @@ export default function Navbar() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.6, ease: "easeOut" }}
-                className="font-['Cormorant_Garamond',serif] font-bold text-5xl sm:text-7xl text-stone-900 tracking-[-0.02em] mb-6"
+                className="font-['Cormorant_Garamond',serif] font-bold text-5xl sm:text-7xl text-green-950 tracking-[-0.02em] mb-6"
               >
                 Download{" "}
-                <span className="italic font-normal text-[#C6A26B]">
+                <span className="italic font-normal text-[#16A34A]">
                   Tawfiq
                 </span>
               </motion.h2>
@@ -608,17 +608,17 @@ export default function Navbar() {
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
                 transition={{ delay: 0.5, duration: 0.8, ease: "easeInOut" }}
-                className="w-16 sm:w-24 h-[1px] bg-[#C6A26B] mb-8"
+                className="w-16 sm:w-24 h-[1px] bg-[#16A34A] mb-8"
               />
 
               <motion.h3
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.6 }}
-                className="font-['Cormorant_Garamond',serif] text-2xl sm:text-4xl text-stone-800 font-normal leading-relaxed max-w-2xl tracking-tight"
+                className="font-['Cormorant_Garamond',serif] text-2xl sm:text-4xl text-green-950 font-normal leading-relaxed max-w-2xl tracking-tight"
               >
                 Begin with one prayer. <br className="hidden sm:block" />
-                <span className="text-stone-500 text-xl sm:text-3xl mt-2 block font-light italic">
+                <span className="text-green-700 text-xl sm:text-3xl mt-2 block font-light italic">
                   Leave with a lifetime of consistency.
                 </span>
               </motion.h3>
@@ -630,7 +630,7 @@ export default function Navbar() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.6, duration: 0.6 }}
-                className="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-stone-200/50 mb-8 flex flex-col items-center"
+                className="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-green-200/50 mb-8 flex flex-col items-center"
               >
                 <img
                   src={qrImage}
@@ -648,21 +648,21 @@ export default function Navbar() {
               className="w-full mt-16 sm:mt-24 flex flex-col items-center"
             >
               {/* Feature List */}
-              <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-6 text-stone-500 font-['Plus_Jakarta_Sans',sans-serif] font-medium text-base sm:text-lg px-4 text-center tracking-tight">
+              <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-6 text-green-800 font-['Plus_Jakarta_Sans',sans-serif] font-medium text-base sm:text-lg px-4 text-center tracking-tight">
                 <span>Prayer Tracking</span>
-                <span className="text-[#C6A26B] opacity-50 hidden sm:block">
+                <span className="text-[#16A34A] opacity-50 hidden sm:block">
                   •
                 </span>
                 <span>Qaza Recovery</span>
-                <span className="text-[#C6A26B] opacity-50 hidden sm:block">
+                <span className="text-[#16A34A] opacity-50 hidden sm:block">
                   •
                 </span>
                 <span>Quran</span>
-                <span className="text-[#C6A26B] opacity-50 hidden sm:block">
+                <span className="text-[#16A34A] opacity-50 hidden sm:block">
                   •
                 </span>
                 <span>Dhikr</span>
-                <span className="text-[#C6A26B] opacity-50 hidden sm:block">
+                <span className="text-[#16A34A] opacity-50 hidden sm:block">
                   •
                 </span>
                 <span>Islamic Academy</span>
@@ -670,14 +670,14 @@ export default function Navbar() {
 
               {/* Trust Signals */}
               <div className="mt-12 flex flex-col items-center gap-4">
-                <p className="font-['Plus_Jakarta_Sans',sans-serif] text-[10px] sm:text-xs tracking-[0.2em] uppercase text-stone-400 font-semibold text-center">
+                <p className="font-['Plus_Jakarta_Sans',sans-serif] text-[10px] sm:text-xs tracking-[0.2em] uppercase text-green-600 font-semibold text-center">
                   Built with sincerity for every Muslim.
                 </p>
-                <div className="flex items-center gap-4 text-[10px] sm:text-xs tracking-widest uppercase text-stone-400/70 font-medium">
+                <div className="flex items-center gap-4 text-[10px] sm:text-xs tracking-widest uppercase text-green-600/70 font-medium">
                   <span>Free Forever</span>
-                  <span className="w-1 h-1 rounded-full bg-stone-300" />
+                  <span className="w-1 h-1 rounded-full bg-green-300" />
                   <span>No Ads</span>
-                  <span className="w-1 h-1 rounded-full bg-stone-300" />
+                  <span className="w-1 h-1 rounded-full bg-green-300" />
                   <span>Privacy First</span>
                 </div>
               </div>
@@ -696,7 +696,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-40 bg-[#F7F5F1] flex flex-col items-center justify-center md:hidden font-['Plus_Jakarta_Sans',sans-serif]"
+            className="fixed inset-0 z-40 bg-[#F0FDF4] flex flex-col items-center justify-center md:hidden font-['Plus_Jakarta_Sans',sans-serif]"
           >
             <div className="flex flex-col items-center gap-8">
               {navItems.map((item, i) => (
@@ -711,7 +711,7 @@ export default function Navbar() {
                     duration: 0.5,
                     ease: [0.22, 1, 0.36, 1],
                   }}
-                  className="font-['Cormorant_Garamond',serif] font-medium text-4xl text-stone-900 tracking-tight"
+                  className="font-['Cormorant_Garamond',serif] font-medium text-4xl text-green-950 tracking-tight"
                 >
                   {item.label}
                 </motion.a>
@@ -730,7 +730,7 @@ export default function Navbar() {
                   duration: 0.5,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                className="font-['Cormorant_Garamond',serif] font-medium text-4xl text-stone-900 tracking-tight cursor-pointer"
+                className="font-['Cormorant_Garamond',serif] font-medium text-4xl text-green-950 tracking-tight cursor-pointer"
               >
                 Contact
               </motion.button>
@@ -747,7 +747,7 @@ export default function Navbar() {
                   duration: 0.5,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                className="mt-2 font-['Plus_Jakarta_Sans',sans-serif] font-medium text-lg text-[#C6A26B] tracking-tight cursor-pointer"
+                className="mt-2 font-['Plus_Jakarta_Sans',sans-serif] font-medium text-lg text-[#16A34A] tracking-tight cursor-pointer"
               >
                 Begin with Bismillah
               </motion.button>
@@ -757,7 +757,7 @@ export default function Navbar() {
               initial={{ opacity: 0, scaleX: 0 }}
               animate={{ opacity: 1, scaleX: 1 }}
               transition={{ delay: 0.4, duration: 0.8 }}
-              className="w-12 h-px bg-stone-300 mt-12"
+              className="w-12 h-px bg-green-200 mt-12"
             />
           </motion.div>
         )}

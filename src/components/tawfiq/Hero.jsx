@@ -146,7 +146,7 @@ export default function Hero() {
   return (
     <section
       ref={containerRef}
-      className="relative h-[900vh] bg-[#F7F5F1] font-['Plus_Jakarta_Sans',sans-serif]"
+      className="relative h-[900vh] bg-[#F0FDF4] font-['Plus_Jakarta_Sans',sans-serif]"
     >
       {/* Sticky Fullscreen Canvas */}
       <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center pointer-events-none">
@@ -159,7 +159,7 @@ export default function Hero() {
             className="w-full h-full"
             style={{
               background:
-                "linear-gradient(135deg, rgba(245, 230, 205, 0.45) 0%, rgba(247, 245, 241, 0) 70%), radial-gradient(ellipse 80% 60% at 20% 10%, rgba(235, 205, 160, 0.35) 0%, rgba(247, 245, 241, 0) 75%)",
+                "linear-gradient(135deg, rgba(220, 252, 231, 0.45) 0%, rgba(240, 253, 244, 0) 70%), radial-gradient(ellipse 80% 60% at 20% 10%, rgba(187, 247, 208, 0.35) 0%, rgba(240, 253, 244, 0) 75%)",
             }}
           />
         </motion.div>
@@ -171,7 +171,7 @@ export default function Hero() {
         >
           <svg
             viewBox="0 0 1200 800"
-            className="w-full h-full max-w-[1600px] text-stone-400 fill-current"
+            className="w-full h-full max-w-[1600px] text-green-300 fill-current"
             preserveAspectRatio="xMidYMid slice"
           >
             <defs>
@@ -204,7 +204,7 @@ export default function Hero() {
             </defs>
             <rect width="1200" height="800" fill="url(#stoneFloor)" />
           </svg>
-          <div className="absolute inset-0 bg-gradient-to-t from-stone-900/10 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-green-900/10 via-transparent to-transparent" />
         </motion.div>
 
         {/* Minimal Grid Overlay */}
@@ -213,7 +213,7 @@ export default function Hero() {
             {Array.from({ length: 6 }).map((_, i) => (
               <div
                 key={i}
-                className="border-r border-stone-900 h-full last:border-r-0"
+                className="border-r border-green-950 h-full last:border-r-0"
               />
             ))}
           </div>
@@ -226,13 +226,13 @@ export default function Hero() {
           style={{ opacity: heroTextOpacity, y: heroTextY }}
           className="absolute z-10 w-full px-4 text-center flex flex-col items-center"
         >
-          <h1 className="font-['Cormorant_Garamond',serif] font-medium text-[2.1rem] xs:text-[2.5rem] sm:text-[5.2rem] md:text-[6.8rem] lg:text-[8rem] leading-[1.2] sm:leading-[0.92] tracking-[-0.02em] text-stone-900">
-            <span className="block font-normal text-stone-900 whitespace-nowrap sm:whitespace-normal">
+          <h1 className="font-['Cormorant_Garamond',serif] font-medium text-[2.1rem] xs:text-[2.5rem] sm:text-[5.2rem] md:text-[6.8rem] lg:text-[8rem] leading-[1.2] sm:leading-[0.92] tracking-[-0.02em] text-green-950">
+            <span className="block font-normal text-green-950 whitespace-nowrap sm:whitespace-normal">
               How long has it been
             </span>
-            <span className="block font-normal text-stone-900 mt-1 sm:mt-2 whitespace-nowrap sm:whitespace-normal">
+            <span className="block font-normal text-green-950 mt-1 sm:mt-2 whitespace-nowrap sm:whitespace-normal">
               since your{" "}
-              <span className="inline-block italic font-normal text-[#C6A26B]">
+              <span className="inline-block italic font-normal text-[#16A34A]">
                 last prayer?
               </span>
             </span>
@@ -246,14 +246,14 @@ export default function Hero() {
           style={{ opacity: philosophyOpacity, y: philosophyY }}
           className="absolute z-10 max-w-5xl w-full px-6 text-center"
         >
-          <h2 className="font-['Cormorant_Garamond',serif] text-3xl sm:text-5xl md:text-6xl lg:text-7xl text-stone-900 leading-[1.15] font-light tracking-[-0.01em]">
+          <h2 className="font-['Cormorant_Garamond',serif] text-3xl sm:text-5xl md:text-6xl lg:text-7xl text-green-950 leading-[1.15] font-light tracking-[-0.01em]">
             <span className="block font-light">
               No matter how many prayers you've missed...
             </span>
             <span className="block mt-2 sm:mt-3">
               <motion.span
                 style={{ clipPath: goldRevealMask }}
-                className="inline-block italic text-[#C6A26B] font-normal"
+                className="inline-block italic text-[#16A34A] font-normal"
               >
                 The next one still matters.
               </motion.span>
@@ -280,14 +280,14 @@ export default function Hero() {
               <p
                 className={`font-['Cormorant_Garamond',serif] text-5xl sm:text-6xl md:text-7xl tracking-[-0.01em] ${
                   item.isHighlight
-                    ? "text-[#C6A26B] font-normal italic"
-                    : "text-stone-900 font-light"
+                    ? "text-[#16A34A] font-normal italic"
+                    : "text-green-950 font-light"
                 }`}
               >
                 {item.text}
               </p>
               {index < cascadeItems.length - 1 && (
-                <span className="text-stone-400 font-['Plus_Jakarta_Sans',sans-serif] text-sm tracking-widest mt-4 block">
+                <span className="text-green-500 font-['Plus_Jakarta_Sans',sans-serif] text-sm tracking-widest mt-4 block">
                   ↓
                 </span>
               )}
@@ -304,7 +304,7 @@ export default function Hero() {
         >
           <h2
             dir="rtl"
-            className="font-serif text-[5.5rem] sm:text-[9rem] md:text-[12rem] lg:text-[14rem] text-stone-900 font-normal tracking-normal leading-none select-none"
+            className="font-serif text-[5.5rem] sm:text-[9rem] md:text-[12rem] lg:text-[14rem] text-green-950 font-normal tracking-normal leading-none select-none"
           >
             بِسْمِ ٱللَّٰهِ
           </h2>
@@ -312,13 +312,13 @@ export default function Hero() {
           <div className="mt-3 sm:mt-6 overflow-hidden">
             <motion.p
               style={{ clipPath: bismillahTransMask }}
-              className="inline-block font-['Cormorant_Garamond',serif] text-3xl sm:text-4xl md:text-5xl text-[#C6A26B] font-light italic tracking-wide"
+              className="inline-block font-['Cormorant_Garamond',serif] text-3xl sm:text-4xl md:text-5xl text-[#16A34A] font-light italic tracking-wide"
             >
               In the Name of Allah
             </motion.p>
           </div>
 
-          <span className="mt-6 sm:mt-8 block font-['Plus_Jakarta_Sans',sans-serif] text-[10px] sm:text-[12px] uppercase tracking-[0.35em] text-stone-500 font-medium">
+          <span className="mt-6 sm:mt-8 block font-['Plus_Jakarta_Sans',sans-serif] text-[10px] sm:text-[12px] uppercase tracking-[0.35em] text-green-600 font-medium">
             Every meaningful journey begins here.
           </span>
         </motion.div>
@@ -330,9 +330,9 @@ export default function Hero() {
           style={{ opacity: introTawfiqOpacity, scale: introTawfiqScale }}
           className="absolute z-35 text-center px-6 max-w-[100vw] overflow-visible"
         >
-          <h2 className="font-['Cormorant_Garamond',serif] text-[3.5rem] xs:text-[4rem] sm:text-[6.5rem] md:text-[8.5rem] lg:text-[10rem] text-stone-900 font-light tracking-[-0.02em] leading-[1.15] select-none sm:whitespace-nowrap">
+          <h2 className="font-['Cormorant_Garamond',serif] text-[3.5rem] xs:text-[4rem] sm:text-[6.5rem] md:text-[8.5rem] lg:text-[10rem] text-green-950 font-light tracking-[-0.02em] leading-[1.15] select-none sm:whitespace-nowrap">
             Introducing{" "}
-            <span className="italic font-normal text-[#C6A26B]">Tawfiq.</span>
+            <span className="italic font-normal text-[#16A34A]">Tawfiq.</span>
           </h2>
         </motion.div>
       </div>

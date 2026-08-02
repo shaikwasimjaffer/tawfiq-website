@@ -171,10 +171,10 @@ function PreviewVisuals({ title }) {
           {[1, 2, 3, 4, 5].map((i) => (
             <motion.div
               key={i}
-              className="w-4 rounded-t-full bg-stone-300 origin-bottom"
+              className="w-4 rounded-t-full bg-green-200 origin-bottom"
               animate={{
                 height: ["20%", "100%", "20%"],
-                backgroundColor: ["#e7e5e4", "#C6A26B", "#e7e5e4"],
+                backgroundColor: ["#bbf7d0", "#16A34A", "#bbf7d0"],
               }}
               transition={{
                 duration: 3,
@@ -192,7 +192,7 @@ function PreviewVisuals({ title }) {
           {[1, 2, 3].map((i) => (
             <motion.div
               key={i}
-              className="absolute w-12 h-12 rounded-full border-[1.5px] border-[#C6A26B]"
+              className="absolute w-12 h-12 rounded-full border-[1.5px] border-[#16A34A]"
               animate={{ scale: [1, 6], opacity: [0.8, 0] }}
               transition={{
                 duration: 2.5,
@@ -202,7 +202,7 @@ function PreviewVisuals({ title }) {
               }}
             />
           ))}
-          <div className="w-3 h-3 bg-[#C6A26B] rounded-full shadow-[0_0_12px_rgba(198,162,107,0.8)]" />
+          <div className="w-3 h-3 bg-[#16A34A] rounded-full shadow-[0_0_12px_rgba(22,163,74,0.8)]" />
         </div>
       );
     case "Adhan":
@@ -211,7 +211,7 @@ function PreviewVisuals({ title }) {
           {[1, 2, 3, 4, 5, 6, 7].map((i) => (
             <motion.div
               key={i}
-              className="w-2 bg-[#C6A26B] rounded-full"
+              className="w-2 bg-[#16A34A] rounded-full"
               animate={{ height: ["10%", i % 2 === 0 ? "80%" : "100%", "10%"] }}
               transition={{
                 duration: 1.2,
@@ -226,10 +226,10 @@ function PreviewVisuals({ title }) {
     case "Hadith":
       return (
         <div className="relative w-28 h-36 perspective-[800px] flex">
-          <div className="w-1/2 h-full bg-stone-200 rounded-l-md border-r border-stone-300 shadow-inner" />
-          <div className="w-1/2 h-full bg-stone-100 rounded-r-md shadow-md" />
+          <div className="w-1/2 h-full bg-green-200 rounded-l-md border-r border-green-300 shadow-inner" />
+          <div className="w-1/2 h-full bg-green-100 rounded-r-md shadow-md" />
           <motion.div
-            className="absolute right-0 w-1/2 h-full bg-white rounded-l-md origin-left shadow-lg border-l border-stone-100"
+            className="absolute right-0 w-1/2 h-full bg-white rounded-l-md origin-left shadow-lg border-l border-green-100"
             animate={{ rotateY: [0, -180, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           />
@@ -237,7 +237,7 @@ function PreviewVisuals({ title }) {
       );
     case "Ramadan":
       return (
-        <div className="relative w-40 h-40 rounded-full bg-stone-900 overflow-hidden flex items-center justify-center shadow-2xl">
+        <div className="relative w-40 h-40 rounded-full bg-green-950 overflow-hidden flex items-center justify-center shadow-2xl">
           {[...Array(12)].map((_, i) => (
             <motion.div
               key={i}
@@ -255,7 +255,7 @@ function PreviewVisuals({ title }) {
             />
           ))}
           <motion.div
-            className="w-14 h-14 rounded-full bg-transparent shadow-[inset_-12px_-5px_0_2px_#C6A26B]"
+            className="w-14 h-14 rounded-full bg-transparent shadow-[inset_-12px_-5px_0_2px_#16A34A]"
             animate={{ rotate: [0, 10, 0] }}
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
           />
@@ -267,7 +267,7 @@ function PreviewVisuals({ title }) {
           {[1, 2, 3].map((i) => (
             <motion.div
               key={i}
-              className="absolute w-4 h-4 bg-[#C6A26B] rounded-full shadow-md"
+              className="absolute w-4 h-4 bg-[#16A34A] rounded-full shadow-md"
               initial={{ y: -60, opacity: 0, scale: 0.5 }}
               animate={{ y: 20, opacity: [0, 1, 0], scale: 1 }}
               transition={{
@@ -278,12 +278,12 @@ function PreviewVisuals({ title }) {
               }}
             />
           ))}
-          <div className="w-20 h-10 border-b-4 border-l-4 border-r-4 border-stone-400 rounded-b-full opacity-60" />
+          <div className="w-20 h-10 border-b-4 border-l-4 border-r-4 border-green-400 rounded-b-full opacity-60" />
         </div>
       );
     case "Zakat Calculator":
       return (
-        <div className="flex items-center text-5xl font-serif text-[#C6A26B] font-light overflow-hidden h-16">
+        <div className="flex items-center text-5xl font-serif text-[#16A34A] font-light overflow-hidden h-16">
           <span>$</span>
           <motion.div
             animate={{ y: ["0%", "-80%"] }}
@@ -309,23 +309,23 @@ function PreviewVisuals({ title }) {
           transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
           className="flex items-center justify-center"
         >
-          <span className="text-7xl text-[#C6A26B] font-arabic drop-shadow-lg">
+          <span className="text-7xl text-[#16A34A] font-arabic drop-shadow-lg">
             الرَّحْمَٰن
           </span>
         </motion.div>
       );
     case "Islamic History":
       return (
-        <div className="relative w-64 h-1 bg-stone-300 rounded-full flex items-center">
+        <div className="relative w-64 h-1 bg-green-200 rounded-full flex items-center">
           <motion.div
-            className="absolute left-0 h-full bg-[#C6A26B] rounded-full"
+            className="absolute left-0 h-full bg-[#16A34A] rounded-full"
             animate={{ width: ["0%", "100%", "0%"] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
           />
           {[20, 50, 80].map((pos, i) => (
             <motion.div
               key={i}
-              className="absolute w-3 h-3 bg-white border-2 border-[#C6A26B] rounded-full"
+              className="absolute w-3 h-3 bg-white border-2 border-[#16A34A] rounded-full"
               style={{ left: `${pos}%` }}
               animate={{ scale: [0, 1.5, 1] }}
               transition={{
@@ -340,7 +340,7 @@ function PreviewVisuals({ title }) {
       );
     case "Learn Arabic":
       return (
-        <div className="relative flex items-center justify-center w-full h-24 text-4xl font-serif text-[#C6A26B]">
+        <div className="relative flex items-center justify-center w-full h-24 text-4xl font-serif text-[#16A34A]">
           <motion.span
             className="absolute font-arabic"
             animate={{
@@ -393,7 +393,7 @@ const CheckIcon = () => (
     height="20"
     viewBox="0 0 24 24"
     fill="none"
-    stroke="#C6A26B"
+    stroke="#16A34A"
     strokeWidth="2.5"
     strokeLinecap="round"
     strokeLinejoin="round"
@@ -435,17 +435,17 @@ function WheelNode({
           <div
             className={`w-2.5 h-2.5 rounded-full mb-3 transition-all duration-700 ${
               isActive && isOpened
-                ? "bg-[#C6A26B] scale-150 shadow-[0_0_24px_rgba(198,162,107,0.8)]"
+                ? "bg-[#16A34A] scale-150 shadow-[0_0_24px_rgba(22,163,74,0.8)]"
                 : isActive
-                  ? "bg-[#C6A26B] scale-125 shadow-[0_0_12px_rgba(198,162,107,0.6)]"
-                  : "bg-stone-300 group-hover:bg-stone-400 group-hover:scale-110"
+                  ? "bg-[#16A34A] scale-125 shadow-[0_0_12px_rgba(22,163,74,0.6)]"
+                  : "bg-green-300 group-hover:bg-green-400 group-hover:scale-110"
             }`}
           />
           <span
             className={`font-serif tracking-wide transition-all duration-700 whitespace-nowrap ${
               isActive
-                ? "text-xl text-[#C6A26B] font-medium"
-                : "text-base text-stone-400 group-hover:text-stone-700"
+                ? "text-xl text-[#16A34A] font-medium"
+                : "text-base text-green-500 group-hover:text-green-700"
             }`}
           >
             {topic.title}
@@ -545,7 +545,7 @@ export default function TawfiqLearningHub() {
     <LayoutGroup>
       <section
         id="academy"
-        className="relative min-h-[100dvh] bg-[#F7F5F1] overflow-hidden flex flex-col items-center font-sans py-16 sm:py-20"
+        className="relative min-h-[100dvh] bg-[#F0FDF4] overflow-hidden flex flex-col items-center font-sans py-16 sm:py-20"
       >
         {/* Header Label, Title, and Description - Standard Flow to push content down safely */}
         <motion.div
@@ -553,13 +553,13 @@ export default function TawfiqLearningHub() {
           transition={{ duration: 0.5 }}
           className="relative text-center z-20 w-full px-4 mb-8 sm:mb-12 shrink-0 pt-4"
         >
-          <p className="text-[10px] sm:text-[11px] font-sans tracking-[0.25em] uppercase text-stone-400 mb-3 sm:mb-4">
+          <p className="text-[10px] sm:text-[11px] font-sans tracking-[0.25em] uppercase text-green-500 mb-3 sm:mb-4">
             03 — The Academy
           </p>
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-serif text-stone-900 tracking-tight leading-tight">
-            Structured <span className="text-[#C6A26B] italic">Learning</span>
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-serif text-green-950 tracking-tight leading-tight">
+            Structured <span className="text-[#16A34A] italic">Learning</span>
           </h2>
-          <p className="mt-3 sm:mt-4 text-sm sm:text-lg font-serif text-stone-600 max-w-lg mx-auto leading-relaxed px-2">
+          <p className="mt-3 sm:mt-4 text-sm sm:text-lg font-serif text-green-700 max-w-lg mx-auto leading-relaxed px-2">
             Master the essentials of your faith through interactive,
             step-by-step modules designed for every level.
           </p>
@@ -583,7 +583,7 @@ export default function TawfiqLearningHub() {
                 className="flex flex-col items-center text-center w-full pointer-events-auto"
               >
                 <span
-                  className="font-arabic text-6xl lg:text-7xl text-stone-300/80 mb-6 leading-none"
+                  className="font-arabic text-6xl lg:text-7xl text-green-300/80 mb-6 leading-none"
                   dir="rtl"
                 >
                   {selectedTopic.arabic}
@@ -596,7 +596,7 @@ export default function TawfiqLearningHub() {
                       setIsBottomSheetOpen(true);
                     }
                   }}
-                  className="flex items-center justify-center gap-2 mb-3 sm:mb-4 text-stone-900 active:opacity-60 transition-opacity sm:pointer-events-none"
+                  className="flex items-center justify-center gap-2 mb-3 sm:mb-4 text-green-950 active:opacity-60 transition-opacity sm:pointer-events-none"
                 >
                   <motion.h2
                     layoutId={`title-${selectedTopic.title}`}
@@ -604,14 +604,14 @@ export default function TawfiqLearningHub() {
                   >
                     {selectedTopic.title}
                   </motion.h2>
-                  <div className="text-stone-400 mt-1 sm:hidden">
+                  <div className="text-green-500 mt-1 sm:hidden">
                     <ChevronDown />
                   </div>
                 </button>
 
                 <motion.p
                   layoutId={`desc-${selectedTopic.title}`}
-                  className="font-serif text-base sm:text-xl italic font-light text-stone-600 leading-relaxed max-w-[280px] sm:max-w-md"
+                  className="font-serif text-base sm:text-xl italic font-light text-green-700 leading-relaxed max-w-[280px] sm:max-w-md"
                 >
                   {selectedTopic.sentence}
                 </motion.p>
@@ -622,7 +622,7 @@ export default function TawfiqLearningHub() {
             <div className="pointer-events-auto sm:hidden mt-10 mb-6 w-full flex justify-center">
               <button
                 onClick={() => setIsOverlayOpen(true)}
-                className="bg-stone-900 text-stone-100 px-8 py-4 rounded-full text-xs tracking-[0.15em] uppercase font-semibold active:bg-stone-800 transition-colors shadow-lg"
+                className="bg-green-950 text-green-100 px-8 py-4 rounded-full text-xs tracking-[0.15em] uppercase font-semibold active:bg-green-900 transition-colors shadow-lg"
               >
                 Explore Module
               </button>
@@ -631,7 +631,7 @@ export default function TawfiqLearningHub() {
 
           {/* --- DESKTOP WHEEL (Hidden on Mobile) --- */}
           <motion.div
-            className={`hidden sm:flex relative items-center justify-center sm:w-[600px] sm:h-[600px] lg:w-[780px] lg:h-[780px] rounded-full border border-stone-200/70 z-10 ${
+            className={`hidden sm:flex relative items-center justify-center sm:w-[600px] sm:h-[600px] lg:w-[780px] lg:h-[780px] rounded-full border border-green-200/70 z-10 ${
               isLocked ? "pointer-events-none" : ""
             }`}
             style={{ rotate: wheelRotation }}
@@ -641,8 +641,8 @@ export default function TawfiqLearningHub() {
               transition={{ duration: 0.8, ease: "easeOut" }}
               className="absolute inset-0 w-full h-full pointer-events-none"
             >
-              <div className="absolute inset-12 rounded-full border-[0.5px] border-stone-200/50" />
-              <div className="absolute inset-24 rounded-full border border-stone-200/40 border-dashed" />
+              <div className="absolute inset-12 rounded-full border-[0.5px] border-green-200/50" />
+              <div className="absolute inset-24 rounded-full border border-green-200/40 border-dashed" />
             </motion.div>
 
             {topics.map((topic, i) => (
@@ -674,7 +674,7 @@ export default function TawfiqLearningHub() {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
                 onClick={() => setIsBottomSheetOpen(false)}
-                className="fixed inset-0 bg-stone-900/40 z-[100] backdrop-blur-[2px] sm:hidden"
+                className="fixed inset-0 bg-green-950/40 z-[100] backdrop-blur-[2px] sm:hidden"
               />
 
               {/* Sheet */}
@@ -686,9 +686,9 @@ export default function TawfiqLearningHub() {
                 className="fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl z-[101] max-h-[85vh] flex flex-col shadow-2xl sm:hidden"
               >
                 {/* Drag Handle & Header */}
-                <div className="pt-3 pb-4 border-b border-stone-100 shrink-0">
-                  <div className="w-12 h-1.5 bg-stone-200 rounded-full mx-auto mb-4" />
-                  <h3 className="text-center font-sans font-semibold text-xs text-stone-400 uppercase tracking-widest">
+                <div className="pt-3 pb-4 border-b border-green-100 shrink-0">
+                  <div className="w-12 h-1.5 bg-green-200 rounded-full mx-auto mb-4" />
+                  <h3 className="text-center font-sans font-semibold text-xs text-green-500 uppercase tracking-widest">
                     Choose Topic
                   </h3>
                 </div>
@@ -704,22 +704,22 @@ export default function TawfiqLearningHub() {
                           setActiveIndex(i);
                           setIsBottomSheetOpen(false);
                         }}
-                        className={`w-full flex items-center justify-between p-4 rounded-2xl transition-colors active:bg-stone-100 ${
+                        className={`w-full flex items-center justify-between p-4 rounded-2xl transition-colors active:bg-green-100 ${
                           isActive
-                            ? "bg-amber-50/50 border border-amber-100/50"
+                            ? "bg-green-100/50 border border-green-200/50"
                             : "bg-transparent"
                         }`}
                       >
                         <div className="flex items-center gap-4 text-left">
                           <span
-                            className="font-arabic text-xl text-stone-400 w-12 text-center"
+                            className="font-arabic text-xl text-green-500 w-12 text-center"
                             dir="rtl"
                           >
                             {topic.arabic}
                           </span>
                           <span
                             className={`font-serif text-xl ${
-                              isActive ? "text-[#C6A26B]" : "text-stone-700"
+                              isActive ? "text-[#16A34A]" : "text-green-800"
                             }`}
                           >
                             {topic.title}
@@ -738,22 +738,22 @@ export default function TawfiqLearningHub() {
         {/* --- FULL SCREEN COURSE OVERLAY (Desktop & Mobile) --- */}
         <AnimatePresence>
           {isOverlayOpen && (
-            <div className="fixed inset-0 z-[105] overflow-y-auto overflow-x-hidden bg-[#FAFAFA]">
+            <div className="fixed inset-0 z-[105] overflow-y-auto overflow-x-hidden bg-[#F0FDF4]">
               {/* Desktop Expanding Background */}
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 35 }}
                 exit={{ scale: 0 }}
                 transition={springTransition}
-                className="hidden sm:block fixed top-1/2 left-1/2 w-48 h-48 bg-[#FAFAFA] rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+                className="hidden sm:block fixed top-1/2 left-1/2 w-48 h-48 bg-[#F0FDF4] rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none"
                 style={{ zIndex: -1 }}
               />
 
               {/* Mobile Sticky Top Bar (iOS style) */}
-              <div className="sm:hidden sticky top-0 z-50 bg-[#FAFAFA]/90 backdrop-blur-md border-b border-stone-200/50 px-4 py-4 flex items-center">
+              <div className="sm:hidden sticky top-0 z-50 bg-[#F0FDF4]/90 backdrop-blur-md border-b border-green-200/50 px-4 py-4 flex items-center">
                 <button
                   onClick={closeModule}
-                  className="text-stone-500 font-sans text-sm tracking-wide font-medium flex items-center gap-1 active:opacity-60"
+                  className="text-green-600 font-sans text-sm tracking-wide font-medium flex items-center gap-1 active:opacity-60"
                 >
                   <ChevronDown className="rotate-90" />
                   Back
@@ -767,7 +767,7 @@ export default function TawfiqLearningHub() {
                 exit={{ opacity: 0, x: -20, transition: { duration: 0.3 } }}
                 transition={{ delay: 0.3, duration: 0.6 }}
                 onClick={closeModule}
-                className="hidden sm:block fixed top-12 left-12 z-50 text-stone-400 hover:text-stone-800 tracking-widest uppercase text-xs font-semibold py-2 transition-colors cursor-pointer pointer-events-auto"
+                className="hidden sm:block fixed top-12 left-12 z-50 text-green-500 hover:text-green-900 tracking-widest uppercase text-xs font-semibold py-2 transition-colors cursor-pointer pointer-events-auto"
               >
                 ← Back to Academy
               </motion.button>
@@ -777,7 +777,7 @@ export default function TawfiqLearningHub() {
                 <motion.h1
                   layoutId={`title-${selectedTopic.title}`}
                   transition={springTransition}
-                  className="font-serif text-5xl sm:text-7xl lg:text-8xl text-[#C6A26B] tracking-tight leading-none mb-4 sm:mb-6 text-center"
+                  className="font-serif text-5xl sm:text-7xl lg:text-8xl text-[#16A34A] tracking-tight leading-none mb-4 sm:mb-6 text-center"
                 >
                   {selectedTopic.title}
                 </motion.h1>
@@ -785,12 +785,12 @@ export default function TawfiqLearningHub() {
                 <motion.p
                   layoutId={`desc-${selectedTopic.title}`}
                   transition={springTransition}
-                  className="font-serif text-lg sm:text-2xl italic font-light text-stone-600 text-center leading-relaxed mb-12 sm:mb-0 max-w-xl"
+                  className="font-serif text-lg sm:text-2xl italic font-light text-green-700 text-center leading-relaxed mb-12 sm:mb-0 max-w-xl"
                 >
                   {selectedTopic.sentence}
                 </motion.p>
 
-                <div className="w-full border-t border-stone-200/60 pt-12 sm:pt-20 sm:mt-24 flex flex-col items-center">
+                <div className="w-full border-t border-green-200/60 pt-12 sm:pt-20 sm:mt-24 flex flex-col items-center">
                   <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -798,10 +798,10 @@ export default function TawfiqLearningHub() {
                     transition={{ duration: 0.6, delay: 0.2 }}
                     className="text-center mb-12 sm:mb-24 px-4"
                   >
-                    <h3 className="text-2xl sm:text-3xl font-serif text-stone-900 mb-4 sm:mb-6">
+                    <h3 className="text-2xl sm:text-3xl font-serif text-green-950 mb-4 sm:mb-6">
                       {selectedTopic.subtitle}
                     </h3>
-                    <p className="text-stone-600 font-light text-base sm:text-xl leading-relaxed max-w-2xl mx-auto">
+                    <p className="text-green-700 font-light text-base sm:text-xl leading-relaxed max-w-2xl mx-auto">
                       {selectedTopic.intro}
                     </p>
                   </motion.div>
@@ -813,16 +813,16 @@ export default function TawfiqLearningHub() {
                     transition={{ duration: 0.6, delay: 0.3 }}
                     className="w-full max-w-3xl mb-12 sm:mb-24"
                   >
-                    <p className="text-[10px] sm:text-xs tracking-[0.2em] uppercase text-stone-400 mb-6 sm:mb-8 text-center font-semibold">
+                    <p className="text-[10px] sm:text-xs tracking-[0.2em] uppercase text-green-500 mb-6 sm:mb-8 text-center font-semibold">
                       Inside Tawfiq
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6">
                       {selectedTopic.features.map((feature, idx) => (
                         <div
                           key={idx}
-                          className="bg-white border border-stone-200/60 p-4 sm:p-6 rounded-xl sm:rounded-2xl text-center shadow-sm"
+                          className="bg-white border border-green-200/60 p-4 sm:p-6 rounded-xl sm:rounded-2xl text-center shadow-sm"
                         >
-                          <p className="text-stone-800 font-light text-base sm:text-lg">
+                          <p className="text-green-900 font-light text-base sm:text-lg">
                             {feature}
                           </p>
                         </div>
@@ -836,7 +836,7 @@ export default function TawfiqLearningHub() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 15 }}
                     transition={{ duration: 0.6, delay: 0.4 }}
-                    className="w-full h-64 sm:h-96 bg-gradient-to-br from-stone-100 to-[#F7F5F1] rounded-3xl flex items-center justify-center mb-12 sm:mb-24 border border-stone-200/50 shadow-inner overflow-hidden relative"
+                    className="w-full h-64 sm:h-96 bg-gradient-to-br from-green-100 to-[#F0FDF4] rounded-3xl flex items-center justify-center mb-12 sm:mb-24 border border-green-200/50 shadow-inner overflow-hidden relative"
                   >
                     <PreviewVisuals title={selectedTopic.title} />
                   </motion.div>
@@ -848,8 +848,8 @@ export default function TawfiqLearningHub() {
                     transition={{ duration: 0.6, delay: 0.5 }}
                     className="text-center mb-12 sm:mb-24 px-4 max-w-2xl"
                   >
-                    <div className="w-8 sm:w-12 h-[1px] bg-[#C6A26B] mx-auto mb-6 sm:mb-8" />
-                    <p className="text-xl sm:text-3xl font-serif text-stone-800 font-light italic leading-relaxed">
+                    <div className="w-8 sm:w-12 h-[1px] bg-[#16A34A] mx-auto mb-6 sm:mb-8" />
+                    <p className="text-xl sm:text-3xl font-serif text-green-900 font-light italic leading-relaxed">
                       "{selectedTopic.statistic}"
                     </p>
                   </motion.div>
@@ -861,7 +861,7 @@ export default function TawfiqLearningHub() {
                     transition={{ duration: 0.6, delay: 0.6 }}
                     className="pb-12 w-full sm:w-auto"
                   >
-                    <button className="w-full sm:w-auto bg-stone-900 text-stone-100 px-10 py-4 rounded-xl sm:rounded-full text-xs sm:text-sm tracking-[0.15em] sm:tracking-[0.2em] uppercase font-semibold hover:bg-[#C6A26B] hover:text-white transition-all duration-300 shadow-xl sm:hover:shadow-2xl sm:hover:-translate-y-1 cursor-pointer active:bg-stone-800">
+                    <button className="w-full sm:w-auto bg-green-950 text-green-100 px-10 py-4 rounded-xl sm:rounded-full text-xs sm:text-sm tracking-[0.15em] sm:tracking-[0.2em] uppercase font-semibold hover:bg-[#16A34A] hover:text-white transition-all duration-300 shadow-xl sm:hover:shadow-2xl sm:hover:-translate-y-1 cursor-pointer active:bg-green-900">
                       Open in Tawfiq
                     </button>
                   </motion.div>
