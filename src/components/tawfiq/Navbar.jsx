@@ -11,7 +11,6 @@ const EMAILJS_SERVICE_ID = "service_8msblsf";
 const EMAILJS_TEMPLATE_ID = "template_9gd6lm2";
 const EMAILJS_PUBLIC_KEY = "5iuNuXg40cmMgueNJ";
 
-// --- Added Tawfiq AI to the navItems array ---
 const navItems = [
   { id: "qaza", label: "Qaza", href: "#qaza" },
   { id: "quran", label: "Quran", href: "#quran" },
@@ -52,17 +51,22 @@ function NavLink({ item, isActive, onClick }) {
     <motion.a
       href={item.href}
       onClick={onClick}
-      className="relative px-5 py-2 font-['Plus_Jakarta_Sans',sans-serif] text-[13px] tracking-[-0.01em] font-medium transition-colors duration-300 z-10 cursor-pointer"
-      style={{ color: isActive ? "#052E16" : "#15803D" }}
-      whileHover={{ color: "#052E16" }}
+      className="relative px-4 py-1.5 rounded-full font-['Plus_Jakarta_Sans',sans-serif] text-[15px] tracking-[-0.01em] font-medium transition-all duration-200 z-10 cursor-pointer"
+      style={{
+        color: isActive ? "#052E16" : "#166534",
+      }}
+      whileHover={{
+        backgroundColor: "rgba(22, 163, 74, 0.08)",
+        color: "#052E16",
+      }}
     >
       <span className="relative z-10">{item.label}</span>
 
-      {/* Active Navigation Dot */}
+      {/* Subtle Active Indicator Dot */}
       {isActive && (
         <motion.div
           layoutId="navActiveDot"
-          className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#16A34A]"
+          className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-[#16A34A]"
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
         />
       )}
@@ -85,7 +89,7 @@ export default function Navbar() {
     category: "General Question",
     message: "",
   });
-  const [formStatus, setFormStatus] = useState("idle"); // 'idle' | 'loading' | 'success' | 'error'
+  const [formStatus, setFormStatus] = useState("idle");
   const [shaking, setShaking] = useState(false);
 
   // Handle scroll blur effect
@@ -202,18 +206,25 @@ export default function Navbar() {
 
   return (
     <>
+      {/* FLOATING GLASS PILL NAVBAR CONTAINER */}
       <motion.header
         initial={{ y: -30, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.1 }}
-        className={`fixed top-0 inset-x-0 z-50 transition-all duration-700 ${
-          scrolled || isMenuOpen
-            ? "bg-white/80 backdrop-blur-xl border-b border-green-100/40 shadow-[0_4px_20px_rgba(22,163,74,0.02)]"
-            : "bg-transparent border-b border-transparent"
+        className={`fixed inset-x-0 z-50 flex justify-center pointer-events-none transition-all duration-500 ${
+          scrolled ? "top-2 md:top-3" : "top-4 md:top-5"
         }`}
       >
-        <nav className="relative max-w-[1400px] mx-auto px-6 lg:px-10 h-14 md:h-20 flex items-center justify-between">
-          {/* MOBILE LEFT: Premium Editorial Menu Icon */}
+        <nav
+          className={`pointer-events-auto w-[92%] px-6 md:px-8 rounded-full flex items-center justify-between transition-all duration-500 ${
+            scrolled ? "h-[56px] max-w-[1100px]" : "h-[68px] max-w-[1250px]"
+          } ${
+            scrolled || isMenuOpen
+              ? "bg-white/40 backdrop-blur-2xl border border-white/60 shadow-[0_8px_32px_rgba(5,46,22,0.08)]"
+              : "bg-white/20 backdrop-blur-xl border border-white/40 shadow-[0_4px_24px_rgba(5,46,22,0.04)]"
+          }`}
+        >
+          {/* MOBILE LEFT: Editorial Menu Icon */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="md:hidden relative z-50 p-2 -ml-2 text-green-950 focus:outline-none cursor-pointer"
@@ -221,17 +232,17 @@ export default function Navbar() {
           >
             <div className="w-5 h-4 flex flex-col justify-between">
               <span
-                className={`block h-[1px] w-full bg-green-950 transition-all duration-300 ${
+                className={`block h-[1.5px] w-full bg-green-950 transition-all duration-300 ${
                   isMenuOpen ? "rotate-45 translate-y-[7px]" : ""
                 }`}
               />
               <span
-                className={`block h-[1px] bg-green-950 transition-all duration-300 ${
+                className={`block h-[1.5px] bg-green-950 transition-all duration-300 ${
                   isMenuOpen ? "w-0 opacity-0" : "w-full"
                 }`}
               />
               <span
-                className={`block h-[1px] w-full bg-green-950 transition-all duration-300 ${
+                className={`block h-[1.5px] w-full bg-green-950 transition-all duration-300 ${
                   isMenuOpen ? "-rotate-45 -translate-y-[8px]" : ""
                 }`}
               />
@@ -257,13 +268,13 @@ export default function Navbar() {
                 <path
                   d="M11 2C11 2 5 6 5 12C5 16 8 19 11 19C14 19 17 16 17 12C17 6 11 2 11 2Z"
                   stroke="currentColor"
-                  strokeWidth="1.2"
+                  strokeWidth="1.4"
                   strokeLinejoin="round"
                 />
                 <path
                   d="M11 5V19M8 11L11 8L14 11"
                   stroke="currentColor"
-                  strokeWidth="1"
+                  strokeWidth="1.2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 />
@@ -275,67 +286,37 @@ export default function Navbar() {
           </div>
 
           {/* DESKTOP CENTER: Navigation Items */}
-          <div className="hidden md:flex items-center absolute left-1/2 -translate-x-1/2">
-            {navItems.map((item, index) => (
-              <React.Fragment key={item.id}>
-                <NavLink
-                  item={item}
-                  isActive={activeItem === item.id}
-                  onClick={() => setActiveItem(item.id)}
-                />
-                {index < navItems.length - 1 && (
-                  <span className="text-green-400/40 text-[10px] mx-1">•</span>
-                )}
-              </React.Fragment>
+          <div className="hidden md:flex items-center gap-1">
+            {navItems.map((item) => (
+              <NavLink
+                key={item.id}
+                item={item}
+                isActive={activeItem === item.id}
+                onClick={() => setActiveItem(item.id)}
+              />
             ))}
-            {/* Added Contact Link to Desktop Nav */}
-            <span className="text-green-400/40 text-[10px] mx-1">•</span>
-            <button
+            <motion.button
               onClick={() => setShowContact(true)}
-              className="relative px-5 py-2 font-['Plus_Jakarta_Sans',sans-serif] text-[13px] tracking-[-0.01em] font-medium text-green-700 hover:text-green-950 transition-colors duration-300 z-10 cursor-pointer"
+              whileHover={{
+                backgroundColor: "rgba(22, 163, 74, 0.08)",
+                color: "#052E16",
+              }}
+              className="relative px-4 py-1.5 rounded-full font-['Plus_Jakarta_Sans',sans-serif] text-[15px] tracking-[-0.01em] font-medium text-[#166534] transition-all duration-200 z-10 cursor-pointer"
             >
               Contact
-            </button>
+            </motion.button>
           </div>
 
-          {/* DESKTOP RIGHT: CTA Button */}
+          {/* DESKTOP RIGHT: Pill CTA Button */}
           <div className="hidden md:block">
             <button
               onClick={() => setShowScanner(true)}
-              className="group inline-flex items-center gap-2.5 text-[13px] text-green-950 transition-all duration-300 cursor-pointer focus:outline-none"
+              className="group inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-[#15803D] hover:bg-[#146c33] text-white font-['Plus_Jakarta_Sans',sans-serif] text-[13px] font-medium tracking-tight shadow-sm transition-all duration-300 cursor-pointer focus:outline-none"
             >
-              <span className="w-0 group-hover:w-4 h-[1px] bg-[#16A34A] transition-all duration-500" />
-              <svg
-                viewBox="0 0 24 24"
-                width="15"
-                height="15"
-                fill="none"
-                className="text-green-950 transition-colors duration-500 group-hover:text-[#16A34A]"
-              >
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="9.5"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                />
-                <path
-                  d="M12 5 L14.5 12 L12 14.5 L9.5 12 Z"
-                  fill="currentColor"
-                />
-                <path
-                  d="M12 19 L14.5 12 L12 14.5 L9.5 12 Z"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                  strokeLinejoin="round"
-                />
-                <circle cx="12" cy="12" r="0.7" fill="currentColor" />
-              </svg>
-              <span className="relative font-['Plus_Jakarta_Sans',sans-serif] font-medium text-[13px] tracking-tight group-hover:text-[#16A34A] transition-colors duration-500">
-                Begin with Bismillah
-                <span className="absolute left-0 -bottom-1 h-[1px] w-0 bg-[#16A34A] transition-all duration-500 group-hover:w-full" />
+              <span>Begin with Bismillah</span>
+              <span className="transform group-hover:translate-x-0.5 transition-transform duration-300">
+                →
               </span>
-              <span className="w-0 group-hover:w-4 h-[1px] bg-[#16A34A] transition-all duration-500" />
             </button>
           </div>
 
@@ -344,7 +325,7 @@ export default function Navbar() {
       </motion.header>
 
       {/* =========================================
-          PREMIUM CONTACT EXPERIENCE OVERLAY (OPTION 3)
+          PREMIUM CONTACT EXPERIENCE OVERLAY
           ========================================= */}
       <AnimatePresence>
         {showContact && (
@@ -433,7 +414,7 @@ export default function Navbar() {
                     />
                   </div>
 
-                  {/* Line 3: Category Selectors (Visual Radio Buttons) */}
+                  {/* Line 3: Category Selectors */}
                   <div className="flex flex-col gap-4 pt-2">
                     <span className="text-green-700 font-light text-base sm:text-xl">
                       I'm writing because:
@@ -466,7 +447,7 @@ export default function Navbar() {
                     </div>
                   </div>
 
-                  {/* Line 4: Dynamic Message Input matching selected category */}
+                  {/* Line 4: Dynamic Message Input */}
                   <div className="flex flex-col gap-3 pt-2">
                     <div className="flex items-center justify-between">
                       <span className="text-green-700 font-light text-base sm:text-xl">
@@ -519,7 +500,7 @@ export default function Navbar() {
                 </div>
               </form>
 
-              {/* Bottom Support Footer Info */}
+              {/* Support Footer */}
               <div className="mt-24 pt-12 border-t border-green-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 text-xs text-green-700 font-['Plus_Jakarta_Sans',sans-serif]">
                 <div>
                   <p className="text-green-600 uppercase tracking-widest mb-1 text-[10px]">
@@ -640,14 +621,13 @@ export default function Navbar() {
               </motion.div>
             </div>
 
-            {/* Features & Trust Signals Footer */}
+            {/* Features & Trust Signals */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8, duration: 0.6 }}
               className="w-full mt-16 sm:mt-24 flex flex-col items-center"
             >
-              {/* Feature List */}
               <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-6 text-green-800 font-['Plus_Jakarta_Sans',sans-serif] font-medium text-base sm:text-lg px-4 text-center tracking-tight">
                 <span>Prayer Tracking</span>
                 <span className="text-[#16A34A] opacity-50 hidden sm:block">
@@ -668,7 +648,6 @@ export default function Navbar() {
                 <span>Islamic Academy</span>
               </div>
 
-              {/* Trust Signals */}
               <div className="mt-12 flex flex-col items-center gap-4">
                 <p className="font-['Plus_Jakarta_Sans',sans-serif] text-[10px] sm:text-xs tracking-[0.2em] uppercase text-green-600 font-semibold text-center">
                   Built with sincerity for every Muslim.
@@ -717,7 +696,6 @@ export default function Navbar() {
                 </motion.a>
               ))}
 
-              {/* Added Contact Link to Mobile Menu */}
               <motion.button
                 onClick={() => {
                   setIsMenuOpen(false);
