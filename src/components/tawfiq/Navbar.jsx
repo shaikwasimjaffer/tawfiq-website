@@ -215,35 +215,41 @@ export default function Navbar() {
           scrolled ? "top-2 md:top-3" : "top-4 md:top-5"
         }`}
       >
+        {/*
+          THE MAGIC HAPPENS HERE: 
+          - Very subtle outer shadow with a negative spread (-8px/-12px) to make it float softly
+          - Faint white inner highlight (inset_0_1px_1px) to catch the light
+          - Glass blur (backdrop-blur-xl/2xl) perfectly balanced with border opacity
+        */}
         <nav
           className={`pointer-events-auto w-[92%] px-6 md:px-8 rounded-full flex items-center justify-between transition-all duration-500 ${
             scrolled ? "h-[56px] max-w-[1100px]" : "h-[68px] max-w-[1250px]"
           } ${
             scrolled || isMenuOpen
-              ? "bg-white/40 backdrop-blur-2xl border border-white/60 shadow-[0_8px_32px_rgba(5,46,22,0.08)]"
-              : "bg-white/20 backdrop-blur-xl border border-white/40 shadow-[0_4px_24px_rgba(5,46,22,0.04)]"
+              ? "bg-white/40 backdrop-blur-2xl border border-white/50 shadow-[0_24px_48px_-12px_rgba(5,46,22,0.08),inset_0_1px_2px_rgba(255,255,255,0.8)]"
+              : "bg-white/20 backdrop-blur-xl border border-white/30 shadow-[0_12px_32px_-8px_rgba(5,46,22,0.04),inset_0_1px_1px_rgba(255,255,255,0.5)]"
           }`}
         >
           {/* MOBILE LEFT: Editorial Menu Icon */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden relative z-50 p-2 -ml-2 text-green-950 focus:outline-none cursor-pointer"
+            className="md:hidden relative z-50 p-2 -ml-2 text-green-950 focus:outline-none cursor-pointer group"
             aria-label="Toggle Menu"
           >
-            <div className="w-5 h-4 flex flex-col justify-between">
+            <div className="w-[22px] flex flex-col gap-[6px]">
               <span
-                className={`block h-[1.5px] w-full bg-green-950 transition-all duration-300 ${
-                  isMenuOpen ? "rotate-45 translate-y-[7px]" : ""
+                className={`block h-[1.25px] w-full rounded-full bg-green-950 transition-all duration-300 ease-out origin-center ${
+                  isMenuOpen ? "rotate-45 translate-y-[7.25px]" : ""
                 }`}
               />
               <span
-                className={`block h-[1.5px] bg-green-950 transition-all duration-300 ${
+                className={`block h-[1.25px] rounded-full bg-green-950 transition-all duration-300 ease-out ${
                   isMenuOpen ? "w-0 opacity-0" : "w-full"
                 }`}
               />
               <span
-                className={`block h-[1.5px] w-full bg-green-950 transition-all duration-300 ${
-                  isMenuOpen ? "-rotate-45 -translate-y-[8px]" : ""
+                className={`block h-[1.25px] w-full rounded-full bg-green-950 transition-all duration-300 ease-out origin-center ${
+                  isMenuOpen ? "-rotate-45 -translate-y-[7.25px]" : ""
                 }`}
               />
             </div>
@@ -730,6 +736,8 @@ export default function Navbar() {
                 Begin with Bismillah
               </motion.button>
             </div>
+
+            <div className="div">hiii</div>
 
             <motion.div
               initial={{ opacity: 0, scaleX: 0 }}
