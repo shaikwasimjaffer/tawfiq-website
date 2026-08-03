@@ -739,6 +739,8 @@ export default function Navbar() {
 
             <div className="div">hiii</div>
 
+            <div>test</div>
+
             <motion.div
               initial={{ opacity: 0, scaleX: 0 }}
               animate={{ opacity: 1, scaleX: 1 }}
