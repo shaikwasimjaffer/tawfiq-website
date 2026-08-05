@@ -24,17 +24,14 @@ export default function Hero() {
   const floorScale = useTransform(scrollYProgress, [0, 0.3], [1, 1.05]);
 
   // --- 0. STAGE 0: ISLAMIC WELCOME "ASSALAMU ALAIKUM" (0% -> 10%) ---
+  // Starts at 1 opacity so it's immediately visible at 0 scroll position
   const welcomeOpacity = useTransform(
     scrollYProgress,
-    [0, 0.02, 0.07, 0.1],
-    [0, 1, 1, 0],
+    [0, 0.07, 0.1],
+    [1, 1, 0],
   );
-  const welcomeY = useTransform(
-    scrollYProgress,
-    [0, 0.02, 0.07, 0.1],
-    [20, 0, 0, -20],
-  );
-  const welcomeScale = useTransform(scrollYProgress, [0, 0.08], [0.97, 1.02]);
+  const welcomeY = useTransform(scrollYProgress, [0, 0.07, 0.1], [0, 0, -20]);
+  const welcomeScale = useTransform(scrollYProgress, [0, 0.08], [1, 1.02]);
 
   // --- 2. STAGE 1: HERO HEADLINE (11% -> 22%) ---
   const heroTextOpacity = useTransform(
