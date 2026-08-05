@@ -737,7 +737,7 @@ export default function Navbar() {
               </motion.button>
             </div>
 
-            <div className="div">hiii</div>
+            
 
             <div>test</div>
 

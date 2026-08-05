@@ -4,54 +4,71 @@ import { motion, useScroll, useTransform } from "framer-motion";
 export default function Hero() {
   const containerRef = useRef(null);
 
-  // 1100vh timeline provides clean spacing for 6 distinct cinematic stages
+  // 1200vh timeline provides clean, unhurried pacing across 7 cinematic stages
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"],
   });
 
-  // --- 1. BACKGROUND & LIGHT BEAM (0% -> 25%) ---
+  // --- 1. BACKGROUND & LIGHT BEAM (0% -> 30%) ---
   const floorOpacity = useTransform(
     scrollYProgress,
-    [0, 0.15, 0.25],
+    [0, 0.22, 0.3],
     [0.35, 0.35, 0],
   );
   const lightBeamOpacity = useTransform(
     scrollYProgress,
-    [0, 0.18, 0.28],
+    [0, 0.22, 0.32],
     [0.85, 0.85, 0],
   );
-  const floorScale = useTransform(scrollYProgress, [0, 0.25], [1, 1.05]);
+  const floorScale = useTransform(scrollYProgress, [0, 0.3], [1, 1.05]);
 
-  // --- 2. STAGE 1: HERO HEADLINE (0% -> 15%) ---
+  // --- 0. STAGE 0: ISLAMIC WELCOME "ASSALAMU ALAIKUM" (0% -> 10%) ---
+  const welcomeOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.02, 0.07, 0.1],
+    [0, 1, 1, 0],
+  );
+  const welcomeY = useTransform(
+    scrollYProgress,
+    [0, 0.02, 0.07, 0.1],
+    [20, 0, 0, -20],
+  );
+  const welcomeScale = useTransform(scrollYProgress, [0, 0.08], [0.97, 1.02]);
+
+  // --- 2. STAGE 1: HERO HEADLINE (11% -> 22%) ---
   const heroTextOpacity = useTransform(
     scrollYProgress,
-    [0, 0.08, 0.15],
-    [1, 1, 0],
+    [0.11, 0.14, 0.19, 0.22],
+    [0, 1, 1, 0],
   );
-  const heroTextY = useTransform(scrollYProgress, [0, 0.15], [0, -30]);
+  const heroTextY = useTransform(
+    scrollYProgress,
+    [0.11, 0.14, 0.19, 0.22],
+    [20, 0, 0, -25],
+  );
 
-  // --- 3. STAGE 2: "No matter how many prayers you've missed..." (18% -> 35%) ---
+  // --- 3. STAGE 2: "No matter how many prayers you've missed..." (24% -> 36%) ---
   const missedTextOpacity = useTransform(
     scrollYProgress,
-    [0.18, 0.22, 0.31, 0.35],
+    [0.24, 0.27, 0.33, 0.36],
     [0, 1, 1, 0],
   );
   const missedTextY = useTransform(
     scrollYProgress,
-    [0.18, 0.22, 0.31, 0.35],
+    [0.24, 0.27, 0.33, 0.36],
     [30, 0, 0, -20],
   );
 
-  // --- 4. STAGE 3: "The next one still matters." (Standalone Big Text) (38% -> 55%) ---
+  // --- 4. STAGE 3: "The next one still matters." (38% -> 54%) ---
   const nextOneOpacity = useTransform(
     scrollYProgress,
-    [0.38, 0.43, 0.51, 0.55],
+    [0.38, 0.42, 0.5, 0.54],
     [0, 1, 1, 0],
   );
   const nextOneY = useTransform(
     scrollYProgress,
-    [0.38, 0.43, 0.51, 0.55],
+    [0.38, 0.42, 0.5, 0.54],
     [40, 0, 0, -30],
   );
   const nextOneScale = useTransform(scrollYProgress, [0.38, 0.45], [0.92, 1]);
@@ -61,49 +78,31 @@ export default function Hero() {
     ["inset(0 100% 0 0)", "inset(0 0% 0 0)"],
   );
 
-  // --- 5. STAGE 4: BEFORE / AFTER SPLIT SCREEN (58% -> 83%) ---
-  const splitScreenOpacity = useTransform(
+  // --- 5. STAGE 4A: "Change doesn't begin tomorrow..." (56% -> 69%) ---
+  const changeTextOpacity = useTransform(
     scrollYProgress,
-    [0.58, 0.62, 0.79, 0.83],
+    [0.56, 0.6, 0.66, 0.69],
     [0, 1, 1, 0],
   );
-  const splitScreenY = useTransform(
+  const changeTextY = useTransform(
     scrollYProgress,
-    [0.58, 0.62, 0.79, 0.83],
-    [40, 0, 0, -40],
+    [0.56, 0.6, 0.66, 0.69],
+    [30, 0, 0, -30],
   );
 
-  // Staggered left-to-right arrow reveal masks
-  const arrowMask1 = useTransform(
+  // --- 6. STAGE 4B: "That's why we built Tawfiq." (71% -> 82%) ---
+  const builtTextOpacity = useTransform(
     scrollYProgress,
-    [0.61, 0.66],
-    ["inset(0 100% 0 0)", "inset(0 0% 0 0)"],
+    [0.71, 0.74, 0.79, 0.82],
+    [0, 1, 1, 0],
   );
-  const arrowMask2 = useTransform(
+  const builtTextY = useTransform(
     scrollYProgress,
-    [0.64, 0.69],
-    ["inset(0 100% 0 0)", "inset(0 0% 0 0)"],
+    [0.71, 0.74, 0.79, 0.82],
+    [30, 0, 0, -30],
   );
-  const arrowMask3 = useTransform(
-    scrollYProgress,
-    [0.67, 0.72],
-    ["inset(0 100% 0 0)", "inset(0 0% 0 0)"],
-  );
-  const arrowMasks = [arrowMask1, arrowMask2, arrowMask3];
 
-  // Subtle left-to-right translation to enhance the arrow shooting effect
-  const arrowX1 = useTransform(scrollYProgress, [0.61, 0.66], [-20, 0]);
-  const arrowX2 = useTransform(scrollYProgress, [0.64, 0.69], [-20, 0]);
-  const arrowX3 = useTransform(scrollYProgress, [0.67, 0.72], [-20, 0]);
-  const arrowXs = [arrowX1, arrowX2, arrowX3];
-
-  const splitRows = [
-    { before: "Missed prayers", after: "Next prayer tracked" },
-    { before: "No routine", after: "Growing consistency" },
-    { before: "Feeling behind", after: "Daily progress" },
-  ];
-
-  // --- 6. STAGE 5: ARABIC BISMILLAH (84% -> 94%) ---
+  // --- 7. STAGE 5: ARABIC BISMILLAH (84% -> 94%) ---
   const bismillahTransMask = useTransform(
     scrollYProgress,
     [0.86, 0.9],
@@ -121,7 +120,7 @@ export default function Hero() {
     [0.94, 1, 1.03],
   );
 
-  // --- 7. STAGE 6: GRAND FINALE "INTRODUCING TAWFIQ." (95% -> 100%) ---
+  // --- 8. STAGE 6: GRAND FINALE "INTRODUCING TAWFIQ." (95% -> 100%) ---
   const introTawfiqOpacity = useTransform(
     scrollYProgress,
     [0.95, 0.98, 1],
@@ -136,7 +135,7 @@ export default function Hero() {
   return (
     <section
       ref={containerRef}
-      className="relative h-[1100vh] bg-[#F0FDF4] font-['Plus_Jakarta_Sans',sans-serif]"
+      className="relative h-[1200vh] bg-[#F0FDF4] font-['Plus_Jakarta_Sans',sans-serif]"
     >
       {/* Sticky Fullscreen Canvas */}
       <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center pointer-events-none">
@@ -210,6 +209,29 @@ export default function Hero() {
         </div>
 
         {/* ==================================================================== */}
+        {/* STAGE 0: ISLAMIC WELCOME ("ASSALAMU ALAIKUM") */}
+        {/* ==================================================================== */}
+        <motion.div
+          style={{
+            opacity: welcomeOpacity,
+            y: welcomeY,
+            scale: welcomeScale,
+          }}
+          className="absolute z-10 w-full px-6 text-center flex flex-col items-center justify-center"
+        >
+          <h2
+            dir="rtl"
+            className="font-serif text-[3.2rem] sm:text-[5.5rem] md:text-[7.2rem] lg:text-[8.5rem] text-green-950 font-normal tracking-wide leading-none select-none drop-shadow-sm"
+          >
+            السَّلَامُ عَلَيْكُمْ
+          </h2>
+
+          <p className="mt-4 sm:mt-6 font-['Cormorant_Garamond',serif] text-xl sm:text-3xl md:text-4xl text-green-800/75 font-light italic tracking-wider">
+            Peace be upon you.
+          </p>
+        </motion.div>
+
+        {/* ==================================================================== */}
         {/* STAGE 1: HERO HEADLINE */}
         {/* ==================================================================== */}
         <motion.div
@@ -242,7 +264,7 @@ export default function Hero() {
         </motion.div>
 
         {/* ==================================================================== */}
-        {/* STAGE 3: "The next one still matters." (Standalone Big Scroll Text) */}
+        {/* STAGE 3: "The next one still matters." */}
         {/* ==================================================================== */}
         <motion.div
           style={{
@@ -263,68 +285,32 @@ export default function Hero() {
         </motion.div>
 
         {/* ==================================================================== */}
-        {/* STAGE 4: BEFORE / AFTER SPLIT SCREEN */}
+        {/* STAGE 4A: "Change doesn't begin tomorrow..." */}
         {/* ==================================================================== */}
         <motion.div
-          style={{ opacity: splitScreenOpacity, y: splitScreenY }}
-          className="absolute z-20 inset-0 flex items-center justify-center w-full px-4 sm:px-8 pointer-events-none"
+          style={{ opacity: changeTextOpacity, y: changeTextY }}
+          className="absolute z-20 max-w-5xl w-full px-6 text-center"
         >
-          <div className="w-full max-w-5xl flex flex-col">
-            {/* Split Headers */}
-            <div className="grid grid-cols-[1fr_auto_1fr] gap-4 sm:gap-8 md:gap-16 mb-10 md:mb-16 w-full items-end">
-              <div className="text-right">
-                <span className="font-['Plus_Jakarta_Sans',sans-serif] text-[10px] sm:text-sm md:text-base uppercase tracking-[0.15em] text-[#829B8C] font-semibold block">
-                  Before Tawfiq
-                </span>
-              </div>
-              <div className="w-8 sm:w-12 md:w-16"></div>{" "}
-              {/* Spacer matching arrow width */}
-              <div className="text-left">
-                <span className="font-['Plus_Jakarta_Sans',sans-serif] text-[10px] sm:text-sm md:text-base uppercase tracking-[0.15em] text-[#16A34A] font-semibold block">
-                  After Tawfiq
-                </span>
-              </div>
-            </div>
+          <h2 className="font-['Cormorant_Garamond',serif] text-3xl sm:text-5xl md:text-6xl lg:text-7xl text-green-950 leading-[1.15] font-light tracking-[-0.01em]">
+            Change doesn't begin tomorrow.
+            <br />
+            <span className="italic font-normal text-[#16A34A]">
+              It begins today.
+            </span>
+          </h2>
+        </motion.div>
 
-            {/* Split Rows */}
-            <div className="flex flex-col gap-10 sm:gap-12 md:gap-16 font-['Cormorant_Garamond',serif] text-2xl sm:text-4xl md:text-5xl lg:text-6xl">
-              {splitRows.map((row, i) => (
-                <div
-                  key={i}
-                  className="grid grid-cols-[1fr_auto_1fr] gap-4 sm:gap-8 md:gap-16 items-center w-full"
-                >
-                  {/* Before side (Drained - soft muted green-gray, light, blurred) */}
-                  <div className="text-right text-[#829B8C] opacity-[0.55] blur-[1px] font-light leading-[1.1] md:leading-tight">
-                    {row.before}
-                  </div>
-
-                  {/* Animated Connecting Arrow */}
-                  <div className="flex justify-center text-[#16A34A]">
-                    <motion.svg
-                      style={{ clipPath: arrowMasks[i], x: arrowXs[i] }}
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
-                      />
-                    </motion.svg>
-                  </div>
-
-                  {/* After side (Crisp and Vibrant) */}
-                  <div className="text-left text-[#16A34A] italic font-normal leading-[1.1] md:leading-tight">
-                    {row.after}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+        {/* ==================================================================== */}
+        {/* STAGE 4B: "That's why we built Tawfiq." */}
+        {/* ==================================================================== */}
+        <motion.div
+          style={{ opacity: builtTextOpacity, y: builtTextY }}
+          className="absolute z-20 max-w-5xl w-full px-6 text-center"
+        >
+          <h2 className="font-['Cormorant_Garamond',serif] text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-green-950 leading-[1.15] font-light tracking-[-0.01em]">
+            That's why we built{" "}
+            <span className="italic font-medium text-[#16A34A]">Tawfiq.</span>
+          </h2>
         </motion.div>
 
         {/* ==================================================================== */}
@@ -336,9 +322,9 @@ export default function Hero() {
         >
           <h2
             dir="rtl"
-            className="font-serif text-[5.5rem] sm:text-[9rem] md:text-[12rem] lg:text-[14rem] text-green-950 font-normal tracking-normal leading-none select-none"
+            className="font-serif text-[3rem] sm:text-[5rem] md:text-[7rem] lg:text-[9rem] text-green-950 font-normal tracking-normal leading-none select-none"
           >
-            بِسْمِ ٱللَّٰهِ
+            بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ
           </h2>
 
           <div className="mt-3 sm:mt-6 overflow-hidden">
@@ -346,7 +332,7 @@ export default function Hero() {
               style={{ clipPath: bismillahTransMask }}
               className="inline-block font-['Cormorant_Garamond',serif] text-3xl sm:text-4xl md:text-5xl text-[#16A34A] font-light italic tracking-wide"
             >
-              In the Name of Allah
+              In the name of Allah, the Most Gracious, the Most Merciful.
             </motion.p>
           </div>
 
