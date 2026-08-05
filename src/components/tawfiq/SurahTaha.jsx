@@ -218,9 +218,9 @@ export default function BreathingVerses() {
         <AnimatePresence mode="wait">
           <motion.div
             key={currentIndex}
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -50 }}
+            initial={{ x: 50 }}
+            animate={{ x: 0 }}
+            exit={{ x: -50 }}
             transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-col items-center"
           >

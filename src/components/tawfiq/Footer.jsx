@@ -49,7 +49,7 @@ export default function Footer() {
     <footer className="relative overflow-hidden bg-[#F0FDF4] pt-36 pb-16">
       <div className="absolute inset-0 pointer-events-none opacity-[0.035] bg-[radial-gradient(circle_at_center,#16A34A_1px,transparent_1px)] bg-[length:24px_24px]" />
 
-      <div className="relative max-w-7xl mx-auto px-6 text-center">
+      <div className="relative w-full mx-auto px-4 sm:px-6 text-center overflow-hidden">
         <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -65,7 +65,7 @@ export default function Footer() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1 }}
-          className="mt-16"
+          className="mt-16 w-full flex flex-col items-center justify-center"
         >
           <p
             className="
@@ -73,7 +73,7 @@ export default function Footer() {
               text-[#16A34A]
               text-5xl
               md:text-6xl
-              mb-4
+              mb-2
               tracking-wide
               translate-x-[2px]
             "
@@ -86,11 +86,12 @@ export default function Footer() {
               font-serif
               uppercase
               font-normal
-              leading-[0.88]
+              leading-[0.8]
               tracking-[-0.04em]
               text-green-950
-              text-[clamp(3.5rem,15vw,12rem)]
+              text-[23vw]
               select-none
+              whitespace-nowrap
             "
           >
             TAWFIQ

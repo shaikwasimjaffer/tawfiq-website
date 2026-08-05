@@ -288,12 +288,10 @@ export default function Hero() {
           style={{ opacity: changeTextOpacity, y: changeTextY }}
           className="absolute z-20 max-w-5xl w-full px-6 text-center"
         >
-          <h2 className="font-['Cormorant_Garamond',serif] text-3xl sm:text-5xl md:text-6xl lg:text-7xl text-green-950 leading-[1.15] font-light tracking-[-0.01em]">
-            Change doesn't begin tomorrow.
+          <h2 className="font-['Cormorant_Garamond',serif] text-[clamp(2.75rem,6vw,8rem)] text-green-950 leading-[1.15] font-light tracking-[-0.01em]">
+            It's never too late to
             <br />
-            <span className="italic font-normal text-[#16A34A]">
-              It begins today.
-            </span>
+            <span className="italic font-normal text-[#16A34A]">Return</span>
           </h2>
         </motion.div>
 
