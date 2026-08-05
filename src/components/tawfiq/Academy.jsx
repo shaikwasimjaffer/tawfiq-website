@@ -117,17 +117,18 @@ const topics = [
   {
     title: "Names of Allah",
     arabic: "أسماء الله الحسنى",
-    sentence: "Ninety-nine doors of knowing the One who knows you.",
-    subtitle: "Reflect on His beautiful names.",
+    sentence:
+      "Tawfiq gives all the 99 names of Allah, explains their purpose, and where they can be implemented in real life.",
+    subtitle: "All 99 Names of Allah",
     intro:
-      "Learn the meanings, virtues, and practical reflections of the 99 Names of Allah.",
+      "First of all, it gives all the 99 names of Allah, and then it explains their purpose and where it can be implemented in real life.",
     features: [
-      "Daily Name",
-      "Audio pronunciation",
-      "Meaning & reflection",
-      "Memorization mode",
+      "All 99 Names",
+      "Core Purposes",
+      "Real-life Implementation",
+      "Practical Guidance",
     ],
-    statistic: "Learn all 99 Names at your own pace.",
+    statistic: "Master the 99 Names and their real-life implementation.",
   },
   {
     title: "Islamic History",

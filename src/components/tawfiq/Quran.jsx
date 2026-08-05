@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, Pause, Check, Sparkles } from "lucide-react";
+import { Play, Pause, Check, Sparkles, ArrowRight, Flame } from "lucide-react";
 
 // Tajweed markup: madd (prolongation) in amber, ghunnah (nasalization) in emerald.
-// Note: Preserved functional Tajweed colors.
 const Tajweed = ({ segments }) => (
   <>
     {segments.map((s, i) => (
@@ -238,9 +237,15 @@ export default function Quran() {
   const [isComplete, setIsComplete] = useState(false);
 
   // Navigation State (Mushaf, Themes, Memorize)
-  const [activeTab, setActiveTab] = useState("reading"); // "reading", "themes", "memorization"
+  const [activeTab, setActiveTab] = useState("reading");
   const [selectedVerseForPanel, setSelectedVerseForPanel] = useState(null);
-  const [memorizationMode, setMemorizationMode] = useState("none"); // "none", "hide-translation", "hide-arabic"
+
+  // Memorization Tab State
+  const [memAyahIndex, setMemAyahIndex] = useState(0);
+  const [memMode, setMemMode] = useState("easy"); // "easy", "medium", "hard"
+  const [isRevealed, setIsRevealed] = useState(false);
+  const [memTimer, setMemTimer] = useState(0);
+  const [memComplete, setMemComplete] = useState(false);
 
   const audioRef = useRef(null);
 
@@ -248,6 +253,7 @@ export default function Quran() {
     ? 100
     : Math.min(((current - 1 + progress) / ayahs.length) * 100, 100);
 
+  // Audio Effect
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -258,6 +264,21 @@ export default function Quran() {
       audio.pause();
     }
   }, [isPlaying, current, isComplete]);
+
+  // Memorization Timer Effect
+  useEffect(() => {
+    let interval;
+    if (activeTab === "memorization" && !memComplete) {
+      interval = setInterval(() => setMemTimer((t) => t + 1), 1000);
+    }
+    return () => clearInterval(interval);
+  }, [activeTab, memComplete, memAyahIndex]);
+
+  // Reset reveal and timer on Ayah change
+  useEffect(() => {
+    setIsRevealed(false);
+    setMemTimer(0);
+  }, [memAyahIndex, memMode]);
 
   const handleEnded = () => {
     if (current < ayahs.length) {
@@ -291,12 +312,25 @@ export default function Quran() {
     }
   };
 
+  const handleNextMemAyah = () => {
+    if (memAyahIndex < ayahs.length - 1) {
+      setMemAyahIndex((i) => i + 1);
+    } else {
+      setMemComplete(true);
+    }
+  };
+
+  const formatTime = (s) =>
+    `${Math.floor(s / 60)
+      .toString()
+      .padStart(2, "0")}:${(s % 60).toString().padStart(2, "0")}`;
+
   const resumeLabel = started && !isPlaying && current > 1 && !isComplete;
 
   return (
     <section
       id="quran"
-      className="relative bg-[#F0FDF4] py-24 md:py-32 overflow-hidden selection:bg-[#16A34A] selection:text-white font-['Manrope']"
+      className="relative min-h-screen bg-[#F0FDF4] py-24 md:py-32 overflow-hidden selection:bg-[#16A34A] selection:text-white font-['Manrope'] transition-colors duration-700"
     >
       <div
         className="absolute inset-0 pointer-events-none"
@@ -306,9 +340,9 @@ export default function Quran() {
         }}
       />
 
-      {/* Header */}
-      <div className="relative max-w-4xl mx-auto px-6 md:px-10 mb-16 md:mb-20 mt-12 md:mt-16">
-        <div className="max-w-2xl mx-auto text-center">
+      {/* Header Tabs - NOW ALWAYS VISIBLE */}
+      <div className="relative z-10 max-w-4xl mx-auto px-6 md:px-10 mb-10 md:mb-12 mt-4 md:mt-8">
+        <div className="max-w-2xl mx-auto text-center mb-10 overflow-hidden">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -320,7 +354,6 @@ export default function Quran() {
               it was meant to be read.
             </span>
           </motion.h2>
-
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -332,44 +365,43 @@ export default function Quran() {
               learning, themes, and memorization tools.
             </p>
           </motion.div>
+        </div>
 
-          {/* Sub-Navigation Tabs - FIXED FOR MOBILE */}
-          <div className="flex flex-nowrap items-center justify-start sm:justify-center gap-1 sm:gap-2 mt-8 bg-green-200/50 p-1.5 rounded-full border border-green-300/40 w-max max-w-full overflow-x-auto mx-auto scrollbar-hide">
-            <button
-              onClick={() => setActiveTab("reading")}
-              className={`whitespace-nowrap px-3 sm:px-5 py-2 rounded-full text-[10px] sm:text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer ${
-                activeTab === "reading"
-                  ? "bg-green-950 text-green-50 shadow-sm"
-                  : "text-green-700 hover:text-green-950"
-              }`}
-            >
-              Mushaf
-            </button>
-            <button
-              onClick={() => setActiveTab("themes")}
-              className={`whitespace-nowrap px-3 sm:px-5 py-2 rounded-full text-[10px] sm:text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer ${
-                activeTab === "themes"
-                  ? "bg-green-950 text-green-50 shadow-sm"
-                  : "text-green-700 hover:text-green-950"
-              }`}
-            >
-              Themes
-            </button>
-            <button
-              onClick={() => setActiveTab("memorization")}
-              className={`whitespace-nowrap px-3 sm:px-5 py-2 rounded-full text-[10px] sm:text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer ${
-                activeTab === "memorization"
-                  ? "bg-green-950 text-green-50 shadow-sm"
-                  : "text-green-700 hover:text-green-950"
-              }`}
-            >
-              Memorize
-            </button>
-          </div>
+        <div className="flex flex-nowrap items-center justify-start sm:justify-center gap-1 sm:gap-2 bg-black/5 p-1.5 rounded-full border border-green-900/10 w-max max-w-full overflow-x-auto mx-auto scrollbar-hide backdrop-blur-sm">
+          <button
+            onClick={() => setActiveTab("reading")}
+            className={`whitespace-nowrap px-4 py-2 rounded-full text-[10px] sm:text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer ${
+              activeTab === "reading"
+                ? "bg-green-950 text-white shadow-sm"
+                : "text-green-700 hover:text-green-950"
+            }`}
+          >
+            Mushaf
+          </button>
+          <button
+            onClick={() => setActiveTab("themes")}
+            className={`whitespace-nowrap px-4 py-2 rounded-full text-[10px] sm:text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer ${
+              activeTab === "themes"
+                ? "bg-green-950 text-white shadow-sm"
+                : "text-green-700 hover:text-green-950"
+            }`}
+          >
+            Themes
+          </button>
+          <button
+            onClick={() => setActiveTab("memorization")}
+            className={`whitespace-nowrap px-4 py-2 rounded-full text-[10px] sm:text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer ${
+              activeTab === "memorization"
+                ? "bg-green-950 text-white shadow-sm"
+                : "text-green-700 hover:text-green-950"
+            }`}
+          >
+            Memorize
+          </button>
         </div>
       </div>
 
-      <div className="relative max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10">
+      <div className="relative z-10 max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10">
         <AnimatePresence mode="wait">
           {/* TAB 1: MUSHAF READING EXPERIENCE */}
           {activeTab === "reading" && (
@@ -390,7 +422,6 @@ export default function Quran() {
                   />
                 </div>
 
-                {/* Adjusted padding for mobile */}
                 <div className="p-6 sm:p-10 md:p-16">
                   <div className="flex items-baseline justify-between mb-10 sm:mb-16 pb-6 border-b border-green-200/60">
                     <div>
@@ -540,7 +571,6 @@ export default function Quran() {
                   </AnimatePresence>
                 </div>
 
-                {/* Control bar - adjusted padding for mobile */}
                 <div className="flex items-center justify-between gap-4 px-6 sm:px-10 md:px-16 py-4 sm:py-6 border-t border-green-200/60 bg-green-50/40">
                   <button
                     onClick={toggle}
@@ -687,7 +717,7 @@ export default function Quran() {
             </motion.div>
           )}
 
-          {/* TAB 3: MEMORIZATION MODE */}
+          {/* TAB 3: NEW MEMORIZATION MODE */}
           {activeTab === "memorization" && (
             <motion.div
               key="tab-memorization"
@@ -695,84 +725,242 @@ export default function Quran() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.5 }}
-              className="max-w-2xl mx-auto bg-white border border-green-200/80 rounded-2xl p-6 sm:p-12 shadow-sm text-center"
+              className="w-full flex flex-col items-center pb-10"
             >
-              <span className="text-xs uppercase tracking-[0.2em] text-[#16A34A] font-semibold">
-                Hifdh Assistant
-              </span>
-              <h3 className="font-serif text-2xl sm:text-3xl text-green-950 mt-2 mb-4">
-                Memorization Mode
-              </h3>
-              <p className="text-green-600 text-sm font-light mb-8 max-w-lg mx-auto">
-                Test your retention by progressively hiding Arabic words or
-                translations and checking your recall.
-              </p>
+              {!memComplete ? (
+                <>
+                  {/* Header Hierarchy */}
+                  <div className="w-full max-w-2xl flex justify-between items-end mb-6 px-2">
+                    <div className="flex flex-col">
+                      <span className="text-[10px] font-bold tracking-[0.25em] text-green-700/70 mb-1 uppercase">
+                        HIFDH
+                      </span>
+                      <h2 className="text-2xl font-serif text-gray-900">
+                        Al-Fatiha
+                      </h2>
+                    </div>
+                    <div className="flex flex-col items-end gap-2">
+                      <div className="bg-green-100/60 text-green-800 text-[11px] px-3 py-1 rounded-full font-medium flex items-center gap-1.5 shadow-sm border border-green-200/50">
+                        <Flame size={12} className="text-green-600" /> Today's
+                        Goal: {memAyahIndex} / {ayahs.length}
+                      </div>
+                      <div className="text-xs text-gray-500 font-mono flex items-center gap-1 bg-white px-2 py-0.5 rounded-md border border-gray-200 shadow-sm">
+                        ⏱ {formatTime(memTimer)}
+                      </div>
+                    </div>
+                  </div>
 
-              {/* Mode Selector */}
-              <div className="flex justify-center gap-2 mb-8 flex-wrap">
-                {[
-                  { id: "none", label: "Normal" },
-                  { id: "hide-translation", label: "Hide Translation" },
-                  { id: "hide-arabic", label: "Hide Arabic" },
-                ].map((m) => (
+                  {/* Segmented Control */}
+                  <div className="flex bg-black/5 p-1 rounded-lg w-fit mb-6 backdrop-blur-sm border border-black/5">
+                    {["easy", "medium", "hard"].map((mode) => (
+                      <button
+                        key={mode}
+                        onClick={() => setMemMode(mode)}
+                        className={`px-5 py-1.5 rounded-md text-sm font-medium transition-all ${
+                          memMode === mode
+                            ? "bg-white shadow-sm text-gray-900"
+                            : "text-gray-500 hover:text-gray-700"
+                        }`}
+                      >
+                        {mode === "easy"
+                          ? "Normal"
+                          : mode === "medium"
+                            ? "Translation"
+                            : "Arabic"}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Progress Indicator */}
+                  <div className="w-full max-w-2xl px-2 mb-3">
+                    <div className="flex items-center justify-between text-xs text-gray-500 font-medium mb-2 uppercase tracking-widest">
+                      <span>
+                        Ayah {memAyahIndex + 1} of {ayahs.length}
+                      </span>
+                      <span>
+                        {Math.round((memAyahIndex / ayahs.length) * 100)}%
+                        Complete
+                      </span>
+                    </div>
+                    <div className="flex gap-1.5">
+                      {ayahs.map((a, i) => (
+                        <div
+                          key={a.n}
+                          className={`h-1.5 rounded-full transition-all duration-500 ${
+                            i === memAyahIndex
+                              ? "w-8 bg-[#16A34A]"
+                              : i < memAyahIndex
+                                ? "w-2 bg-[#16A34A]/40"
+                                : "w-2 bg-gray-200"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* The Flashcard */}
+                  <div className="w-full max-w-2xl bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-8 sm:p-12 min-h-[340px] flex flex-col justify-center relative overflow-hidden">
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={`${memAyahIndex}-${memMode}`}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.4 }}
+                        className="flex flex-col items-center text-center w-full"
+                      >
+                        {memMode === "hard" && !isRevealed ? (
+                          <div
+                            onClick={() => setIsRevealed(true)}
+                            className="cursor-pointer group flex flex-col items-center justify-center py-12 w-full h-full"
+                          >
+                            <div className="text-gray-300 text-3xl mb-4 tracking-[0.4em] group-hover:text-green-300 transition-colors">
+                              ••••••••••••
+                            </div>
+                            <span className="text-sm font-medium text-gray-500 group-hover:text-green-700 transition-colors px-6 py-2 bg-gray-50 border border-gray-100 rounded-full">
+                              Tap to Reveal
+                            </span>
+                          </div>
+                        ) : (
+                          <>
+                            {/* Arabic Hero */}
+                            <p
+                              className="font-arabic text-[clamp(2.5rem,5vw,3.8rem)] leading-[1.8] text-gray-900 mb-8 transition-all"
+                              dir="rtl"
+                            >
+                              <Tajweed
+                                segments={ayahs[memAyahIndex].segments}
+                              />
+                            </p>
+
+                            {/* Translation Logic */}
+                            {memMode === "easy" ||
+                            (memMode === "medium" && isRevealed) ||
+                            (memMode === "hard" && isRevealed) ? (
+                              <motion.p
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                className="text-gray-500 font-serif text-lg max-w-lg leading-relaxed"
+                              >
+                                {ayahs[memAyahIndex].translation}
+                              </motion.p>
+                            ) : memMode === "medium" && !isRevealed ? (
+                              <div className="mt-2 w-full flex justify-center">
+                                <button
+                                  onClick={() => setIsRevealed(true)}
+                                  className="text-xs uppercase tracking-widest font-semibold text-gray-500 hover:text-green-700 border border-gray-200 hover:border-green-300 bg-gray-50 hover:bg-green-50 rounded-full px-6 py-2 transition-all cursor-pointer"
+                                >
+                                  Reveal Translation
+                                </button>
+                              </div>
+                            ) : null}
+                          </>
+                        )}
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
+
+                  {/* Success / Confidence Actions */}
+                  <div className="mt-8 flex flex-col items-center h-[100px] w-full">
+                    <AnimatePresence mode="wait">
+                      {!isRevealed && memMode !== "easy" ? (
+                        <motion.div
+                          key="hidden"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          className="flex h-full items-center"
+                        >
+                          <span className="text-sm font-medium text-gray-400/80 uppercase tracking-widest">
+                            Reveal to continue
+                          </span>
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          key="revealed"
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="flex flex-col items-center w-full"
+                        >
+                          {memMode === "easy" ? (
+                            <button
+                              onClick={handleNextMemAyah}
+                              className="bg-[#16A34A] hover:bg-green-700 text-white font-semibold text-sm px-8 py-3.5 rounded-full shadow-lg shadow-green-600/20 transition-all flex items-center gap-2 hover:scale-105 cursor-pointer"
+                            >
+                              Next Ayah <ArrowRight size={16} />
+                            </button>
+                          ) : (
+                            <>
+                              <p className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-4">
+                                How confident were you?
+                              </p>
+                              <div className="flex gap-3 sm:gap-4">
+                                <button
+                                  onClick={handleNextMemAyah}
+                                  className="px-5 py-2.5 bg-red-50 hover:bg-red-100 text-red-700 border border-red-100 rounded-full text-sm font-medium transition-all hover:scale-105 cursor-pointer"
+                                >
+                                  😅 Hard
+                                </button>
+                                <button
+                                  onClick={handleNextMemAyah}
+                                  className="px-5 py-2.5 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-100 rounded-full text-sm font-medium transition-all hover:scale-105 cursor-pointer"
+                                >
+                                  🙂 Okay
+                                </button>
+                                <button
+                                  onClick={handleNextMemAyah}
+                                  className="px-5 py-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-100 rounded-full text-sm font-medium transition-all hover:scale-105 cursor-pointer"
+                                >
+                                  😄 Easy
+                                </button>
+                              </div>
+                            </>
+                          )}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </>
+              ) : (
+                /* Completion State */
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="flex flex-col items-center justify-center py-20 text-center w-full max-w-lg mx-auto bg-white rounded-3xl shadow-sm border border-gray-100 mt-10 p-12"
+                >
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", bounce: 0.5 }}
+                    className="w-20 h-20 bg-emerald-50 text-emerald-500 rounded-full flex items-center justify-center mb-6 border-4 border-emerald-100"
+                  >
+                    <Check size={40} strokeWidth={3} />
+                  </motion.div>
+                  <h3 className="text-3xl font-serif text-gray-900 mb-2">
+                    ✓ Great Job
+                  </h3>
+                  <p className="text-gray-500 mb-8 font-light">
+                    You have successfully completed today's memorization goal
+                    for Al-Fatiha.
+                  </p>
                   <button
-                    key={m.id}
-                    onClick={() => setMemorizationMode(m.id)}
-                    className={`px-3 sm:px-4 py-2 rounded-full text-[10px] sm:text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer ${
-                      memorizationMode === m.id
-                        ? "bg-[#16A34A] text-white shadow-sm"
-                        : "bg-green-100 text-green-700 hover:bg-green-200"
-                    }`}
+                    onClick={() => {
+                      setMemComplete(false);
+                      setMemAyahIndex(0);
+                      setMemMode("easy");
+                    }}
+                    className="text-sm font-semibold tracking-widest uppercase text-green-600 hover:text-green-700 transition-colors border-b-2 border-green-200 hover:border-green-600 pb-1 cursor-pointer"
                   >
-                    {m.label}
+                    Review Again
                   </button>
-                ))}
-              </div>
-
-              {/* Sample Verse Exercise Card */}
-              <div className="bg-[#F0FDF4] border border-green-200 rounded-2xl p-6 sm:p-8 mb-8 text-center">
-                <span className="text-[10px] font-sans text-green-500 uppercase tracking-widest block mb-4">
-                  Ayah 1 of Al-Fatiha
-                </span>
-                {memorizationMode !== "hide-arabic" ? (
-                  <p
-                    className="font-arabic text-2xl sm:text-3xl text-green-950 mb-4 leading-relaxed"
-                    dir="rtl"
-                  >
-                    بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ
-                  </p>
-                ) : (
-                  <div className="py-6 border-2 border-dashed border-green-300 rounded-xl mb-4 text-green-500 text-sm italic">
-                    [Arabic hidden — tap reveal or recite from memory]
-                  </div>
-                )}
-
-                {memorizationMode !== "hide-translation" ? (
-                  <p className="font-serif italic text-green-700 text-sm">
-                    "In the name of Allah, the Entirely Merciful, the Especially
-                    Merciful."
-                  </p>
-                ) : (
-                  <div className="py-3 text-green-500 text-xs italic">
-                    [Translation hidden]
-                  </div>
-                )}
-              </div>
-
-              <button
-                onClick={() =>
-                  alert("Great effort! Keep practicing with Tawfiq Hifdh.")
-                }
-                className="bg-green-950 text-white px-6 sm:px-8 py-3 rounded-full text-[10px] sm:text-xs font-semibold tracking-widest uppercase hover:bg-[#16A34A] transition-colors cursor-pointer"
-              >
-                I Recited Correctly ✓
-              </button>
+                </motion.div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
       </div>
 
-      {/* INTERACTIVE TAFSIR SIDE PANEL / MODAL */}
+      {/* INTERACTIVE TAFSIR SIDE PANEL / MODAL (Original Retained) */}
       <AnimatePresence>
         {selectedVerseForPanel && (
           <div className="fixed inset-0 z-[99999] flex justify-end bg-green-950/40 backdrop-blur-sm">

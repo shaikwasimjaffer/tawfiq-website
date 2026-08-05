@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import emailjs from "@emailjs/browser";
 
 // Note: Ensure this path correctly points to your QR image
-import qrImage from "../../assets/qr-placeholder.png";
+import qrImage from "../../assets/qr code.png";
 
 // EmailJS Configuration Keys (Replace with your actual EmailJS IDs)
 const EMAILJS_SERVICE_ID = "service_8msblsf";
@@ -80,6 +80,7 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showScanner, setShowScanner] = useState(false);
   const [showContact, setShowContact] = useState(false);
+  const [isBismillahAnimating, setIsBismillahAnimating] = useState(false);
   const location = useLocation();
 
   // Contact Form State
@@ -204,6 +205,20 @@ export default function Navbar() {
     }
   };
 
+  const handleBismillahClick = () => {
+    if (isBismillahAnimating) return;
+    setIsBismillahAnimating(true);
+
+    setTimeout(() => {
+      setShowScanner(true);
+
+      // Reset the navbar state smoothly while the modal is open
+      setTimeout(() => {
+        setIsBismillahAnimating(false);
+      }, 400);
+    }, 450); // Matches the duration of our expansion animation
+  };
+
   return (
     <>
       {/* FLOATING GLASS PILL NAVBAR CONTAINER */}
@@ -215,14 +230,8 @@ export default function Navbar() {
           scrolled ? "top-2 md:top-3" : "top-4 md:top-5"
         }`}
       >
-        {/*
-          THE MAGIC HAPPENS HERE: 
-          - Very subtle outer shadow with a negative spread (-8px/-12px) to make it float softly
-          - Faint white inner highlight (inset_0_1px_1px) to catch the light
-          - Glass blur (backdrop-blur-xl/2xl) perfectly balanced with border opacity
-        */}
         <nav
-          className={`pointer-events-auto w-[92%] px-6 md:px-8 rounded-full flex items-center justify-between transition-all duration-500 ${
+          className={`pointer-events-auto relative overflow-hidden w-[92%] px-6 md:px-8 rounded-full flex items-center justify-between transition-all duration-500 ${
             scrolled ? "h-[56px] max-w-[1100px]" : "h-[68px] max-w-[1250px]"
           } ${
             scrolled || isMenuOpen
@@ -230,103 +239,146 @@ export default function Navbar() {
               : "bg-white/20 backdrop-blur-xl border border-white/30 shadow-[0_12px_32px_-8px_rgba(5,46,22,0.04),inset_0_1px_1px_rgba(255,255,255,0.5)]"
           }`}
         >
-          {/* MOBILE LEFT: Editorial Menu Icon */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden relative z-50 p-2 -ml-2 text-green-950 focus:outline-none cursor-pointer group"
-            aria-label="Toggle Menu"
+          {/* Main Content Wrapper - Fades out gracefully during Bismillah animation */}
+          <motion.div
+            className="w-full flex items-center justify-between"
+            animate={{ opacity: isBismillahAnimating ? 0 : 1 }}
+            transition={{ duration: 0.3 }}
           >
-            <div className="w-[22px] flex flex-col gap-[6px]">
-              <span
-                className={`block h-[1.25px] w-full rounded-full bg-green-950 transition-all duration-300 ease-out origin-center ${
-                  isMenuOpen ? "rotate-45 translate-y-[7.25px]" : ""
-                }`}
-              />
-              <span
-                className={`block h-[1.25px] rounded-full bg-green-950 transition-all duration-300 ease-out ${
-                  isMenuOpen ? "w-0 opacity-0" : "w-full"
-                }`}
-              />
-              <span
-                className={`block h-[1.25px] w-full rounded-full bg-green-950 transition-all duration-300 ease-out origin-center ${
-                  isMenuOpen ? "-rotate-45 -translate-y-[7.25px]" : ""
-                }`}
-              />
-            </div>
-          </button>
-
-          {/* LOGO */}
-          <div className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 z-50">
-            <Link
-              to="/"
-              onClick={handleLogoClick}
-              className="group flex items-center gap-2.5 cursor-pointer"
-            >
-              <motion.svg
-                width="22"
-                height="22"
-                viewBox="0 0 22 22"
-                fill="none"
-                className="text-green-950"
-                whileHover={{ rotate: 5, x: 2 }}
-                transition={{ type: "spring", stiffness: 300, damping: 15 }}
-              >
-                <path
-                  d="M11 2C11 2 5 6 5 12C5 16 8 19 11 19C14 19 17 16 17 12C17 6 11 2 11 2Z"
-                  stroke="currentColor"
-                  strokeWidth="1.4"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M11 5V19M8 11L11 8L14 11"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </motion.svg>
-              <span className="font-['Cormorant_Garamond',serif] font-[600] text-xl text-green-950 tracking-[-0.01em]">
-                Tawfiq
-              </span>
-            </Link>
-          </div>
-
-          {/* DESKTOP CENTER: Navigation Items */}
-          <div className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => (
-              <NavLink
-                key={item.id}
-                item={item}
-                isActive={activeItem === item.id}
-                onClick={() => setActiveItem(item.id)}
-              />
-            ))}
-            <motion.button
-              onClick={() => setShowContact(true)}
-              whileHover={{
-                backgroundColor: "rgba(22, 163, 74, 0.08)",
-                color: "#052E16",
-              }}
-              className="relative px-4 py-1.5 rounded-full font-['Plus_Jakarta_Sans',sans-serif] text-[15px] tracking-[-0.01em] font-medium text-[#166534] transition-all duration-200 z-10 cursor-pointer"
-            >
-              Contact
-            </motion.button>
-          </div>
-
-          {/* DESKTOP RIGHT: Pill CTA Button */}
-          <div className="hidden md:block">
+            {/* MOBILE LEFT: Editorial Menu Icon */}
             <button
-              onClick={() => setShowScanner(true)}
-              className="group inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-[#15803D] hover:bg-[#146c33] text-white font-['Plus_Jakarta_Sans',sans-serif] text-[13px] font-medium tracking-tight shadow-sm transition-all duration-300 cursor-pointer focus:outline-none"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden relative z-50 p-2 -ml-2 text-green-950 focus:outline-none cursor-pointer group"
+              aria-label="Toggle Menu"
             >
-              <span>Begin with Bismillah</span>
-              <span className="transform group-hover:translate-x-0.5 transition-transform duration-300">
-                →
-              </span>
+              <div className="w-[22px] flex flex-col gap-[6px]">
+                <span
+                  className={`block h-[1.25px] w-full rounded-full bg-green-950 transition-all duration-300 ease-out origin-center ${
+                    isMenuOpen ? "rotate-45 translate-y-[7.25px]" : ""
+                  }`}
+                />
+                <span
+                  className={`block h-[1.25px] rounded-full bg-green-950 transition-all duration-300 ease-out ${
+                    isMenuOpen ? "w-0 opacity-0" : "w-full"
+                  }`}
+                />
+                <span
+                  className={`block h-[1.25px] w-full rounded-full bg-green-950 transition-all duration-300 ease-out origin-center ${
+                    isMenuOpen ? "-rotate-45 -translate-y-[7.25px]" : ""
+                  }`}
+                />
+              </div>
             </button>
-          </div>
 
-          <div className="block md:hidden w-8" />
+            {/* LOGO */}
+            <div className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 z-50">
+              <Link
+                to="/"
+                onClick={handleLogoClick}
+                className="group flex items-center gap-2.5 cursor-pointer"
+              >
+                <motion.svg
+                  width="22"
+                  height="22"
+                  viewBox="0 0 22 22"
+                  fill="none"
+                  className="text-green-950"
+                  whileHover={{ rotate: 5, x: 2 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                >
+                  <path
+                    d="M11 2C11 2 5 6 5 12C5 16 8 19 11 19C14 19 17 16 17 12C17 6 11 2 11 2Z"
+                    stroke="currentColor"
+                    strokeWidth="1.4"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M11 5V19M8 11L11 8L14 11"
+                    stroke="currentColor"
+                    strokeWidth="1.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </motion.svg>
+                <span className="font-['Cormorant_Garamond',serif] font-[600] text-xl text-green-950 tracking-[-0.01em]">
+                  Tawfiq
+                </span>
+              </Link>
+            </div>
+
+            {/* DESKTOP CENTER: Navigation Items */}
+            <div className="hidden md:flex items-center gap-1">
+              {navItems.map((item) => (
+                <NavLink
+                  key={item.id}
+                  item={item}
+                  isActive={activeItem === item.id}
+                  onClick={() => setActiveItem(item.id)}
+                />
+              ))}
+              <motion.button
+                onClick={() => setShowContact(true)}
+                whileHover={{
+                  backgroundColor: "rgba(22, 163, 74, 0.08)",
+                  color: "#052E16",
+                }}
+                className="relative px-4 py-1.5 rounded-full font-['Plus_Jakarta_Sans',sans-serif] text-[15px] tracking-[-0.01em] font-medium text-[#166534] transition-all duration-200 z-10 cursor-pointer"
+              >
+                Contact
+              </motion.button>
+            </div>
+
+            {/* DESKTOP RIGHT: Spacer for floating CTA button to maintain flex centering */}
+            <div className="hidden md:block w-[190px]" />
+            <div className="block md:hidden w-8" />
+          </motion.div>
+
+          {/* DESKTOP RIGHT: The Magic Expanding Bismillah CTA Button */}
+          <motion.div
+            className="hidden md:flex absolute inset-y-0 items-center justify-end z-[60] pointer-events-none"
+            animate={{
+              left: isBismillahAnimating ? 0 : "auto",
+              right: isBismillahAnimating ? 0 : 32, // corresponds to md:px-8 padding
+            }}
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <motion.button
+              onClick={handleBismillahClick}
+              className="group bg-[#15803D] hover:bg-[#146c33] text-white flex items-center justify-center font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden pointer-events-auto cursor-pointer shadow-sm"
+              animate={{
+                width: isBismillahAnimating ? "100%" : "190px",
+                height: isBismillahAnimating ? "100%" : "40px",
+                borderRadius: isBismillahAnimating ? "9999px" : "9999px",
+              }}
+              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <AnimatePresence mode="wait">
+                {isBismillahAnimating ? (
+                  <motion.span
+                    key="bismillah"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.2, delay: 0.15 }}
+                    className="font-serif italic text-2xl text-white tracking-wide"
+                  >
+                    Bismillah
+                  </motion.span>
+                ) : (
+                  <motion.div
+                    key="begin"
+                    exit={{ opacity: 0, filter: "blur(4px)" }}
+                    transition={{ duration: 0.2 }}
+                    className="flex items-center gap-2.5 text-[13px] font-medium tracking-tight"
+                  >
+                    <span>Begin with Bismillah</span>
+                    <span className="transform group-hover:translate-x-0.5 transition-transform duration-300">
+                      →
+                    </span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.button>
+          </motion.div>
         </nav>
       </motion.header>
 
@@ -577,42 +629,32 @@ export default function Navbar() {
               Back to Site
             </motion.button>
 
-            {/* Cinematic Header Container */}
-            <div className="w-full max-w-5xl mx-auto flex flex-col items-center text-center mt-4 sm:mt-8">
+            {/* Cinematic Typography Header Container */}
+            <div className="w-full max-w-4xl mx-auto flex flex-col items-center text-center mt-8 sm:mt-12 mb-4">
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.6, ease: "easeOut" }}
-                className="font-['Cormorant_Garamond',serif] font-bold text-5xl sm:text-7xl text-green-950 tracking-[-0.02em] mb-6"
+                className="font-['Cormorant_Garamond',serif] font-normal text-[clamp(2.75rem,7vw,6.5rem)] leading-[1.05] text-[#052E16] tracking-[-0.01em]"
               >
-                Download{" "}
-                <span className="italic font-normal text-[#16A34A]">
-                  Tawfiq
-                </span>
+                Download <span className="italic text-[#16A34A]">Tawfiq</span>
+                <br />
+                <span className="italic text-[#16A34A]">to begin today.</span>
               </motion.h2>
 
-              <motion.div
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ delay: 0.5, duration: 0.8, ease: "easeInOut" }}
-                className="w-16 sm:w-24 h-[1px] bg-[#16A34A] mb-8"
-              />
-
-              <motion.h3
+              <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.6 }}
-                className="font-['Cormorant_Garamond',serif] text-2xl sm:text-4xl text-green-950 font-normal leading-relaxed max-w-2xl tracking-tight"
+                className="mt-6 font-['Plus_Jakarta_Sans',sans-serif] text-[#16A34A] text-[15px] sm:text-[18px] max-w-2xl mx-auto leading-relaxed"
               >
-                Begin with one prayer. <br className="hidden sm:block" />
-                <span className="text-green-700 text-xl sm:text-3xl mt-2 block font-light italic">
-                  Leave with a lifetime of consistency.
-                </span>
-              </motion.h3>
+                Begin with one prayer. Leave with a lifetime of consistency.
+                Scan the QR code below to download the app for iOS and Android.
+              </motion.p>
             </div>
 
             {/* Centered QR Code */}
-            <div className="w-full max-w-xl mx-auto mt-16 sm:mt-24 flex flex-col items-center justify-center">
+            <div className="w-full max-w-xl mx-auto mt-10 sm:mt-16 flex flex-col items-center justify-center">
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -632,7 +674,7 @@ export default function Navbar() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8, duration: 0.6 }}
-              className="w-full mt-16 sm:mt-24 flex flex-col items-center"
+              className="w-full mt-10 sm:mt-16 flex flex-col items-center"
             >
               <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-6 text-green-800 font-['Plus_Jakarta_Sans',sans-serif] font-medium text-base sm:text-lg px-4 text-center tracking-tight">
                 <span>Prayer Tracking</span>
@@ -736,10 +778,6 @@ export default function Navbar() {
                 Begin with Bismillah
               </motion.button>
             </div>
-
-            
-
-            <div>test</div>
 
             <motion.div
               initial={{ opacity: 0, scaleX: 0 }}

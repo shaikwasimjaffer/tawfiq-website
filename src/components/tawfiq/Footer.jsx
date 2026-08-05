@@ -3,15 +3,15 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
 const BismillahButton = ({
+  onClick,
   className = "",
   iconSize = 18,
   textSize = "text-xl md:text-2xl",
 }) => (
-  <a
-    href="https://tawfiq-official.github.io/Tawfiq/"
-    target="_blank"
-    rel="noopener noreferrer"
-    className={`group inline-flex items-center gap-3 ${className}`}
+  <button
+    onClick={onClick}
+    type="button"
+    className={`group inline-flex items-center gap-3 cursor-pointer outline-none bg-transparent border-none p-0 ${className}`}
   >
     <span className="w-0 group-hover:w-6 h-px bg-green-950 transition-all duration-500" />
 
@@ -41,10 +41,11 @@ const BismillahButton = ({
     </span>
 
     <span className="w-0 group-hover:w-6 h-px bg-green-950 transition-all duration-500" />
-  </a>
+  </button>
 );
 
-export default function Footer() {
+// Added onOpenScanner prop here to trigger the modal
+export default function Footer({ onOpenScanner }) {
   return (
     <footer className="relative overflow-hidden bg-[#F0FDF4] pt-36 pb-16">
       <div className="absolute inset-0 pointer-events-none opacity-[0.035] bg-[radial-gradient(circle_at_center,#16A34A_1px,transparent_1px)] bg-[length:24px_24px]" />
@@ -108,7 +109,8 @@ export default function Footer() {
           }}
           className="mt-16"
         >
-          <BismillahButton />
+          {/* Passed the trigger function down to the button */}
+          <BismillahButton onClick={onOpenScanner} />
         </motion.div>
 
         <div className="mt-28 border-t border-green-200/60 pt-8 flex flex-wrap justify-center gap-10 text-[11px] tracking-[0.18em] uppercase text-green-700">
