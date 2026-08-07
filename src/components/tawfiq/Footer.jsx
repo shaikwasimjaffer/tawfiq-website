@@ -14,43 +14,19 @@ const BismillahButton = ({
     className={`group inline-flex items-center gap-3 cursor-pointer outline-none bg-transparent border-none p-0 ${className}`}
   >
     <span className="w-0 group-hover:w-6 h-px bg-green-950 transition-all duration-500" />
-
-    <svg
-      viewBox="0 0 24 24"
-      width={iconSize}
-      height={iconSize}
-      fill="none"
-      className="text-green-950 transition-transform duration-500 group-hover:rotate-12"
-    >
-      <circle cx="12" cy="12" r="9.5" stroke="currentColor" strokeWidth="1.2" />
-
-      <path d="M12 5 L14.5 12 L12 14.5 L9.5 12 Z" fill="currentColor" />
-
-      <path
-        d="M12 19 L14.5 12 L12 14.5 L9.5 12 Z"
-        stroke="currentColor"
-        strokeWidth="1.2"
-        strokeLinejoin="round"
-      />
-
-      <circle cx="12" cy="12" r="0.7" fill="currentColor" />
-    </svg>
-
-    <span className={`font-serif ${textSize} text-green-950 tracking-tight`}>
-      Begin with Bismillah
-    </span>
+    
 
     <span className="w-0 group-hover:w-6 h-px bg-green-950 transition-all duration-500" />
   </button>
 );
 
-// Added onOpenScanner prop here to trigger the modal
 export default function Footer({ onOpenScanner }) {
   return (
     <footer className="relative overflow-hidden bg-[#F0FDF4] pt-36 pb-16">
       <div className="absolute inset-0 pointer-events-none opacity-[0.035] bg-[radial-gradient(circle_at_center,#16A34A_1px,transparent_1px)] bg-[length:24px_24px]" />
 
       <div className="relative w-full mx-auto px-4 sm:px-6 text-center overflow-hidden">
+        {/* Restored: Closer with every sajdah */}
         <motion.p
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -60,6 +36,35 @@ export default function Footer({ onOpenScanner }) {
         >
           Closer with every sajdah.
         </motion.p>
+
+        {/* Moved: Privacy / Terms / Support Links */}
+        <div className="mt-10 flex flex-wrap justify-center gap-10 text-[11px] tracking-[0.18em] uppercase text-green-700">
+          <Link
+            to="/privacy"
+            className="transition-all duration-300 hover:text-green-950"
+          >
+            Privacy
+          </Link>
+
+          <Link
+            to="/terms"
+            className="transition-all duration-300 hover:text-green-950"
+          >
+            Terms
+          </Link>
+
+          <a
+            href="mailto:tawfiq.base44@gmail.com"
+            className="transition-all duration-300 hover:text-green-950"
+          >
+            Support
+          </a>
+        </div>
+
+        {/* Moved: Made with intention */}
+        <p className="mt-6 text-[10px] uppercase tracking-[0.22em] text-green-600">
+          تَوْفِيق · Made with intention
+        </p>
 
         <motion.div
           initial={{ opacity: 0, y: 25 }}
@@ -109,36 +114,8 @@ export default function Footer({ onOpenScanner }) {
           }}
           className="mt-16"
         >
-          {/* Passed the trigger function down to the button */}
           <BismillahButton onClick={onOpenScanner} />
         </motion.div>
-
-        <div className="mt-28 border-t border-green-200/60 pt-8 flex flex-wrap justify-center gap-10 text-[11px] tracking-[0.18em] uppercase text-green-700">
-          <Link
-            to="/privacy"
-            className="transition-all duration-300 hover:text-green-950"
-          >
-            Privacy
-          </Link>
-
-          <Link
-            to="/terms"
-            className="transition-all duration-300 hover:text-green-950"
-          >
-            Terms
-          </Link>
-
-          <a
-            href="mailto:tawfiq.base44@gmail.com"
-            className="transition-all duration-300 hover:text-green-950"
-          >
-            Support
-          </a>
-        </div>
-
-        <p className="mt-10 text-[10px] uppercase tracking-[0.22em] text-green-600">
-          تَوْفِيق · Made with intention
-        </p>
       </div>
     </footer>
   );
