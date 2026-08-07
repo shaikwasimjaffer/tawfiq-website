@@ -50,7 +50,7 @@ function NavLink({ item, isActive, onClick }) {
   return (
     <motion.a
       href={item.href}
-      onClick={onClick}
+      onClick={(e) => onClick(e, item)}
       className="relative px-4 py-1.5 rounded-full font-['Plus_Jakarta_Sans',sans-serif] text-[15px] tracking-[-0.01em] font-medium transition-all duration-200 z-10 cursor-pointer"
       style={{
         color: isActive ? "#052E16" : "#166534",
@@ -80,7 +80,10 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showScanner, setShowScanner] = useState(false);
   const [showContact, setShowContact] = useState(false);
-  const [isBismillahAnimating, setIsBismillahAnimating] = useState(false);
+
+  // Unified morphing animation state applied to ALL actions
+  const [animatingAction, setAnimatingAction] = useState(null);
+
   const location = useLocation();
 
   // Contact Form State
@@ -143,14 +146,62 @@ export default function Navbar() {
   const handleLogoClick = (e) => {
     if (location.pathname === "/") {
       e.preventDefault();
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
-      setIsMenuOpen(false);
-      setShowScanner(false);
-      setShowContact(false);
+      if (animatingAction) return;
+      setAnimatingAction({ type: "logo", label: "Tawfiq" });
+
+      setTimeout(() => {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+        setIsMenuOpen(false);
+        setShowScanner(false);
+        setShowContact(false);
+
+        setTimeout(() => setAnimatingAction(null), 400);
+      }, 450);
     }
+  };
+
+  const handleNavClick = (e, item) => {
+    if (location.pathname === "/") {
+      e.preventDefault();
+      if (animatingAction) return;
+
+      setAnimatingAction({ type: "nav", label: item.label });
+
+      setTimeout(() => {
+        const element = document.getElementById(item.id);
+        if (element) {
+          const yOffset = -80;
+          const y =
+            element.getBoundingClientRect().top + window.scrollY + yOffset;
+          window.scrollTo({ top: y, behavior: "smooth" });
+        }
+
+        setTimeout(() => setAnimatingAction(null), 400);
+      }, 450);
+    }
+  };
+
+  const handleContactClick = () => {
+    if (animatingAction) return;
+    setAnimatingAction({ type: "contact", label: "Contact" });
+
+    setTimeout(() => {
+      setShowContact(true);
+      setTimeout(() => setAnimatingAction(null), 400);
+    }, 450);
+  };
+
+  const handleBismillahClick = () => {
+    if (animatingAction) return;
+    setAnimatingAction({ type: "bismillah", label: "Bismillah" });
+
+    setTimeout(() => {
+      setShowScanner(true);
+      setTimeout(() => setAnimatingAction(null), 400);
+    }, 450);
   };
 
   const handleContactSubmit = async (e) => {
@@ -205,20 +256,6 @@ export default function Navbar() {
     }
   };
 
-  const handleBismillahClick = () => {
-    if (isBismillahAnimating) return;
-    setIsBismillahAnimating(true);
-
-    setTimeout(() => {
-      setShowScanner(true);
-
-      // Reset the navbar state smoothly while the modal is open
-      setTimeout(() => {
-        setIsBismillahAnimating(false);
-      }, 400);
-    }, 450); // Matches the duration of our expansion animation
-  };
-
   return (
     <>
       {/* FLOATING GLASS PILL NAVBAR CONTAINER */}
@@ -239,10 +276,10 @@ export default function Navbar() {
               : "bg-white/20 backdrop-blur-xl border border-white/30 shadow-[0_12px_32px_-8px_rgba(5,46,22,0.04),inset_0_1px_1px_rgba(255,255,255,0.5)]"
           }`}
         >
-          {/* Main Content Wrapper - Fades out gracefully during Bismillah animation */}
+          {/* Main Content Wrapper - Fades out gracefully during ANY action animation */}
           <motion.div
             className="w-full flex items-center justify-between"
-            animate={{ opacity: isBismillahAnimating ? 0 : 1 }}
+            animate={{ opacity: animatingAction ? 0 : 1 }}
             transition={{ duration: 0.3 }}
           >
             {/* MOBILE LEFT: Editorial Menu Icon */}
@@ -313,11 +350,11 @@ export default function Navbar() {
                   key={item.id}
                   item={item}
                   isActive={activeItem === item.id}
-                  onClick={() => setActiveItem(item.id)}
+                  onClick={handleNavClick}
                 />
               ))}
               <motion.button
-                onClick={() => setShowContact(true)}
+                onClick={handleContactClick}
                 whileHover={{
                   backgroundColor: "rgba(22, 163, 74, 0.08)",
                   color: "#052E16",
@@ -333,12 +370,12 @@ export default function Navbar() {
             <div className="block md:hidden w-8" />
           </motion.div>
 
-          {/* DESKTOP RIGHT: The Magic Expanding Bismillah CTA Button */}
+          {/* DESKTOP RIGHT: The Magic Expanding Pill (Applied to all Navbar Actions) */}
           <motion.div
             className="hidden md:flex absolute inset-y-0 items-center justify-end z-[60] pointer-events-none"
             animate={{
-              left: isBismillahAnimating ? 0 : "auto",
-              right: isBismillahAnimating ? 0 : 32, // corresponds to md:px-8 padding
+              left: animatingAction ? 0 : "auto",
+              right: animatingAction ? 0 : 32, // corresponds to md:px-8 padding
             }}
             transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
           >
@@ -346,22 +383,22 @@ export default function Navbar() {
               onClick={handleBismillahClick}
               className="group bg-[#15803D] hover:bg-[#146c33] text-white flex items-center justify-center font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden pointer-events-auto cursor-pointer shadow-sm"
               animate={{
-                width: isBismillahAnimating ? "100%" : "190px",
-                height: isBismillahAnimating ? "100%" : "40px",
-                borderRadius: isBismillahAnimating ? "9999px" : "9999px",
+                width: animatingAction ? "100%" : "190px",
+                height: animatingAction ? "100%" : "40px",
+                borderRadius: animatingAction ? "9999px" : "9999px",
               }}
               transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
             >
               <AnimatePresence mode="wait">
-                {isBismillahAnimating ? (
+                {animatingAction ? (
                   <motion.span
-                    key="bismillah"
+                    key="animating-text"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.2, delay: 0.15 }}
                     className="font-serif italic text-2xl text-white tracking-wide"
                   >
-                    Bismillah
+                    {animatingAction.label}
                   </motion.span>
                 ) : (
                   <motion.div
