@@ -24,7 +24,6 @@ export default function Hero() {
   const floorScale = useTransform(scrollYProgress, [0, 0.3], [1, 1.05]);
 
   // --- 0. STAGE 0: ISLAMIC WELCOME "ASSALAMU ALAIKUM" (0% -> 10%) ---
-  // Starts at 1 opacity so it's immediately visible at 0 scroll position
   const welcomeOpacity = useTransform(
     scrollYProgress,
     [0, 0.07, 0.1],
@@ -75,7 +74,7 @@ export default function Hero() {
     ["inset(0 100% 0 0)", "inset(0 0% 0 0)"],
   );
 
-  // --- 5. STAGE 4A: "Change doesn't begin tomorrow..." (56% -> 69%) ---
+  // --- 5. STAGE 4A: "It's never too late to Return" (56% -> 69%) ---
   const changeTextOpacity = useTransform(
     scrollYProgress,
     [0.56, 0.6, 0.66, 0.69],
@@ -237,10 +236,10 @@ export default function Hero() {
           className="absolute z-10 w-full px-4 text-center flex flex-col items-center"
         >
           <h1 className="font-['Newsreader',serif] font-light text-[2.1rem] xs:text-[2.5rem] sm:text-[5.2rem] md:text-[6.8rem] lg:text-[8rem] leading-[1.2] sm:leading-[0.92] tracking-[-0.02em] text-green-950">
-            <span className="block text-green-950 whitespace-nowrap sm:whitespace-normal">
+            <span className="block text-green-950 whitespace-nowrap">
               How long has it been
             </span>
-            <span className="block text-green-950 mt-1 sm:mt-2 whitespace-nowrap sm:whitespace-normal">
+            <span className="block text-green-950 mt-1 sm:mt-2 whitespace-nowrap">
               since your{" "}
               <span className="inline-block italic font-normal text-[#16A34A]">
                 last prayer?
@@ -254,10 +253,18 @@ export default function Hero() {
         {/* ==================================================================== */}
         <motion.div
           style={{ opacity: missedTextOpacity, y: missedTextY }}
-          className="absolute z-10 max-w-5xl w-full px-6 text-center"
+          className="absolute z-10 max-w-5xl w-full px-6 text-center flex flex-col items-center"
         >
-          <h2 className="font-['Newsreader',serif] font-light text-3xl sm:text-5xl md:text-6xl lg:text-7xl text-green-950 leading-[1.15] tracking-[-0.01em]">
-            No matter how many prayers you've missed.
+          <h2 className="font-['Newsreader',serif] font-light text-[2.1rem] xs:text-[2.5rem] sm:text-[5.2rem] md:text-[6.8rem] lg:text-[8rem] leading-[1.2] sm:leading-[0.92] tracking-[-0.02em] text-green-950">
+            <span className="block text-green-950 whitespace-nowrap">
+              No matter how many
+            </span>
+            <span className="block text-green-950 mt-1 sm:mt-2 whitespace-nowrap">
+              prayers you've{" "}
+              <span className="inline-block italic font-normal text-[#16A34A]">
+                missed.
+              </span>
+            </span>
           </h2>
         </motion.div>
 
@@ -283,16 +290,19 @@ export default function Hero() {
         </motion.div>
 
         {/* ==================================================================== */}
-        {/* STAGE 4A: "Change doesn't begin tomorrow..." */}
+        {/* STAGE 4A: "It's never too late to Return" */}
         {/* ==================================================================== */}
         <motion.div
           style={{ opacity: changeTextOpacity, y: changeTextY }}
-          className="absolute z-20 max-w-5xl w-full px-6 text-center"
+          className="absolute z-20 max-w-5xl w-full px-6 text-center flex flex-col items-center"
         >
-          <h2 className="font-['Newsreader',serif] font-light text-[clamp(2.75rem,6vw,8rem)] text-green-950 leading-[1.15] tracking-[-0.01em]">
-            It's never too late to
-            <br />
-            <span className="italic font-normal text-[#16A34A]">Return</span>
+          <h2 className="font-['Newsreader',serif] font-light text-[2.1rem] xs:text-[2.5rem] sm:text-[5.2rem] md:text-[6.8rem] lg:text-[8rem] leading-[1.2] sm:leading-[0.92] tracking-[-0.02em] text-green-950">
+            <span className="block text-green-950 whitespace-nowrap">
+              It's never too late to
+            </span>
+            <span className="block mt-1 sm:mt-2 whitespace-nowrap italic font-normal text-[#16A34A]">
+              Return
+            </span>
           </h2>
         </motion.div>
 
@@ -301,11 +311,15 @@ export default function Hero() {
         {/* ==================================================================== */}
         <motion.div
           style={{ opacity: builtTextOpacity, y: builtTextY }}
-          className="absolute z-20 max-w-5xl w-full px-6 text-center"
+          className="absolute z-20 max-w-5xl w-full px-6 text-center flex flex-col items-center"
         >
-          <h2 className="font-['Newsreader',serif] font-light text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-green-950 leading-[1.15] tracking-[-0.01em]">
-            That's why we built{" "}
-            <span className="italic font-medium text-[#16A34A]">Tawfiq.</span>
+          <h2 className="font-['Newsreader',serif] font-light text-[2.1rem] xs:text-[2.5rem] sm:text-[5.2rem] md:text-[6.8rem] lg:text-[8rem] leading-[1.2] sm:leading-[0.92] tracking-[-0.02em] text-green-950">
+            <span className="block text-green-950 whitespace-nowrap">
+              That's why we built
+            </span>
+            <span className="block mt-1 sm:mt-2 whitespace-nowrap italic font-medium text-[#16A34A]">
+              Tawfiq.
+            </span>
           </h2>
         </motion.div>
 
