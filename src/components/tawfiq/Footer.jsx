@@ -61,10 +61,6 @@ export default function Footer({ onOpenScanner }) {
           </a>
         </div>
 
-        {/* Moved: Made with intention */}
-        <p className="mt-6 text-[10px] uppercase tracking-[0.22em] text-green-600">
-          تَوْفِيق · Made with intention
-        </p>
 
         <motion.div
           initial={{ opacity: 0, y: 25 }}
@@ -72,7 +68,7 @@ export default function Footer({ onOpenScanner }) {
           viewport={{ once: true }}
           transition={{ duration: 1 }}
           className="mt-16 w-full flex flex-col items-center justify-center"
-        >
+        > 
           <p
             className="
               font-arabic
