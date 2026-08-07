@@ -6,7 +6,7 @@ import emailjs from "@emailjs/browser";
 // Note: Ensure this path correctly points to your QR image
 import qrImage from "../../assets/qr code.png";
 
-// EmailJS Configuration Keys (Replace with your actual EmailJS IDs)
+// EmailJS Configuration Keys
 const EMAILJS_SERVICE_ID = "service_8msblsf";
 const EMAILJS_TEMPLATE_ID = "template_9gd6lm2";
 const EMAILJS_PUBLIC_KEY = "5iuNuXg40cmMgueNJ";
@@ -81,7 +81,7 @@ export default function Navbar() {
   const [showScanner, setShowScanner] = useState(false);
   const [showContact, setShowContact] = useState(false);
 
-  // Unified morphing animation state applied to ALL actions
+  // Unified morphing animation state applied to ALL desktop actions
   const [animatingAction, setAnimatingAction] = useState(null);
 
   const location = useLocation();
@@ -256,11 +256,6 @@ export default function Navbar() {
     }
   };
 
-  // Determine what text to show in the mobile navbar depending on scroll position
-  const mobileNavText = !scrolled
-    ? "Tawfiq"
-    : navItems.find((item) => item.id === activeItem)?.label || "Tawfiq";
-
   return (
     <>
       {/* FLOATING GLASS PILL NAVBAR CONTAINER */}
@@ -281,13 +276,13 @@ export default function Navbar() {
               : "bg-white/20 backdrop-blur-xl border border-white/30 shadow-[0_12px_32px_-8px_rgba(5,46,22,0.04),inset_0_1px_1px_rgba(255,255,255,0.5)]"
           }`}
         >
-          {/* Main Content Wrapper - Fades out gracefully during ANY action animation */}
+          {/* Main Content Wrapper */}
           <motion.div
             className="w-full flex items-center justify-between"
             animate={{ opacity: animatingAction ? 0 : 1 }}
             transition={{ duration: 0.3 }}
           >
-            {/* MOBILE LEFT: Editorial Menu Icon */}
+            {/* MOBILE LEFT: Menu Icon */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="md:hidden relative z-50 p-2 -ml-2 text-green-950 focus:outline-none cursor-pointer group"
@@ -342,9 +337,7 @@ export default function Navbar() {
                     strokeLinejoin="round"
                   />
                 </motion.svg>
-                
-                {/* DESKTOP TEXT: Static Logo text */}
-                <span className="hidden md:block font-['Cormorant_Garamond',serif] font-[600] text-xl text-green-950 tracking-[-0.01em]">
+                <span className="font-['Cormorant_Garamond',serif] font-[600] text-xl text-green-950 tracking-[-0.01em]">
                   Tawfiq
                 </span>
 
@@ -388,17 +381,17 @@ export default function Navbar() {
               </motion.button>
             </div>
 
-            {/* DESKTOP RIGHT: Spacer for floating CTA button to maintain flex centering */}
+            {/* DESKTOP RIGHT Spacer */}
             <div className="hidden md:block w-[190px]" />
             <div className="block md:hidden w-8" />
           </motion.div>
 
-          {/* DESKTOP RIGHT: The Magic Expanding Pill (Applied to all Navbar Actions) */}
+          {/* DESKTOP RIGHT: The Magic Expanding Pill */}
           <motion.div
             className="hidden md:flex absolute inset-y-0 items-center justify-end z-[60] pointer-events-none"
             animate={{
               left: animatingAction ? 0 : "auto",
-              right: animatingAction ? 0 : 32, // corresponds to md:px-8 padding
+              right: animatingAction ? 0 : 32,
             }}
             transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
           >
@@ -443,7 +436,7 @@ export default function Navbar() {
       </motion.header>
 
       {/* =========================================
-          PREMIUM CONTACT EXPERIENCE OVERLAY
+          CONTACT EXPERIENCE OVERLAY
           ========================================= */}
       <AnimatePresence>
         {showContact && (
@@ -525,4 +518,329 @@ export default function Navbar() {
                         setFormData({ ...formData, email: e.target.value })
                       }
                       className={`font-['Plus_Jakarta_Sans',sans-serif] text-base sm:text-lg bg-transparent border-b ${
-                        formStatus === "error
+                        formStatus === "error" && !formData.email
+                          ? "border-red-400"
+                          : "border-green-300 focus:border-[#16A34A]"
+                      } pb-1 outline-none transition-all duration-300 text-green-950 placeholder:text-green-400 flex-1 min-w-[220px]`}
+                    />
+                  </div>
+
+                  {/* Line 3: Category Selectors */}
+                  <div className="flex flex-col gap-4 pt-2">
+                    <span className="text-green-700 font-light text-base sm:text-xl">
+                      I'm writing because:
+                    </span>
+                    <div className="flex flex-wrap gap-3 font-['Plus_Jakarta_Sans',sans-serif]">
+                      {categories.map((cat) => {
+                        const isSelected = formData.category === cat;
+                        return (
+                          <button
+                            type="button"
+                            key={cat}
+                            onClick={() =>
+                              setFormData({ ...formData, category: cat })
+                            }
+                            className={`flex items-center gap-2.5 px-4 py-2 rounded-full text-xs sm:text-sm tracking-tight transition-all duration-300 cursor-pointer border ${
+                              isSelected
+                                ? "bg-green-950 text-white border-green-950 shadow-sm"
+                                : "bg-white/50 text-green-800 border-green-200 hover:border-green-300"
+                            }`}
+                          >
+                            <span
+                              className={`w-2 h-2 rounded-full transition-colors ${
+                                isSelected ? "bg-[#16A34A]" : "bg-green-300"
+                              }`}
+                            />
+                            {cat}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Line 4: Dynamic Message Input */}
+                  <div className="flex flex-col gap-3 pt-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-green-700 font-light text-base sm:text-xl">
+                        Tell us more about this{" "}
+                        <span className="text-[#16A34A] font-normal italic">
+                          ({formData.category})
+                        </span>
+                        :
+                      </span>
+                    </div>
+                    <textarea
+                      rows="4"
+                      placeholder={
+                        categoryConfig[formData.category]?.placeholder ||
+                        "Share your thoughts..."
+                      }
+                      value={formData.message}
+                      onChange={(e) =>
+                        setFormData({ ...formData, message: e.target.value })
+                      }
+                      className={`font-['Plus_Jakarta_Sans',sans-serif] text-base sm:text-base bg-white/60 p-4 rounded-xl border ${
+                        formStatus === "error" && !formData.message
+                          ? "border-red-400"
+                          : "border-green-200 focus:border-[#16A34A]"
+                      } outline-none transition-all duration-300 text-green-950 placeholder:text-green-400/60 resize-none`}
+                    />
+                  </div>
+                </div>
+
+                {/* Submit Action */}
+                <div className="pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+                  <motion.button
+                    type="submit"
+                    whileHover={{ y: -2 }}
+                    whileTap={{ scale: 0.98 }}
+                    className={`relative px-8 py-4 rounded-full font-['Plus_Jakarta_Sans',sans-serif] text-sm font-medium tracking-tight cursor-pointer transition-all duration-500 flex items-center justify-center min-w-[200px] ${
+                      formStatus === "success"
+                        ? "bg-[#16A34A] text-white shadow-[0_0_20px_rgba(22,163,74,0.4)]"
+                        : "bg-green-950 text-white hover:bg-green-900"
+                    }`}
+                  >
+                    {formStatus === "idle" && "Send with Salaam →"}
+                    {formStatus === "loading" && (
+                      <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    )}
+                    {formStatus === "success" && "✓ Message sent successfully."}
+                    {formStatus === "error" &&
+                      "Failed. Please fill all fields."}
+                  </motion.button>
+                </div>
+              </form>
+
+              {/* Support Footer */}
+              <div className="mt-24 pt-12 border-t border-green-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 text-xs text-green-700 font-['Plus_Jakarta_Sans',sans-serif]">
+                <div>
+                  <p className="text-green-600 uppercase tracking-widest mb-1 text-[10px]">
+                    Need a quicker answer?
+                  </p>
+                  <a
+                    href="mailto:tawfiq.base44@gmail.com"
+                    className="text-green-950 font-medium hover:text-[#16A34A] transition-colors"
+                  >
+                    tawfiq.base44@gmail.com
+                  </a>
+                  <span className="block text-green-600 mt-0.5">
+                    Average reply &lt; 24 hours
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-6">
+                  <a
+                    href="https://github.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:text-green-950 transition-colors"
+                  >
+                    GitHub
+                  </a>
+                  <a
+                    href="https://discord.com"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="hover:text-green-950 transition-colors"
+                  >
+                    Discord
+                  </a>
+                  <div className="flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span>Status: All systems operational</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* =========================================
+          PREMIUM DOWNLOAD EXPERIENCE OVERLAY
+          ========================================= */}
+      <AnimatePresence>
+        {showScanner && (
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 40 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-0 z-[100] bg-[#F0FDF4] overflow-y-auto overflow-x-hidden flex flex-col items-center pt-24 pb-16 px-6 font-['Plus_Jakarta_Sans',sans-serif]"
+          >
+            {/* Back Button */}
+            <motion.button
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              onClick={() => setShowScanner(false)}
+              className="absolute top-8 left-6 sm:top-12 sm:left-12 text-green-600 hover:text-green-950 tracking-[0.2em] uppercase text-[10px] sm:text-xs font-semibold py-2 transition-colors cursor-pointer group flex items-center gap-2"
+            >
+              <span className="transform group-hover:-translate-x-1 transition-transform duration-300">
+                ←
+              </span>
+              Back to Site
+            </motion.button>
+
+            {/* Cinematic Typography Header Container */}
+            <div className="w-full max-w-4xl mx-auto flex flex-col items-center text-center mt-8 sm:mt-12 mb-4">
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.6, ease: "easeOut" }}
+                className="font-['Cormorant_Garamond',serif] font-normal text-[clamp(2.75rem,7vw,6.5rem)] leading-[1.05] text-[#052E16] tracking-[-0.01em]"
+              >
+                Download <span className="italic text-[#16A34A]">Tawfiq</span>
+                <br />
+                <span className="italic text-[#16A34A]">to begin today.</span>
+              </motion.h2>
+
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 0.6 }}
+                className="mt-6 font-['Plus_Jakarta_Sans',sans-serif] text-[#16A34A] text-[15px] sm:text-[18px] max-w-2xl mx-auto leading-relaxed"
+              >
+                Begin with one prayer. Leave with a lifetime of consistency.
+                Scan the QR code below to download the app for iOS and Android.
+              </motion.p>
+            </div>
+
+            {/* Centered QR Code */}
+            <div className="w-full max-w-xl mx-auto mt-10 sm:mt-16 flex flex-col items-center justify-center">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.6, duration: 0.6 }}
+                className="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-green-200/50 mb-8 flex flex-col items-center"
+              >
+                <img
+                  src={qrImage}
+                  alt="Scan to download"
+                  className="w-56 h-56 sm:w-64 sm:h-64 object-contain mix-blend-multiply"
+                />
+              </motion.div>
+            </div>
+
+            {/* Features & Trust Signals */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.6 }}
+              className="w-full mt-10 sm:mt-16 flex flex-col items-center"
+            >
+              <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-6 text-green-800 font-['Plus_Jakarta_Sans',sans-serif] font-medium text-base sm:text-lg px-4 text-center tracking-tight">
+                <span>Prayer Tracking</span>
+                <span className="text-[#16A34A] opacity-50 hidden sm:block">
+                  •
+                </span>
+                <span>Qaza Recovery</span>
+                <span className="text-[#16A34A] opacity-50 hidden sm:block">
+                  •
+                </span>
+                <span>Quran</span>
+                <span className="text-[#16A34A] opacity-50 hidden sm:block">
+                  •
+                </span>
+                <span>Dhikr</span>
+                <span className="text-[#16A34A] opacity-50 hidden sm:block">
+                  •
+                </span>
+                <span>Islamic Academy</span>
+              </div>
+
+              <div className="mt-12 flex flex-col items-center gap-4">
+                <p className="font-['Plus_Jakarta_Sans',sans-serif] text-[10px] sm:text-xs tracking-[0.2em] uppercase text-green-600 font-semibold text-center">
+                  Built with sincerity for every Muslim.
+                </p>
+                <div className="flex items-center gap-4 text-[10px] sm:text-xs tracking-widest uppercase text-green-600/70 font-medium">
+                  <span>Free Forever</span>
+                  <span className="w-1 h-1 rounded-full bg-green-300" />
+                  <span>No Ads</span>
+                  <span className="w-1 h-1 rounded-full bg-green-300" />
+                  <span>Privacy First</span>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* =========================================
+          MOBILE MENU FULLSCREEN OVERLAY
+          ========================================= */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed inset-0 z-40 bg-[#F0FDF4] flex flex-col items-center justify-center md:hidden font-['Plus_Jakarta_Sans',sans-serif]"
+          >
+            <div className="flex flex-col items-center gap-8">
+              {navItems.map((item, i) => (
+                <motion.a
+                  key={item.id}
+                  href={item.href}
+                  onClick={() => setIsMenuOpen(false)}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    delay: 0.1 + i * 0.1,
+                    duration: 0.5,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                  className="font-['Cormorant_Garamond',serif] font-medium text-4xl text-green-950 tracking-tight"
+                >
+                  {item.label}
+                </motion.a>
+              ))}
+
+              <motion.button
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  setShowContact(true);
+                }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  delay: 0.3,
+                  duration: 0.5,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="font-['Cormorant_Garamond',serif] font-medium text-4xl text-green-950 tracking-tight cursor-pointer"
+              >
+                Contact
+              </motion.button>
+
+              <motion.button
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  setShowScanner(true);
+                }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  delay: 0.4,
+                  duration: 0.5,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+                className="mt-2 font-['Plus_Jakarta_Sans',sans-serif] font-medium text-lg text-[#16A34A] tracking-tight cursor-pointer"
+              >
+                Begin with Bismillah
+              </motion.button>
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, scaleX: 0 }}
+              animate={{ opacity: 1, scaleX: 1 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+              className="w-12 h-px bg-green-200 mt-12"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
