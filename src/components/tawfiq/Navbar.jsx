@@ -256,6 +256,11 @@ export default function Navbar() {
     }
   };
 
+  // Mobile navigation header text switcher based on scroll position
+  const mobileNavText = !scrolled
+    ? "Tawfiq"
+    : navItems.find((item) => item.id === activeItem)?.label || "Tawfiq";
+
   return (
     <>
       {/* FLOATING GLASS PILL NAVBAR CONTAINER */}
@@ -337,7 +342,8 @@ export default function Navbar() {
                     strokeLinejoin="round"
                   />
                 </motion.svg>
-                <span className="font-['Cormorant_Garamond',serif] font-[600] text-xl text-green-950 tracking-[-0.01em]">
+                {/* ADDED hidden md:block HERE to hide static text on mobile */}
+                <span className="hidden md:block font-['Cormorant_Garamond',serif] font-[600] text-xl text-green-950 tracking-[-0.01em]">
                   Tawfiq
                 </span>
 
