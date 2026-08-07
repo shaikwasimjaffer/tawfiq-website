@@ -284,7 +284,7 @@ function PreviewVisuals({ title }) {
       );
     case "Zakat Calculator":
       return (
-        <div className="flex items-center text-5xl font-serif text-[#16A34A] font-light overflow-hidden h-16">
+        <div className="flex items-center text-5xl font-['Newsreader',serif] font-light text-[#16A34A] overflow-hidden h-16">
           <span>$</span>
           <motion.div
             animate={{ y: ["0%", "-80%"] }}
@@ -341,7 +341,7 @@ function PreviewVisuals({ title }) {
       );
     case "Learn Arabic":
       return (
-        <div className="relative flex items-center justify-center w-full h-24 text-4xl font-serif text-[#16A34A]">
+        <div className="relative flex items-center justify-center w-full h-24 text-4xl font-['Newsreader',serif] font-light text-[#16A34A]">
           <motion.span
             className="absolute font-arabic"
             animate={{
@@ -443,9 +443,9 @@ function WheelNode({
             }`}
           />
           <span
-            className={`font-serif tracking-wide transition-all duration-700 whitespace-nowrap ${
+            className={`font-['Newsreader',serif] font-light tracking-wide transition-all duration-700 whitespace-nowrap ${
               isActive
-                ? "text-xl text-[#16A34A] font-medium"
+                ? "text-xl text-[#16A34A] font-normal"
                 : "text-base text-green-500 group-hover:text-green-700"
             }`}
           >
@@ -546,7 +546,7 @@ export default function TawfiqLearningHub() {
     <LayoutGroup>
       <section
         id="academy"
-        className="relative min-h-[100dvh] bg-[#F0FDF4] overflow-hidden flex flex-col items-center font-sans py-16 sm:py-20"
+        className="relative min-h-[100dvh] bg-[#F0FDF4] overflow-hidden flex flex-col items-center font-['Geist',sans-serif] py-16 sm:py-20"
       >
         {/* Header Label, Title, and Description - Standard Flow to push content down safely */}
         <motion.div
@@ -554,13 +554,13 @@ export default function TawfiqLearningHub() {
           transition={{ duration: 0.5 }}
           className="relative text-center z-20 w-full px-4 mb-8 sm:mb-12 shrink-0 pt-4"
         >
-          <p className="text-[10px] sm:text-[11px] font-sans tracking-[0.25em] uppercase text-green-500 mb-3 sm:mb-4">
+          <p className="text-[10px] sm:text-[11px] font-['Geist',sans-serif] tracking-[0.25em] uppercase text-green-500 mb-3 sm:mb-4">
             03 — The Academy
           </p>
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-serif text-green-950 tracking-tight leading-tight">
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-['Newsreader',serif] font-light text-green-950 tracking-tight leading-tight">
             Structured <span className="text-[#16A34A] italic">Learning</span>
           </h2>
-          <p className="mt-3 sm:mt-4 text-sm sm:text-lg font-serif text-green-700 max-w-lg mx-auto leading-relaxed px-2">
+          <p className="mt-3 sm:mt-4 text-sm sm:text-lg font-['Newsreader',serif] font-light text-green-700 max-w-lg mx-auto leading-relaxed px-2">
             Master the essentials of your faith through interactive,
             step-by-step modules designed for every level.
           </p>
@@ -601,7 +601,7 @@ export default function TawfiqLearningHub() {
                 >
                   <motion.h2
                     layoutId={`title-${selectedTopic.title}`}
-                    className="font-serif text-4xl sm:text-5xl tracking-tight leading-none"
+                    className="font-['Newsreader',serif] font-light text-4xl sm:text-5xl tracking-tight leading-none"
                   >
                     {selectedTopic.title}
                   </motion.h2>
@@ -612,7 +612,7 @@ export default function TawfiqLearningHub() {
 
                 <motion.p
                   layoutId={`desc-${selectedTopic.title}`}
-                  className="font-serif text-base sm:text-xl italic font-light text-green-700 leading-relaxed max-w-[280px] sm:max-w-md"
+                  className="font-['Newsreader',serif] font-light text-base sm:text-xl italic text-green-700 leading-relaxed max-w-[280px] sm:max-w-md"
                 >
                   {selectedTopic.sentence}
                 </motion.p>
@@ -623,7 +623,7 @@ export default function TawfiqLearningHub() {
             <div className="pointer-events-auto sm:hidden mt-10 mb-6 w-full flex justify-center">
               <button
                 onClick={() => setIsOverlayOpen(true)}
-                className="bg-green-950 text-green-100 px-8 py-4 rounded-full text-xs tracking-[0.15em] uppercase font-semibold active:bg-green-900 transition-colors shadow-lg"
+                className="font-['Geist',sans-serif] bg-green-950 text-green-100 px-8 py-4 rounded-full text-xs tracking-[0.15em] uppercase font-semibold active:bg-green-900 transition-colors shadow-lg"
               >
                 Explore Module
               </button>
@@ -689,7 +689,7 @@ export default function TawfiqLearningHub() {
                 {/* Drag Handle & Header */}
                 <div className="pt-3 pb-4 border-b border-green-100 shrink-0">
                   <div className="w-12 h-1.5 bg-green-200 rounded-full mx-auto mb-4" />
-                  <h3 className="text-center font-sans font-semibold text-xs text-green-500 uppercase tracking-widest">
+                  <h3 className="text-center font-['Geist',sans-serif] font-semibold text-xs text-green-500 uppercase tracking-widest">
                     Choose Topic
                   </h3>
                 </div>
@@ -719,7 +719,7 @@ export default function TawfiqLearningHub() {
                             {topic.arabic}
                           </span>
                           <span
-                            className={`font-serif text-xl ${
+                            className={`font-['Newsreader',serif] font-light text-xl ${
                               isActive ? "text-[#16A34A]" : "text-green-800"
                             }`}
                           >
@@ -754,7 +754,7 @@ export default function TawfiqLearningHub() {
               <div className="sm:hidden sticky top-0 z-50 bg-[#F0FDF4]/90 backdrop-blur-md border-b border-green-200/50 px-4 py-4 flex items-center">
                 <button
                   onClick={closeModule}
-                  className="text-green-600 font-sans text-sm tracking-wide font-medium flex items-center gap-1 active:opacity-60"
+                  className="text-green-600 font-['Geist',sans-serif] text-sm tracking-wide font-medium flex items-center gap-1 active:opacity-60"
                 >
                   <ChevronDown className="rotate-90" />
                   Back
@@ -768,7 +768,7 @@ export default function TawfiqLearningHub() {
                 exit={{ opacity: 0, x: -20, transition: { duration: 0.3 } }}
                 transition={{ delay: 0.3, duration: 0.6 }}
                 onClick={closeModule}
-                className="hidden sm:block fixed top-12 left-12 z-50 text-green-500 hover:text-green-900 tracking-widest uppercase text-xs font-semibold py-2 transition-colors cursor-pointer pointer-events-auto"
+                className="hidden sm:block fixed top-12 left-12 z-50 text-green-500 hover:text-green-900 tracking-widest uppercase text-xs font-semibold py-2 transition-colors cursor-pointer pointer-events-auto font-['Geist',sans-serif]"
               >
                 ← Back to Academy
               </motion.button>
@@ -778,7 +778,7 @@ export default function TawfiqLearningHub() {
                 <motion.h1
                   layoutId={`title-${selectedTopic.title}`}
                   transition={springTransition}
-                  className="font-serif text-5xl sm:text-7xl lg:text-8xl text-[#16A34A] tracking-tight leading-none mb-4 sm:mb-6 text-center"
+                  className="font-['Newsreader',serif] font-light text-5xl sm:text-7xl lg:text-8xl text-[#16A34A] tracking-tight leading-none mb-4 sm:mb-6 text-center"
                 >
                   {selectedTopic.title}
                 </motion.h1>
@@ -786,7 +786,7 @@ export default function TawfiqLearningHub() {
                 <motion.p
                   layoutId={`desc-${selectedTopic.title}`}
                   transition={springTransition}
-                  className="font-serif text-lg sm:text-2xl italic font-light text-green-700 text-center leading-relaxed mb-12 sm:mb-0 max-w-xl"
+                  className="font-['Newsreader',serif] font-light text-lg sm:text-2xl italic text-green-700 text-center leading-relaxed mb-12 sm:mb-0 max-w-xl"
                 >
                   {selectedTopic.sentence}
                 </motion.p>
@@ -799,10 +799,10 @@ export default function TawfiqLearningHub() {
                     transition={{ duration: 0.6, delay: 0.2 }}
                     className="text-center mb-12 sm:mb-24 px-4"
                   >
-                    <h3 className="text-2xl sm:text-3xl font-serif text-green-950 mb-4 sm:mb-6">
+                    <h3 className="text-2xl sm:text-3xl font-['Newsreader',serif] font-light text-green-950 mb-4 sm:mb-6">
                       {selectedTopic.subtitle}
                     </h3>
-                    <p className="text-green-700 font-light text-base sm:text-xl leading-relaxed max-w-2xl mx-auto">
+                    <p className="font-['Newsreader',serif] font-light text-green-700 text-base sm:text-xl leading-relaxed max-w-2xl mx-auto">
                       {selectedTopic.intro}
                     </p>
                   </motion.div>
@@ -814,7 +814,7 @@ export default function TawfiqLearningHub() {
                     transition={{ duration: 0.6, delay: 0.3 }}
                     className="w-full max-w-3xl mb-12 sm:mb-24"
                   >
-                    <p className="text-[10px] sm:text-xs tracking-[0.2em] uppercase text-green-500 mb-6 sm:mb-8 text-center font-semibold">
+                    <p className="text-[10px] sm:text-xs font-['Geist',sans-serif] tracking-[0.2em] uppercase text-green-500 mb-6 sm:mb-8 text-center font-semibold">
                       Inside Tawfiq
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6">
@@ -823,7 +823,7 @@ export default function TawfiqLearningHub() {
                           key={idx}
                           className="bg-white border border-green-200/60 p-4 sm:p-6 rounded-xl sm:rounded-2xl text-center shadow-sm"
                         >
-                          <p className="text-green-900 font-light text-base sm:text-lg">
+                          <p className="font-['Newsreader',serif] font-light text-green-900 text-base sm:text-lg">
                             {feature}
                           </p>
                         </div>
@@ -850,7 +850,7 @@ export default function TawfiqLearningHub() {
                     className="text-center mb-12 sm:mb-24 px-4 max-w-2xl"
                   >
                     <div className="w-8 sm:w-12 h-[1px] bg-[#16A34A] mx-auto mb-6 sm:mb-8" />
-                    <p className="text-xl sm:text-3xl font-serif text-green-900 font-light italic leading-relaxed">
+                    <p className="text-xl sm:text-3xl font-['Newsreader',serif] font-light text-green-900 italic leading-relaxed">
                       "{selectedTopic.statistic}"
                     </p>
                   </motion.div>
@@ -862,7 +862,7 @@ export default function TawfiqLearningHub() {
                     transition={{ duration: 0.6, delay: 0.6 }}
                     className="pb-12 w-full sm:w-auto"
                   >
-                    <button className="w-full sm:w-auto bg-green-950 text-green-100 px-10 py-4 rounded-xl sm:rounded-full text-xs sm:text-sm tracking-[0.15em] sm:tracking-[0.2em] uppercase font-semibold hover:bg-[#16A34A] hover:text-white transition-all duration-300 shadow-xl sm:hover:shadow-2xl sm:hover:-translate-y-1 cursor-pointer active:bg-green-900">
+                    <button className="font-['Geist',sans-serif] w-full sm:w-auto bg-green-950 text-green-100 px-10 py-4 rounded-xl sm:rounded-full text-xs sm:text-sm tracking-[0.15em] sm:tracking-[0.2em] uppercase font-semibold hover:bg-[#16A34A] hover:text-white transition-all duration-300 shadow-xl sm:hover:shadow-2xl sm:hover:-translate-y-1 cursor-pointer active:bg-green-900">
                       Open in Tawfiq
                     </button>
                   </motion.div>

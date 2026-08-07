@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { ChevronDown } from "lucide-react";
 
+// ==========================================
+// DATA: VERSES
+// ==========================================
 const verses = [
   {
     id: 1,
@@ -200,10 +204,44 @@ const verses = [
   },
 ];
 
-export default function BreathingVerses() {
+// ==========================================
+// DATA: FAQs
+// ==========================================
+const faqs = [
+  {
+    question: "Is Tawfiq completely free to use?",
+    answer:
+      "Yes. Tawfiq is 100% free forever. There are no paywalls, no premium subscriptions, and absolutely no advertisements. It was built with sincerity for the Ummah.",
+  },
+  {
+    question: "How does the Qaza calculator estimate my missed prayers?",
+    answer:
+      "The calculator uses your current age, your estimated age of puberty, and your past prayer habits to create a mathematical baseline. It offers different scholarly calculation modes (Conservative to Maximum) so you can choose the approach you are most comfortable with.",
+  },
+  {
+    question: "Can I track my regular daily prayers (Fard) along with my Qaza?",
+    answer:
+      "Yes! While Tawfiq specializes in helping you recover missed prayers, it is ultimately designed to help you build lasting consistency. You can track your daily obligatory (Fard) prayers right alongside your Qaza makeup sessions.",
+  },
+  {
+    question: "What happens if I fall behind on my daily Qaza goal?",
+    answer:
+      "Nothing happens! Tawfiq does not use guilt-based streaks or penalize you for missing a day. If you fall behind, your completion horizon simply adjusts. You can always catch up the next day without feeling pressured or discouraged.",
+  },
+  {
+    question: "I feel overwhelmed by my total Qaza number. What should I do?",
+    answer:
+      "It is completely normal to feel overwhelmed, but remember that your sincere intention (Niyyah) to make them up is what matters most to Allah. We recommend setting a very small, manageable daily pace—even just one Qaza prayer a day. Focus on the daily habit, not the total number.",
+  },
+];
+
+// ==========================================
+// COMPONENT: BREATHING VERSES SECTION
+// ==========================================
+function BreathingVersesSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Automatically cycle through the verses every 6 seconds to create the breathing pace
+  // Automatically cycle through the verses every 6 seconds
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % verses.length);
@@ -212,9 +250,8 @@ export default function BreathingVerses() {
   }, []);
 
   return (
-    <section className="relative bg-[#F0FDF4] py-40 md:py-56 overflow-hidden min-h-[600px] flex items-center justify-center">
+    <section className="relative bg-[#F0FDF4] py-10 md:py-14 overflow-hidden flex items-center justify-center">
       <div className="relative max-w-3xl mx-auto px-6 text-center w-full">
-        {/* mode="wait" ensures the exiting verse slides out cleanly before the next slides in. */}
         <AnimatePresence mode="wait">
           <motion.div
             key={currentIndex}
@@ -225,7 +262,7 @@ export default function BreathingVerses() {
             className="flex flex-col items-center"
           >
             {/* Eyebrow Label */}
-            <p className="text-[11px] font-sans tracking-[0.25em] uppercase text-green-600 mb-16 md:mb-20">
+            <p className="text-[11px] font-['Geist',sans-serif] tracking-[0.25em] uppercase text-green-600 mb-16 md:mb-20 font-semibold">
               {verses[currentIndex].reference}
             </p>
 
@@ -238,12 +275,115 @@ export default function BreathingVerses() {
             </p>
 
             {/* English Translation */}
-            <p className="font-serif text-xl md:text-2xl italic font-light text-green-700 leading-relaxed mt-16 md:mt-20">
+            <p className="font-['Newsreader',serif] text-xl md:text-2xl italic font-light text-green-700 leading-relaxed mt-4 md:mt-6">
               {verses[currentIndex].english}
             </p>
           </motion.div>
         </AnimatePresence>
       </div>
     </section>
+  );
+}
+
+// ==========================================
+// COMPONENT: FAQ SECTION
+// ==========================================
+function FAQSection() {
+  const [openIndex, setOpenIndex] = useState(0);
+
+  const toggleFAQ = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
+  return (
+    <section className="w-full bg-[#F0FDF4] py-24 px-4 sm:px-6 lg:px-8 font-['Geist',sans-serif]">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-start">
+        {/* Left Column: Title (Removed sticky properties to let it scroll up naturally) */}
+        <div className="lg:col-span-4">
+          <div className="relative inline-block">
+            <h2 className="font-['Newsreader',serif] font-light text-6xl md:text-7xl text-green-950 tracking-tight">
+              FAQ
+            </h2>
+            {/* Custom thick underline replicating the screenshot's style */}
+            <div className="absolute -bottom-2 left-0 w-full h-1.5 bg-green-950 rounded-full" />
+          </div>
+        </div>
+
+        {/* Right Column: Accordions */}
+        <div className="lg:col-span-8 flex flex-col gap-4">
+          {faqs.map((faq, index) => {
+            const isOpen = openIndex === index;
+
+            return (
+              <motion.div
+                key={index}
+                initial={false}
+                animate={{
+                  backgroundColor: isOpen ? "#ffffff" : "#ffffff",
+                  borderColor: isOpen ? "#bbf7d0" : "#dcfce3",
+                }}
+                className={`rounded-[2rem] border overflow-hidden transition-shadow duration-300 ${
+                  isOpen
+                    ? "shadow-md shadow-green-900/5"
+                    : "shadow-sm hover:shadow-md hover:border-green-200"
+                }`}
+              >
+                <button
+                  onClick={() => toggleFAQ(index)}
+                  className="w-full flex items-center justify-between p-6 sm:p-8 text-left outline-none cursor-pointer group"
+                >
+                  <span
+                    className={`text-lg sm:text-xl font-['Newsreader',serif] font-light transition-colors duration-300 pr-4 ${
+                      isOpen
+                        ? "text-[#16A34A]"
+                        : "text-green-950 group-hover:text-green-800"
+                    }`}
+                  >
+                    {faq.question}
+                  </span>
+
+                  <motion.div
+                    animate={{ rotate: isOpen ? 180 : 0 }}
+                    transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                    className={`flex-shrink-0 ${
+                      isOpen ? "text-[#16A34A]" : "text-green-600"
+                    }`}
+                  >
+                    <ChevronDown size={24} strokeWidth={2.5} />
+                  </motion.div>
+                </button>
+
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                      <div className="px-6 sm:px-8 pb-8 text-green-800 text-base sm:text-lg leading-relaxed font-light">
+                        {faq.answer}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ==========================================
+// DEFAULT EXPORT: MAIN PAGE CONTENT
+// ==========================================
+export default function BreathingVersesAndFAQ() {
+  return (
+    <>
+      <BreathingVersesSection />
+      <FAQSection />
+    </>
   );
 }

@@ -131,8 +131,9 @@ export default function Hero() {
 
   return (
     <section
+      id="hero"
       ref={containerRef}
-      className="relative h-[1200vh] bg-[#F0FDF4] font-['Plus_Jakarta_Sans',sans-serif]"
+      className="relative h-[1200vh] bg-[#F0FDF4] font-['Geist',sans-serif]"
     >
       {/* Sticky Fullscreen Canvas */}
       <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center pointer-events-none">
@@ -223,7 +224,7 @@ export default function Hero() {
             السَّلَامُ عَلَيْكُمْ
           </h2>
 
-          <p className="mt-4 sm:mt-6 font-['Cormorant_Garamond',serif] text-xl sm:text-3xl md:text-4xl text-green-800/75 font-light italic tracking-wider">
+          <p className="mt-4 sm:mt-6 font-['Newsreader',serif] font-light italic text-xl sm:text-3xl md:text-4xl text-green-800/80 tracking-wider">
             Peace be upon you.
           </p>
         </motion.div>
@@ -235,11 +236,11 @@ export default function Hero() {
           style={{ opacity: heroTextOpacity, y: heroTextY }}
           className="absolute z-10 w-full px-4 text-center flex flex-col items-center"
         >
-          <h1 className="font-['Cormorant_Garamond',serif] font-medium text-[2.1rem] xs:text-[2.5rem] sm:text-[5.2rem] md:text-[6.8rem] lg:text-[8rem] leading-[1.2] sm:leading-[0.92] tracking-[-0.02em] text-green-950">
-            <span className="block font-normal text-green-950 whitespace-nowrap sm:whitespace-normal">
+          <h1 className="font-['Newsreader',serif] font-light text-[2.1rem] xs:text-[2.5rem] sm:text-[5.2rem] md:text-[6.8rem] lg:text-[8rem] leading-[1.2] sm:leading-[0.92] tracking-[-0.02em] text-green-950">
+            <span className="block text-green-950 whitespace-nowrap sm:whitespace-normal">
               How long has it been
             </span>
-            <span className="block font-normal text-green-950 mt-1 sm:mt-2 whitespace-nowrap sm:whitespace-normal">
+            <span className="block text-green-950 mt-1 sm:mt-2 whitespace-nowrap sm:whitespace-normal">
               since your{" "}
               <span className="inline-block italic font-normal text-[#16A34A]">
                 last prayer?
@@ -255,7 +256,7 @@ export default function Hero() {
           style={{ opacity: missedTextOpacity, y: missedTextY }}
           className="absolute z-10 max-w-5xl w-full px-6 text-center"
         >
-          <h2 className="font-['Cormorant_Garamond',serif] text-3xl sm:text-5xl md:text-6xl lg:text-7xl text-green-950 leading-[1.15] font-light tracking-[-0.01em]">
+          <h2 className="font-['Newsreader',serif] font-light text-3xl sm:text-5xl md:text-6xl lg:text-7xl text-green-950 leading-[1.15] tracking-[-0.01em]">
             No matter how many prayers you've missed.
           </h2>
         </motion.div>
@@ -271,7 +272,7 @@ export default function Hero() {
           }}
           className="absolute z-10 max-w-6xl w-full px-6 text-center"
         >
-          <h2 className="font-['Cormorant_Garamond',serif] text-4xl sm:text-6xl md:text-8xl lg:text-9xl text-[#16A34A] italic font-normal tracking-[-0.02em] leading-[1.1]">
+          <h2 className="font-['Newsreader',serif] font-light italic text-4xl sm:text-6xl md:text-8xl lg:text-9xl text-[#16A34A] tracking-[-0.02em] leading-[1.1]">
             <motion.span
               style={{ clipPath: nextOneRevealMask }}
               className="inline-block"
@@ -288,7 +289,7 @@ export default function Hero() {
           style={{ opacity: changeTextOpacity, y: changeTextY }}
           className="absolute z-20 max-w-5xl w-full px-6 text-center"
         >
-          <h2 className="font-['Cormorant_Garamond',serif] text-[clamp(2.75rem,6vw,8rem)] text-green-950 leading-[1.15] font-light tracking-[-0.01em]">
+          <h2 className="font-['Newsreader',serif] font-light text-[clamp(2.75rem,6vw,8rem)] text-green-950 leading-[1.15] tracking-[-0.01em]">
             It's never too late to
             <br />
             <span className="italic font-normal text-[#16A34A]">Return</span>
@@ -302,7 +303,7 @@ export default function Hero() {
           style={{ opacity: builtTextOpacity, y: builtTextY }}
           className="absolute z-20 max-w-5xl w-full px-6 text-center"
         >
-          <h2 className="font-['Cormorant_Garamond',serif] text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-green-950 leading-[1.15] font-light tracking-[-0.01em]">
+          <h2 className="font-['Newsreader',serif] font-light text-4xl sm:text-6xl md:text-7xl lg:text-8xl text-green-950 leading-[1.15] tracking-[-0.01em]">
             That's why we built{" "}
             <span className="italic font-medium text-[#16A34A]">Tawfiq.</span>
           </h2>
@@ -325,13 +326,13 @@ export default function Hero() {
           <div className="mt-3 sm:mt-6 overflow-hidden">
             <motion.p
               style={{ clipPath: bismillahTransMask }}
-              className="inline-block font-['Cormorant_Garamond',serif] text-3xl sm:text-4xl md:text-5xl text-[#16A34A] font-light italic tracking-wide"
+              className="inline-block font-['Newsreader',serif] font-light italic text-3xl sm:text-4xl md:text-5xl text-[#16A34A] tracking-wide"
             >
               In the name of Allah, the Most Gracious, the Most Merciful.
             </motion.p>
           </div>
 
-          <span className="mt-6 sm:mt-8 block font-['Plus_Jakarta_Sans',sans-serif] text-[10px] sm:text-[12px] uppercase tracking-[0.35em] text-green-600 font-medium">
+          <span className="mt-6 sm:mt-8 block font-['Geist',sans-serif] text-[10px] sm:text-[12px] uppercase tracking-[0.35em] text-green-600 font-medium">
             Every meaningful journey begins here.
           </span>
         </motion.div>
@@ -343,7 +344,7 @@ export default function Hero() {
           style={{ opacity: introTawfiqOpacity, scale: introTawfiqScale }}
           className="absolute z-35 text-center px-6 max-w-[100vw] overflow-visible"
         >
-          <h2 className="font-['Cormorant_Garamond',serif] text-[3.5rem] xs:text-[4rem] sm:text-[6.5rem] md:text-[8.5rem] lg:text-[10rem] text-green-950 font-light tracking-[-0.02em] leading-[1.15] select-none sm:whitespace-nowrap">
+          <h2 className="font-['Newsreader',serif] font-light text-[3.5rem] xs:text-[4rem] sm:text-[6.5rem] md:text-[8.5rem] lg:text-[10rem] text-green-950 tracking-[-0.02em] leading-[1.15] select-none sm:whitespace-nowrap">
             Introducing{" "}
             <span className="italic font-normal text-[#16A34A]">Tawfiq.</span>
           </h2>

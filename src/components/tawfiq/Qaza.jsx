@@ -303,7 +303,10 @@ export default function Qaza() {
   };
 
   return (
-    <section className="relative bg-[#F0FDF4] h-auto pb-24 md:pb-32 overflow-hidden selection:bg-[#16A34A] selection:text-white font-['Manrope']">
+    <section
+      id="qaza"
+      className="relative bg-[#F0FDF4] h-auto pb-24 md:pb-32 overflow-hidden selection:bg-[#16A34A] selection:text-white font-['Manrope']"
+    >
       <style
         dangerouslySetInnerHTML={{
           __html: `

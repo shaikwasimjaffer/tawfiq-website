@@ -69,19 +69,6 @@ export default function Footer({ onOpenScanner }) {
           transition={{ duration: 1 }}
           className="mt-16 w-full flex flex-col items-center justify-center"
         > 
-          <p
-            className="
-              font-arabic
-              text-[#16A34A]
-              text-5xl
-              md:text-6xl
-              mb-2
-              tracking-wide
-              translate-x-[2px]
-            "
-          >
-            توفيق
-          </p>
 
           <h2
             className="

@@ -51,7 +51,7 @@ function NavLink({ item, isActive, onClick }) {
     <motion.a
       href={item.href}
       onClick={(e) => onClick(e, item)}
-      className="relative px-4 py-1.5 rounded-full font-['Plus_Jakarta_Sans',sans-serif] text-[15px] tracking-[-0.01em] font-medium transition-all duration-200 z-10 cursor-pointer"
+      className="relative px-4 py-1.5 rounded-full font-['Geist',sans-serif] text-[15px] tracking-[-0.01em] font-medium transition-all duration-200 z-10 cursor-pointer"
       style={{
         color: isActive ? "#052E16" : "#166534",
       }}
@@ -343,7 +343,7 @@ export default function Navbar() {
                   />
                 </motion.svg>
                 {/* ADDED hidden md:block HERE to hide static text on mobile */}
-                <span className="hidden md:block font-['Cormorant_Garamond',serif] font-[600] text-xl text-green-950 tracking-[-0.01em]">
+                <span className="hidden md:block font-['Newsreader',serif] font-medium text-xl text-green-950 tracking-[-0.01em]">
                   Tawfiq
                 </span>
 
@@ -356,7 +356,7 @@ export default function Navbar() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -15 }}
                       transition={{ duration: 0.25, ease: "easeOut" }}
-                      className="block font-['Cormorant_Garamond',serif] font-[600] text-xl text-green-950 tracking-[-0.01em]"
+                      className="block font-['Newsreader',serif] font-medium text-xl text-green-950 tracking-[-0.01em]"
                     >
                       {mobileNavText}
                     </motion.span>
@@ -381,7 +381,7 @@ export default function Navbar() {
                   backgroundColor: "rgba(22, 163, 74, 0.08)",
                   color: "#052E16",
                 }}
-                className="relative px-4 py-1.5 rounded-full font-['Plus_Jakarta_Sans',sans-serif] text-[15px] tracking-[-0.01em] font-medium text-[#166534] transition-all duration-200 z-10 cursor-pointer"
+                className="relative px-4 py-1.5 rounded-full font-['Geist',sans-serif] text-[15px] tracking-[-0.01em] font-medium text-[#166534] transition-all duration-200 z-10 cursor-pointer"
               >
                 Contact
               </motion.button>
@@ -403,7 +403,7 @@ export default function Navbar() {
           >
             <motion.button
               onClick={handleBismillahClick}
-              className="group bg-[#15803D] hover:bg-[#146c33] text-white flex items-center justify-center font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden pointer-events-auto cursor-pointer shadow-sm"
+              className="group bg-[#15803D] hover:bg-[#146c33] text-white flex items-center justify-center font-['Geist',sans-serif] overflow-hidden pointer-events-auto cursor-pointer shadow-sm"
               animate={{
                 width: animatingAction ? "100%" : "190px",
                 height: animatingAction ? "100%" : "40px",
@@ -418,7 +418,7 @@ export default function Navbar() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.2, delay: 0.15 }}
-                    className="font-serif italic text-2xl text-white tracking-wide"
+                    className="font-['Newsreader',serif] font-light italic text-2xl text-white tracking-wide"
                   >
                     {animatingAction.label}
                   </motion.span>
@@ -451,7 +451,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 40 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-[110] bg-[#F0FDF4] overflow-y-auto overflow-x-hidden flex flex-col pt-24 pb-24 px-6 font-['Plus_Jakarta_Sans',sans-serif]"
+            className="fixed inset-0 z-[110] bg-[#F0FDF4] overflow-y-auto overflow-x-hidden flex flex-col pt-24 pb-24 px-6 font-['Geist',sans-serif]"
           >
             {/* Back Button */}
             <motion.button
@@ -474,9 +474,9 @@ export default function Navbar() {
                 <span className="text-[10px] tracking-[0.25em] uppercase text-[#16A34A] font-semibold block mb-3">
                   Support
                 </span>
-                <h2 className="font-['Cormorant_Garamond',serif] font-normal text-3xl sm:text-5xl text-green-950 tracking-tight leading-snug">
+                <h2 className="font-['Newsreader',serif] font-light text-3xl sm:text-5xl text-green-950 tracking-tight leading-snug">
                   Have a question, found a bug, <br />
-                  <span className="italic text-green-700 font-light">
+                  <span className="italic text-green-700">
                     or have an idea to improve Tawfiq?
                   </span>
                 </h2>
@@ -490,7 +490,7 @@ export default function Navbar() {
                 onSubmit={handleContactSubmit}
                 className={`flex flex-col gap-10 ${shaking ? "animate-bounce" : ""}`}
               >
-                <div className="space-y-12 text-lg sm:text-2xl font-['Cormorant_Garamond',serif] text-green-900">
+                <div className="space-y-12 text-lg sm:text-2xl font-['Newsreader',serif] text-green-900">
                   {/* Line 1: Name */}
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 flex-wrap">
                     <span className="text-green-700 font-light">
@@ -503,7 +503,7 @@ export default function Navbar() {
                       onChange={(e) =>
                         setFormData({ ...formData, name: e.target.value })
                       }
-                      className={`font-['Plus_Jakarta_Sans',sans-serif] text-base sm:text-lg bg-transparent border-b ${
+                      className={`font-['Geist',sans-serif] text-base sm:text-lg bg-transparent border-b ${
                         formStatus === "error" && !formData.name
                           ? "border-red-400"
                           : "border-green-300 focus:border-[#16A34A]"
@@ -523,7 +523,7 @@ export default function Navbar() {
                       onChange={(e) =>
                         setFormData({ ...formData, email: e.target.value })
                       }
-                      className={`font-['Plus_Jakarta_Sans',sans-serif] text-base sm:text-lg bg-transparent border-b ${
+                      className={`font-['Geist',sans-serif] text-base sm:text-lg bg-transparent border-b ${
                         formStatus === "error" && !formData.email
                           ? "border-red-400"
                           : "border-green-300 focus:border-[#16A34A]"
@@ -536,7 +536,7 @@ export default function Navbar() {
                     <span className="text-green-700 font-light text-base sm:text-xl">
                       I'm writing because:
                     </span>
-                    <div className="flex flex-wrap gap-3 font-['Plus_Jakarta_Sans',sans-serif]">
+                    <div className="flex flex-wrap gap-3 font-['Geist',sans-serif]">
                       {categories.map((cat) => {
                         const isSelected = formData.category === cat;
                         return (
@@ -585,7 +585,7 @@ export default function Navbar() {
                       onChange={(e) =>
                         setFormData({ ...formData, message: e.target.value })
                       }
-                      className={`font-['Plus_Jakarta_Sans',sans-serif] text-base sm:text-base bg-white/60 p-4 rounded-xl border ${
+                      className={`font-['Geist',sans-serif] text-base sm:text-base bg-white/60 p-4 rounded-xl border ${
                         formStatus === "error" && !formData.message
                           ? "border-red-400"
                           : "border-green-200 focus:border-[#16A34A]"
@@ -600,7 +600,7 @@ export default function Navbar() {
                     type="submit"
                     whileHover={{ y: -2 }}
                     whileTap={{ scale: 0.98 }}
-                    className={`relative px-8 py-4 rounded-full font-['Plus_Jakarta_Sans',sans-serif] text-sm font-medium tracking-tight cursor-pointer transition-all duration-500 flex items-center justify-center min-w-[200px] ${
+                    className={`relative px-8 py-4 rounded-full font-['Geist',sans-serif] text-sm font-medium tracking-tight cursor-pointer transition-all duration-500 flex items-center justify-center min-w-[200px] ${
                       formStatus === "success"
                         ? "bg-[#16A34A] text-white shadow-[0_0_20px_rgba(22,163,74,0.4)]"
                         : "bg-green-950 text-white hover:bg-green-900"
@@ -618,7 +618,7 @@ export default function Navbar() {
               </form>
 
               {/* Support Footer */}
-              <div className="mt-24 pt-12 border-t border-green-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 text-xs text-green-700 font-['Plus_Jakarta_Sans',sans-serif]">
+              <div className="mt-24 pt-12 border-t border-green-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 text-xs text-green-700 font-['Geist',sans-serif]">
                 <div>
                   <p className="text-green-600 uppercase tracking-widest mb-1 text-[10px]">
                     Need a quicker answer?
@@ -672,7 +672,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 40 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-0 z-[100] bg-[#F0FDF4] overflow-y-auto overflow-x-hidden flex flex-col items-center pt-24 pb-16 px-6 font-['Plus_Jakarta_Sans',sans-serif]"
+            className="fixed inset-0 z-[100] bg-[#F0FDF4] overflow-y-auto overflow-x-hidden flex flex-col items-center pt-24 pb-16 px-6 font-['Geist',sans-serif]"
           >
             {/* Back Button */}
             <motion.button
@@ -694,7 +694,7 @@ export default function Navbar() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.6, ease: "easeOut" }}
-                className="font-['Cormorant_Garamond',serif] font-normal text-[clamp(2.75rem,7vw,6.5rem)] leading-[1.05] text-[#052E16] tracking-[-0.01em]"
+                className="font-['Newsreader',serif] font-light text-[clamp(2.75rem,7vw,6.5rem)] leading-[1.05] text-[#052E16] tracking-[-0.01em]"
               >
                 Download <span className="italic text-[#16A34A]">Tawfiq</span>
                 <br />
@@ -705,7 +705,7 @@ export default function Navbar() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.6 }}
-                className="mt-6 font-['Plus_Jakarta_Sans',sans-serif] text-[#16A34A] text-[15px] sm:text-[18px] max-w-2xl mx-auto leading-relaxed"
+                className="mt-6 font-['Geist',sans-serif] text-[#16A34A] text-[15px] sm:text-[18px] max-w-2xl mx-auto leading-relaxed"
               >
                 Begin with one prayer. Leave with a lifetime of consistency.
                 Scan the QR code below to download the app for iOS and Android.
@@ -735,7 +735,7 @@ export default function Navbar() {
               transition={{ delay: 0.8, duration: 0.6 }}
               className="w-full mt-10 sm:mt-16 flex flex-col items-center"
             >
-              <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-6 text-green-800 font-['Plus_Jakarta_Sans',sans-serif] font-medium text-base sm:text-lg px-4 text-center tracking-tight">
+              <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-6 text-green-800 font-['Geist',sans-serif] font-medium text-base sm:text-lg px-4 text-center tracking-tight">
                 <span>Prayer Tracking</span>
                 <span className="text-[#16A34A] opacity-50 hidden sm:block">
                   •
@@ -756,7 +756,7 @@ export default function Navbar() {
               </div>
 
               <div className="mt-12 flex flex-col items-center gap-4">
-                <p className="font-['Plus_Jakarta_Sans',sans-serif] text-[10px] sm:text-xs tracking-[0.2em] uppercase text-green-600 font-semibold text-center">
+                <p className="font-['Geist',sans-serif] text-[10px] sm:text-xs tracking-[0.2em] uppercase text-green-600 font-semibold text-center">
                   Built with sincerity for every Muslim.
                 </p>
                 <div className="flex items-center gap-4 text-[10px] sm:text-xs tracking-widest uppercase text-green-600/70 font-medium">
@@ -782,7 +782,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-40 bg-[#F0FDF4] flex flex-col items-center justify-center md:hidden font-['Plus_Jakarta_Sans',sans-serif]"
+            className="fixed inset-0 z-40 bg-[#F0FDF4] flex flex-col items-center justify-center md:hidden font-['Geist',sans-serif]"
           >
             <div className="flex flex-col items-center gap-8">
               {navItems.map((item, i) => (
@@ -797,7 +797,7 @@ export default function Navbar() {
                     duration: 0.5,
                     ease: [0.22, 1, 0.36, 1],
                   }}
-                  className="font-['Cormorant_Garamond',serif] font-medium text-4xl text-green-950 tracking-tight"
+                  className="font-['Newsreader',serif] font-light text-4xl text-green-950 tracking-tight"
                 >
                   {item.label}
                 </motion.a>
@@ -815,7 +815,7 @@ export default function Navbar() {
                   duration: 0.5,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                className="font-['Cormorant_Garamond',serif] font-medium text-4xl text-green-950 tracking-tight cursor-pointer"
+                className="font-['Newsreader',serif] font-light text-4xl text-green-950 tracking-tight cursor-pointer"
               >
                 Contact
               </motion.button>
@@ -832,7 +832,7 @@ export default function Navbar() {
                   duration: 0.5,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                className="mt-2 font-['Plus_Jakarta_Sans',sans-serif] font-medium text-lg text-[#16A34A] tracking-tight cursor-pointer"
+                className="mt-2 font-['Geist',sans-serif] font-medium text-lg text-[#16A34A] tracking-tight cursor-pointer"
               >
                 Begin with Bismillah
               </motion.button>
