@@ -289,7 +289,8 @@ function BreathingVersesSection() {
 // COMPONENT: FAQ SECTION
 // ==========================================
 function FAQSection() {
-  const [openIndex, setOpenIndex] = useState(0);
+  // Changed initial state from 0 to null so all accordions start closed
+  const [openIndex, setOpenIndex] = useState(null);
 
   const toggleFAQ = (index) => {
     setOpenIndex(openIndex === index ? null : index);
