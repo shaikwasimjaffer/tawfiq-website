@@ -342,7 +342,6 @@ export default function Navbar() {
                     strokeLinejoin="round"
                   />
                 </motion.svg>
-                {/* ADDED hidden md:block HERE to hide static text on mobile */}
                 <span className="hidden md:block font-['Newsreader',serif] font-medium text-xl text-green-950 tracking-[-0.01em]">
                   Tawfiq
                 </span>
@@ -392,7 +391,7 @@ export default function Navbar() {
             <div className="block md:hidden w-8" />
           </motion.div>
 
-          {/* DESKTOP RIGHT: The Magic Expanding Pill */}
+          {/* DESKTOP RIGHT: The Magic Expanding Pill CTA */}
           <motion.div
             className="hidden md:flex absolute inset-y-0 items-center justify-end z-[60] pointer-events-none"
             animate={{
@@ -403,11 +402,14 @@ export default function Navbar() {
           >
             <motion.button
               onClick={handleBismillahClick}
-              className="group bg-[#15803D] hover:bg-[#146c33] text-white flex items-center justify-center font-['Geist',sans-serif] overflow-hidden pointer-events-auto cursor-pointer shadow-sm"
+              whileHover={{ y: -1 }} // very small hover movement
+              className={`group bg-[#15803D] hover:bg-[#146c33] text-white flex items-center justify-center font-['Geist',sans-serif] overflow-hidden pointer-events-auto cursor-pointer shadow-sm border border-white/20 transition-all ${
+                animatingAction ? "" : "px-5 py-3 md:px-6 md:py-3.5"
+              }`}
               animate={{
-                width: animatingAction ? "100%" : "190px",
-                height: animatingAction ? "100%" : "40px",
-                borderRadius: animatingAction ? "9999px" : "9999px",
+                width: animatingAction ? "100%" : "auto",
+                height: animatingAction ? "100%" : "auto",
+                borderRadius: "9999px",
               }}
               transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
             >
@@ -427,12 +429,12 @@ export default function Navbar() {
                     key="begin"
                     exit={{ opacity: 0, filter: "blur(4px)" }}
                     transition={{ duration: 0.2 }}
-                    className="flex items-center gap-2.5 text-[13px] font-medium tracking-tight"
+                    className="flex items-center gap-3 text-[14px] md:text-[15px] font-medium tracking-tight whitespace-nowrap"
                   >
-                    <span>Begin with Bismillah</span>
-                    <span className="transform group-hover:translate-x-0.5 transition-transform duration-300">
-                      →
+                    <span className="font-serif text-[16px] md:text-[18px] opacity-90 leading-none pt-0.5" dir="rtl">
+                      بسم الله
                     </span>
+                    <span>Bismillah</span>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -820,6 +822,7 @@ export default function Navbar() {
                 Contact
               </motion.button>
 
+              {/* Elevated Mobile Bismillah CTA */}
               <motion.button
                 onClick={() => {
                   setIsMenuOpen(false);
@@ -832,9 +835,11 @@ export default function Navbar() {
                   duration: 0.5,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                className="mt-2 font-['Geist',sans-serif] font-medium text-lg text-[#16A34A] tracking-tight cursor-pointer"
+                whileHover={{ y: -1 }}
+                className="mt-4 flex items-center justify-center gap-3 px-6 py-3.5 bg-[#15803D] hover:bg-[#146c33] text-white rounded-full font-['Geist',sans-serif] font-medium tracking-tight cursor-pointer border border-white/20 shadow-sm transition-all"
               >
-                Begin with Bismillah
+                <span className="font-serif text-[18px] opacity-90 leading-none pt-0.5" dir="rtl">بسم الله</span>
+                <span className="text-[16px]">Bismillah</span>
               </motion.button>
             </div>
 
