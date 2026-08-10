@@ -236,56 +236,6 @@ const faqs = [
 ];
 
 // ==========================================
-// COMPONENT: BREATHING VERSES SECTION
-// ==========================================
-function BreathingVersesSection() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  // Automatically cycle through the verses every 6 seconds
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % verses.length);
-    }, 6000);
-    return () => clearInterval(timer);
-  }, []);
-
-  return (
-    <section className="relative bg-[#F0FDF4] py-10 md:py-14 overflow-hidden flex items-center justify-center">
-      <div className="relative max-w-3xl mx-auto px-6 text-center w-full">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentIndex}
-            initial={{ x: 50 }}
-            animate={{ x: 0 }}
-            exit={{ x: -50 }}
-            transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
-            className="flex flex-col items-center"
-          >
-            {/* Eyebrow Label */}
-            <p className="text-[11px] font-['Geist',sans-serif] tracking-[0.25em] uppercase text-green-600 mb-16 md:mb-20 font-semibold">
-              {verses[currentIndex].reference}
-            </p>
-
-            {/* Arabic Text */}
-            <p
-              className="font-arabic text-[clamp(2rem,6vw,4.25rem)] leading-[1.9] text-green-950"
-              dir="rtl"
-            >
-              {verses[currentIndex].arabic}
-            </p>
-
-            {/* English Translation */}
-            <p className="font-['Newsreader',serif] text-xl md:text-2xl italic font-light text-green-700 leading-relaxed mt-4 md:mt-6">
-              {verses[currentIndex].english}
-            </p>
-          </motion.div>
-        </AnimatePresence>
-      </div>
-    </section>
-  );
-}
-
-// ==========================================
 // COMPONENT: FAQ SECTION
 // ==========================================
 function FAQSection() {
@@ -378,13 +328,64 @@ function FAQSection() {
 }
 
 // ==========================================
+// COMPONENT: BREATHING VERSES SECTION
+// ==========================================
+function BreathingVersesSection() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Automatically cycle through the verses every 6 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % verses.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <section className="relative bg-[#F0FDF4] py-10 md:py-14 overflow-hidden flex items-center justify-center">
+      <div className="relative max-w-3xl mx-auto px-6 text-center w-full">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentIndex}
+            initial={{ x: 50 }}
+            animate={{ x: 0 }}
+            exit={{ x: -50 }}
+            transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
+            className="flex flex-col items-center"
+          >
+            {/* Eyebrow Label */}
+            <p className="text-[11px] font-['Geist',sans-serif] tracking-[0.25em] uppercase text-green-600 mb-16 md:mb-20 font-semibold">
+              {verses[currentIndex].reference}
+            </p>
+
+            {/* Arabic Text */}
+            <p
+              className="font-arabic text-[clamp(2rem,6vw,4.25rem)] leading-[1.9] text-green-950"
+              dir="rtl"
+            >
+              {verses[currentIndex].arabic}
+            </p>
+
+            {/* English Translation */}
+            <p className="font-['Newsreader',serif] text-xl md:text-2xl italic font-light text-green-700 leading-relaxed mt-4 md:mt-6">
+              {verses[currentIndex].english}
+            </p>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </section>
+  );
+}
+
+// ==========================================
 // DEFAULT EXPORT: MAIN PAGE CONTENT
 // ==========================================
 export default function BreathingVersesAndFAQ() {
   return (
     <>
-      <BreathingVersesSection />
       <FAQSection />
+      <BreathingVersesSection />
     </>
   );
 }
+  
