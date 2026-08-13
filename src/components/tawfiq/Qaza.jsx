@@ -9,13 +9,15 @@ function AnimatedNumber({ value }) {
     const node = nodeRef.current;
     if (!node) return;
 
-    const currentVal = parseInt(node.textContent.replace(/,/g, "")) || 0;
+    const currentVal = parseInt((node.textContent || "").replace(/,/g, ""), 10) || 0;
 
     const controls = animate(currentVal, value, {
       duration: 1.5,
       ease: [0.22, 1, 0.36, 1],
       onUpdate(val) {
-        node.textContent = Math.round(val).toLocaleString();
+        if (node) {
+          node.textContent = Math.round(val).toLocaleString();
+        }
       },
     });
 
@@ -128,8 +130,21 @@ export default function Qaza() {
   useEffect(() => {
     if (isModalOpen) document.body.style.overflow = "hidden";
     else document.body.style.overflow = "unset";
+
+    // Handle Escape key to close modal
+    const handleEscapeKey = (e) => {
+      if (e.key === "Escape") {
+        setIsModalOpen(false);
+      }
+    };
+
+    if (isModalOpen) {
+      document.addEventListener("keydown", handleEscapeKey);
+    }
+
     return () => {
       document.body.style.overflow = "unset";
+      document.removeEventListener("keydown", handleEscapeKey);
     };
   }, [isModalOpen]);
 
@@ -305,7 +320,7 @@ export default function Qaza() {
   return (
     <section
       id="qaza"
-      className="relative bg-[#F0FDF4] h-auto pb-24 md:pb-32 overflow-hidden selection:bg-[#16A34A] selection:text-white font-['Manrope']"
+      className="relative bg-[#F0FDF4] py-24 md:py-32 overflow-hidden selection:bg-[#16A34A] selection:text-white"
     >
       <style
         dangerouslySetInnerHTML={{
@@ -325,13 +340,13 @@ export default function Qaza() {
       />
 
       {/* 1. Header */}
-      <div className="max-w-4xl mx-auto px-6 md:px-10 mb-12 md:mb-16 mt-12 md:mt-16 text-center">
+      <div className="max-w-4xl mx-auto px-6 md:px-10 pb-12 md:pb-16 text-center">
         <div className="max-w-2xl mx-auto">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
-            className="font-['Manrope'] font-medium text-[clamp(2.1rem,4.8vw,4.8rem)] leading-[1.15] tracking-[-0.03em] text-green-950"
+            className="font-['Newsreader',serif] font-light text-[clamp(2.5rem,5vw,5rem)] leading-[1.1] tracking-[-0.02em] text-green-950 mb-6"
           >
             Missed prayers don't have to stay{" "}
             <span className="italic font-normal text-[#16A34A]">
@@ -343,20 +358,15 @@ export default function Qaza() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.2 }}
-            className="mt-8 md:mt-12 flex flex-col items-center"
+            className="flex flex-col items-center space-y-4"
           >
-            <p className="font-['Manrope'] text-[1.1rem] md:text-[1.2rem] text-green-800 leading-[1.6] font-light max-w-xl">
+            <p className="font-['Manrope'] text-[clamp(1.1rem,1.5vw,1.25rem)] md:text-[clamp(1.25rem,2vw,1.5rem)] text-green-600 leading-[1.7] font-light max-w-xl">
               Recover your Qaza with clarity, structure, and consistency.
             </p>
 
             <button
               onClick={() => setIsModalOpen(true)}
-              className="mt-10 bg-green-950 text-white font-['Manrope'] text-[13px] font-medium tracking-tight py-3.5 rounded-full hover:bg-[#16A34A] transition-colors duration-300 active:scale-95 shadow-sm cursor-pointer"
-              style={{
-                width: "fit-content",
-                paddingLeft: "28px",
-                paddingRight: "28px",
-              }}
+              className="bg-green-950 text-white font-['Manrope'] font-medium text-[clamp(0.875rem,1.5vw,1rem)] py-3.5 px-6 md:px-8 rounded-full hover:bg-[#16A34A] transition-colors duration-300 shadow-sm font-[clamp(0.875rem,1.5vw,1rem)]"
             >
               {hasEstimated ? "Update Estimate" : "Estimate Your Qaza"}
             </button>
@@ -365,47 +375,44 @@ export default function Qaza() {
       </div>
 
       {/* 2. Tracker Reading */}
-      <div
-        id="qaza-tracker"
-        className="max-w-2xl mx-auto px-6 md:px-10 scroll-mt-24"
-      >
-        <div className="text-center mb-16">
+      <AnimatePresence initial={false}>
+        {hasEstimated && (
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            id="qaza-tracker"
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: "easeOut" }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{
+              duration: 0.7,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            className="max-w-2xl mx-auto px-6 md:px-10"
           >
-            <p className="text-[11px] font-['Manrope'] uppercase tracking-[0.2em] text-green-600 font-semibold mb-4">
-              The Journey
-            </p>
-            <div className="font-['Manrope'] font-light text-[5rem] md:text-[7rem] leading-[0.9] tracking-[-0.03em] text-green-950">
-              <AnimatedNumber value={hasEstimated ? totalOwed : 0} />
-            </div>
-            <h2 className="font-['Manrope'] text-2xl md:text-3xl text-green-700 italic font-light mt-4">
-              prayers remain.
-            </h2>
-          </motion.div>
-        </div>
+            <div className="text-center space-y-6">
+              {/* Eyebrow Label */}
+              <p className="text-[11px] font-['Geist',sans-serif] tracking-[0.25em] uppercase text-green-600 font-semibold">
+                The Journey
+              </p>
 
-        <AnimatePresence>
-          {hasEstimated && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-            >
-              <div className="mb-16 text-center">
-                <p className="font-['Manrope'] text-[1.35rem] sm:text-[1.75rem] md:text-[2rem] text-green-900 font-light leading-[1.4] max-w-xl mx-auto">
-                  At your current pace, you will complete this journey in{" "}
-                  <span className="italic font-normal text-[#16A34A] block mt-1 sm:inline sm:mt-0">
-                    {calculateHorizon(totalOwed)}.
-                  </span>
+              {/* Main Number */}
+              <div className="flex items-baseline gap-4">
+                <AnimatedNumber value={totalOwed} className="font-['Manrope'] font-light text-[clamp(4rem,10vw,6rem)] leading-[0.9] tracking-[-0.02em] text-green-950" />
+                <p className="font-['Manrope'] text-2xl md:text-3xl text-green-700 italic font-light leading-[0.9]">
+                  prayers remain.
                 </p>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+
+              {/* Completion Timeline */}
+              <p className="font-['Manrope'] text-[clamp(1.25rem,2vw,1.5rem)] text-green-900 font-light leading-[1.6] max-w-xl mx-auto">
+                At your current pace, you will complete this journey in{" "}
+                <span className="italic font-normal text-[#16A34A]">
+                  {calculateHorizon(totalOwed)}
+                </span>
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Luxury Editorial Modal */}
       <AnimatePresence>
@@ -425,12 +432,12 @@ export default function Qaza() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: 20, scale: 0.95 }}
                 transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className="custom-scrollbar bg-[#F0FDF4] border border-green-200/80 w-full max-w-[32rem] p-6 md:p-10 shadow-2xl relative pointer-events-auto text-left flex flex-col max-h-[90vh] overflow-y-auto"
-                style={{ borderRadius: "0px" }}
+                className="custom-scrollbar bg-[#F0FDF4] border border-green-200/80 w-full max-w-[36rem] p-6 md:p-8 shadow-2xl relative pointer-events-auto text-left flex flex-col max-h-[90vh] overflow-y-auto"
+                style={{ borderRadius: "0.5rem" }}
               >
                 <button
                   onClick={() => setIsModalOpen(false)}
-                  className="absolute top-6 right-6 text-green-500 hover:text-green-950 transition-colors z-10 cursor-pointer"
+                  className="absolute top-4 right-4 text-green-400 hover:text-green-800 transition-colors z-10 h-8 w-8 flex items-center justify-center rounded-hover:bg-green-100"
                 >
                   <svg
                     width="20"
@@ -458,26 +465,23 @@ export default function Qaza() {
                       transition={{ duration: 0.3 }}
                     >
                       <div className="flex justify-between items-center mb-4">
-                        <p className="text-[10px] font-['Manrope'] uppercase tracking-[0.2em] text-green-500 font-semibold">
+                        <p className="text-[10px] font-['Geist',sans-serif] tracking-[0.25em] uppercase text-green-500 font-semibold">
                           Step 1 of 3
                         </p>
                       </div>
 
-                      <h3 className="font-['Manrope'] font-medium text-3xl md:text-4xl text-green-950 mb-4 tracking-[-0.02em]">
+                      <h3 className="font-['Newsreader',serif] font-medium text-[clamp(1.875rem,3vw,2.25rem)] md:text-[clamp(2.25rem,4vw,2.75rem)] text-green-950 mb-6 tracking-[-0.02em] leading-[1.2]">
                         Estimate Your Missed Prayers
                       </h3>
-                      <div className="font-['Manrope'] text-[15px] text-green-700 leading-[1.6] mb-8 font-light">
-                        <p>
-                          Answer a few questions to build an accurate starting
-                          point.
-                        </p>
-                      </div>
+                      <p className="font-['Manrope'] text-[clamp(1rem,1.5vw,1.125rem)] text-green-600 leading-[1.7] mb-6">
+                        Answer a few questions to build an accurate starting point.
+                      </p>
 
                       <div className="space-y-10">
                         {/* Core Setup */}
                         <div className="space-y-6">
-                          <div>
-                            <label className="block font-['Manrope'] font-medium text-[1.1rem] text-green-950 mb-3">
+                          <div className="space-y-4">
+                            <label className="block font-['Manrope'] font-medium text-[clamp(0.875rem,1.5vw,1rem)] text-green-950 mb-3">
                               Select your gender
                             </label>
                             <div className="grid grid-cols-2 gap-3">
@@ -492,7 +496,7 @@ export default function Qaza() {
                                     if (option.id === "male")
                                       setSubtractMenses(false);
                                   }}
-                                  className={`w-full text-center px-4 py-3 border transition-colors duration-200 font-['Manrope'] text-[15px] cursor-pointer ${
+                                  className={`w-full text-center px-4 py-3 border transition-colors duration-200 font-['Manrope'] text-[clamp(0.875rem,1.5vw,1rem)] cursor-pointer ${
                                     gender === option.id
                                       ? "border-green-950 bg-green-950/5 text-green-950 font-medium"
                                       : "border-green-200 bg-white/50 text-green-700 hover:border-[#16A34A]"
@@ -512,7 +516,7 @@ export default function Qaza() {
                                 exit={{ opacity: 0, height: 0 }}
                                 className="overflow-hidden"
                               >
-                                <label className="flex items-center gap-4 cursor-pointer group mt-4">
+                                <label className="flex items-center gap-3 cursor-pointer group">
                                   <input
                                     type="checkbox"
                                     className="hidden"
@@ -522,7 +526,7 @@ export default function Qaza() {
                                     }
                                   />
                                   <div
-                                    className={`w-5 h-5 flex items-center justify-center border transition-colors duration-200 ${
+                                    className={`w-4 h-4 flex items-center justify-center border transition-colors duration-200 ${
                                       subtractMenses
                                         ? "border-green-950 bg-green-950"
                                         : "border-green-200 bg-white/50 group-hover:border-[#16A34A]"
@@ -535,7 +539,7 @@ export default function Qaza() {
                                         viewBox="0 0 24 24"
                                         fill="none"
                                         stroke="white"
-                                        strokeWidth="2.5"
+                                        strokeWidth="2"
                                         strokeLinecap="round"
                                         strokeLinejoin="round"
                                       >
@@ -543,7 +547,7 @@ export default function Qaza() {
                                       </svg>
                                     )}
                                   </div>
-                                  <span className="font-['Manrope'] text-[15px] text-green-950">
+                                  <span className="font-['Manrope'] text-[clamp(0.875rem,1.5vw,1rem)] text-green-950">
                                     Exclude menstruation days
                                   </span>
                                 </label>
@@ -554,10 +558,10 @@ export default function Qaza() {
                           {/* Tactile Slider: Current Age */}
                           <div>
                             <div className="flex justify-between items-center mb-3">
-                              <label className="font-['Manrope'] font-medium text-[1.1rem] text-green-950">
+                              <label className="font-['Manrope'] font-medium text-[clamp(0.875rem,1.5vw,1rem)] text-green-950">
                                 Current Age?
                               </label>
-                              <span className="font-['Manrope'] text-lg font-semibold text-[#16A34A]">
+                              <span className="font-['Manrope'] text-[clamp(0.875rem,1.5vw,1rem)] font-semibold text-[#16A34A]">
                                 {currentAge}
                               </span>
                             </div>
@@ -572,7 +576,7 @@ export default function Qaza() {
                               }
                               className="w-full accent-[#16A34A] bg-green-200 h-1.5 rounded-lg cursor-pointer"
                             />
-                            <div className="flex justify-between text-[10px] text-green-500 font-['Manrope'] mt-1.5 tracking-wider font-semibold">
+                            <div className="flex justify-between text-[clamp(0.75rem,1.5vw,0.875rem)] text-green-500 font-['Manrope'] mt-1.5 tracking-wider font-semibold">
                               <span>9</span>
                               <span>90</span>
                             </div>
@@ -581,10 +585,10 @@ export default function Qaza() {
                           {/* Tactile Slider: Puberty Age */}
                           <div>
                             <div className="flex justify-between items-center mb-3">
-                              <label className="font-['Manrope'] font-medium text-[1.1rem] text-green-950">
+                              <label className="font-['Manrope'] font-medium text-[clamp(0.875rem,1.5vw,1rem)] text-green-950">
                                 Puberty Age?
                               </label>
-                              <span className="font-['Manrope'] text-lg font-semibold text-[#16A34A]">
+                              <span className="font-['Manrope'] text-[clamp(0.875rem,1.5vw,1rem)] font-semibold text-[#16A34A]">
                                 {pubertyAge}
                               </span>
                             </div>
@@ -599,7 +603,7 @@ export default function Qaza() {
                               }
                               className="w-full accent-[#16A34A] bg-green-200 h-1.5 rounded-lg cursor-pointer"
                             />
-                            <div className="flex justify-between text-[10px] text-green-500 font-['Manrope'] mt-1.5 tracking-wider font-semibold">
+                            <div className="flex justify-between text-[clamp(0.75rem,1.5vw,0.875rem)] text-green-500 font-['Manrope'] mt-1.5 tracking-wider font-semibold">
                               <span>9</span>
                               <span>{currentAge}</span>
                             </div>
@@ -607,7 +611,7 @@ export default function Qaza() {
 
                           {/* Prayer Consistency Logic */}
                           <div className="pt-2">
-                            <label className="block font-['Manrope'] font-medium text-[1.1rem] text-green-950 mb-3">
+                            <label className="block font-['Manrope'] font-medium text-[clamp(0.875rem,1.5vw,1rem)] text-green-950 mb-3">
                               Prayer Consistency
                             </label>
 
@@ -637,7 +641,7 @@ export default function Qaza() {
                                   checked={prayerStatus === "consistent"}
                                   onChange={() => setPrayerStatus("consistent")}
                                 />
-                                <span className="font-['Manrope'] text-[14px] text-green-950">
+                                <span className="font-['Manrope'] text-[clamp(0.875rem,1.5vw,1rem)] text-green-950">
                                   I began praying consistently
                                 </span>
                               </label>
@@ -667,7 +671,7 @@ export default function Qaza() {
                                   checked={prayerStatus === "never"}
                                   onChange={() => setPrayerStatus("never")}
                                 />
-                                <span className="font-['Manrope'] text-[14px] text-green-950">
+                                <span className="font-['Manrope'] text-[clamp(0.875rem,1.5vw,1rem)] text-green-950">
                                   I have never prayed consistently
                                 </span>
                               </label>
@@ -711,14 +715,14 @@ export default function Qaza() {
                           {/* Scholar Mode */}
                           <div className="pt-2">
                             <div className="flex justify-between items-center mb-3">
-                              <label className="font-['Manrope'] font-medium text-[1.1rem] text-green-950">
+                              <label className="font-['Manrope'] font-medium text-[clamp(0.875rem,1.5vw,1rem)] text-green-950">
                                 Calculation Method
                               </label>
                               <button
                                 onClick={() =>
                                   setShowScholarInfo(!showScholarInfo)
                                 }
-                                className="text-[10px] uppercase tracking-widest font-['Manrope'] text-[#16A34A] hover:text-green-950 underline underline-offset-2 font-semibold cursor-pointer"
+                                className="text-[clamp(0.75rem,1.5vw,0.875rem)] uppercase tracking-widest font-['Manrope'] text-[#16A34A] hover:text-green-950 underline underline-offset-2 font-semibold cursor-pointer"
                               >
                                 Learn More
                               </button>
@@ -732,7 +736,7 @@ export default function Qaza() {
                                   exit={{ opacity: 0, height: 0 }}
                                   className="overflow-hidden"
                                 >
-                                  <p className="text-[11px] text-green-700 font-['Manrope'] mb-3 p-3 bg-white/50 border border-green-200 font-light">
+                                  <p className="text-[clamp(0.75rem,1.5vw,0.875rem)] text-green-700 font-['Manrope'] mb-3 p-3 bg-white/50 border border-green-200 font-light">
                                     Provides different estimation models based
                                     on varying fiqh assumptions. Does not
                                     dictate which opinion is correct.
@@ -768,7 +772,7 @@ export default function Qaza() {
                                 prayerStatus === "consistent" ? 2 : 3,
                               )
                             }
-                            className="bg-green-950 text-white font-['Manrope'] text-[14px] font-medium tracking-tight py-3 px-8 rounded-full hover:bg-[#16A34A] transition-colors duration-300 shadow-sm cursor-pointer"
+                            className="bg-green-950 text-white font-['Manrope'] text-[clamp(0.875rem,1.5vw,1rem)] font-medium tracking-tight py-3 px-8 rounded-full hover:bg-[#16A34A] transition-colors duration-300 shadow-sm cursor-pointer"
                           >
                             Next Step
                           </button>
@@ -787,15 +791,15 @@ export default function Qaza() {
                       transition={{ duration: 0.3 }}
                     >
                       <div className="flex justify-between items-center mb-4">
-                        <p className="text-[10px] font-['Manrope'] uppercase tracking-[0.2em] text-green-500 font-semibold">
+                        <p className="text-[10px] font-['Geist',sans-serif] tracking-[0.25em] uppercase text-green-500 font-semibold">
                           Step 2 of 3
                         </p>
                       </div>
 
-                      <h3 className="font-['Manrope'] font-medium text-3xl md:text-4xl text-green-950 mb-4 tracking-[-0.02em]">
+                      <h3 className="font-['Newsreader',serif] font-medium text-[clamp(1.875rem,3vw,2.25rem)] md:text-[clamp(2.25rem,4vw,2.75rem)] text-green-950 mb-6 tracking-[-0.02em] leading-[1.2]">
                         Detail Your Journey
                       </h3>
-                      <p className="font-['Manrope'] text-[15px] text-green-700 leading-[1.6] mb-8 font-light">
+                      <p className="font-['Manrope'] text-[clamp(1rem,1.5vw,1.125rem)] text-green-600 leading-[1.7] mb-6">
                         Break down the years between {pubertyAge} and{" "}
                         {prayingAge} to reflect when your habits changed.
                       </p>
@@ -825,13 +829,13 @@ export default function Qaza() {
                               </button>
                             )}
 
-                            <h4 className="font-['Manrope'] text-lg font-medium text-green-950 mb-4">
+                            <h4 className="font-['Manrope'] text-[clamp(1rem,1.5vw,1.125rem)] font-medium text-green-950 mb-4">
                               Ages {phase.startAge} to {phase.endAge}
                             </h4>
 
                             {index < phases.length - 1 && (
                               <div className="mb-6">
-                                <label className="block text-sm text-green-800 mb-2">
+                                <label className="block text-[clamp(0.75rem,1.5vw,0.875rem)] text-green-800 mb-2">
                                   Adjust End Age
                                 </label>
                                 <input
@@ -854,7 +858,7 @@ export default function Qaza() {
                                   key={prayer}
                                   className="flex justify-between items-center bg-[#F0FDF4] p-2 px-3 border border-green-100"
                                 >
-                                  <span className="font-['Manrope'] font-medium text-green-900 text-[14px]">
+                                  <span className="font-['Manrope'] font-medium text-green-900 text-[clamp(0.875rem,1.5vw,1rem)]">
                                     {prayer}
                                   </span>
                                   <select
@@ -866,7 +870,7 @@ export default function Qaza() {
                                         e.target.value,
                                       )
                                     }
-                                    className="bg-transparent text-[14px] text-green-800 font-['Manrope'] outline-none cursor-pointer"
+                                    className="bg-transparent text-[clamp(0.875rem,1.5vw,1rem)] text-green-800 font-['Manrope'] outline-none cursor-pointer"
                                   >
                                     {HABITS.map((habit) => (
                                       <option key={habit} value={habit}>
@@ -890,13 +894,13 @@ export default function Qaza() {
                         <div className="flex justify-between pt-6 border-t border-green-200">
                           <button
                             onClick={() => setModalStep(1)}
-                            className="text-green-700 font-['Manrope'] text-[14px] font-medium hover:text-green-950 transition-colors"
+                            className="text-green-700 font-['Manrope'] text-[clamp(0.875rem,1.5vw,1rem)] font-medium hover:text-green-950 transition-colors"
                           >
                             Back
                           </button>
                           <button
                             onClick={() => setModalStep(3)}
-                            className="bg-green-950 text-white font-['Manrope'] text-[14px] font-medium tracking-tight py-3 px-8 rounded-full hover:bg-[#16A34A] transition-colors duration-300 shadow-sm"
+                            className="bg-green-950 text-white font-['Manrope'] text-[clamp(0.875rem,1.5vw,1rem)] font-medium tracking-tight py-3 px-8 rounded-full hover:bg-[#16A34A] transition-colors duration-300 shadow-sm"
                           >
                             Next Step
                           </button>
@@ -915,25 +919,25 @@ export default function Qaza() {
                       transition={{ duration: 0.3 }}
                     >
                       <div className="flex justify-between items-center mb-4">
-                        <p className="text-[10px] font-['Manrope'] uppercase tracking-[0.2em] text-green-500 font-semibold">
+                        <p className="text-[10px] font-['Geist',sans-serif] tracking-[0.25em] uppercase text-green-500 font-semibold">
                           Step 3 of 3
                         </p>
                       </div>
 
-                      <h3 className="font-['Manrope'] font-medium text-3xl md:text-4xl text-green-950 mb-4 tracking-[-0.02em]">
+                      <h3 className="font-['Newsreader',serif] font-medium text-[clamp(1.875rem,3vw,2.25rem)] md:text-[clamp(2.25rem,4vw,2.75rem)] text-green-950 mb-6 tracking-[-0.02em] leading-[1.2]">
                         Pace & Refinement
                       </h3>
-                      <p className="font-['Manrope'] text-[15px] text-green-700 leading-[1.6] mb-8 font-light">
+                      <p className="font-['Manrope'] text-[clamp(1rem,1.5vw,1.125rem)] text-green-600 leading-[1.7] mb-6">
                         Finalize your plan by setting your daily recovery pace
                         and any manual adjustments.
                       </p>
 
                       <div className="space-y-8">
                         <div>
-                          <label className="block font-['Manrope'] font-medium text-[1.1rem] text-green-950 mb-3">
+                          <label className="block font-['Manrope'] font-medium text-[clamp(0.875rem,1.5vw,1rem)] text-green-950 mb-3">
                             Manual Adjustment (Optional)
                           </label>
-                          <p className="text-[12px] text-green-600 mb-3">
+                          <p className="text-[clamp(0.75rem,1.5vw,0.875rem)] text-green-600 mb-3">
                             Add or subtract specific prayers if you have
                             previously made some up.
                           </p>
@@ -943,16 +947,16 @@ export default function Qaza() {
                             onChange={(e) =>
                               setManualAdjustment(Number(e.target.value))
                             }
-                            className="w-full bg-white/50 border border-green-200 p-3 font-['Manrope'] text-green-950 outline-none focus:border-[#16A34A]"
+                            className="w-full bg-white/50 border border-green-200 p-3 font-['Manrope'] text-green-950 text-[clamp(0.875rem,1.5vw,1rem)] outline-none focus:border-[#16A34A]"
                             placeholder="e.g. -500"
                           />
                         </div>
 
                         <div>
-                          <label className="block font-['Manrope'] font-medium text-[1.1rem] text-green-950 mb-3">
+                          <label className="block font-['Manrope'] font-medium text-[clamp(0.875rem,1.5vw,1rem)] text-green-950 mb-3">
                             Daily Pace
                           </label>
-                          <p className="text-[12px] text-green-600 mb-3">
+                          <p className="text-[clamp(0.75rem,1.5vw,0.875rem)] text-green-600 mb-3">
                             How many Qaza prayers do you plan to make up each
                             day?
                           </p>
@@ -964,7 +968,7 @@ export default function Qaza() {
                                   setDailyPace(pace);
                                   setCustomPace("");
                                 }}
-                                className={`py-2 text-[14px] font-['Manrope'] border transition-colors ${
+                                className={`py-2 text-[clamp(0.875rem,1.5vw,1rem)] font-['Manrope'] border transition-colors ${
                                   dailyPace === pace && !customPace
                                     ? "border-green-950 bg-green-950/5 font-medium text-green-950"
                                     : "border-green-200 text-green-700 hover:border-[#16A34A]"
@@ -978,7 +982,7 @@ export default function Qaza() {
                             type="number"
                             value={customPace}
                             onChange={(e) => setCustomPace(e.target.value)}
-                            className="w-full bg-white/50 border border-green-200 p-3 font-['Manrope'] text-green-950 outline-none focus:border-[#16A34A]"
+                            className="w-full bg-white/50 border border-green-200 p-3 font-['Manrope'] text-green-950 text-[clamp(0.875rem,1.5vw,1rem)] outline-none focus:border-[#16A34A]"
                             placeholder="Or enter a custom number..."
                           />
                         </div>
@@ -990,13 +994,13 @@ export default function Qaza() {
                                 prayerStatus === "consistent" ? 2 : 1,
                               )
                             }
-                            className="text-green-700 font-['Manrope'] text-[14px] font-medium hover:text-green-950 transition-colors"
+                            className="text-green-700 font-['Manrope'] text-[clamp(0.875rem,1.5vw,1rem)] font-medium hover:text-green-950 transition-colors"
                           >
                             Back
                           </button>
                           <button
                             onClick={handleCommitEstimate}
-                            className="bg-[#16A34A] text-white font-['Manrope'] text-[14px] font-medium tracking-tight py-3 px-8 rounded-full hover:bg-green-600 transition-colors duration-300 shadow-sm"
+                            className="bg-[#16A34A] text-white font-['Manrope'] text-[clamp(0.875rem,1.5vw,1rem)] font-medium tracking-tight py-3 px-8 rounded-full hover:bg-green-600 transition-colors duration-300 shadow-sm"
                           >
                             Finalize Estimate
                           </button>

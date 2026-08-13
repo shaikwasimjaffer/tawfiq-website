@@ -209,29 +209,19 @@ const verses = [
 // ==========================================
 const faqs = [
   {
-    question: "Is Tawfiq completely free to use?",
+    question: "What exactly can I do with Tawfiq?",
     answer:
-      "Yes. Tawfiq is 100% free forever. There are no paywalls, no premium subscriptions, and absolutely no advertisements. It was built with sincerity for the Ummah.",
+      "Tawfiq helps you track your daily Salah, calculate missed (Qaza) prayers, read the Quran, perform Dhikr, find the Qibla direction, and build consistency in your worship - all completely free with no ads or paywalls.",
   },
   {
-    question: "How does the Qaza calculator estimate my missed prayers?",
+    question: "How does Tawfiq help me stay consistent with my Salah?",
     answer:
-      "The calculator uses your current age, your estimated age of puberty, and your past prayer habits to create a mathematical baseline. It offers different scholarly calculation modes (Conservative to Maximum) so you can choose the approach you are most comfortable with.",
+      "Tawfiq lets you log your daily prayers, set reminders, visualize your prayer streaks, and track both your current Salah and Qaza makeup prayers together, making it easier to build a consistent worship habit.",
   },
   {
-    question: "Can I track my regular daily prayers (Fard) along with my Qaza?",
+    question: "Can Tawfiq help me understand Islam and learn more?",
     answer:
-      "Yes! While Tawfiq specializes in helping you recover missed prayers, it is ultimately designed to help you build lasting consistency. You can track your daily obligatory (Fard) prayers right alongside your Qaza makeup sessions.",
-  },
-  {
-    question: "What happens if I fall behind on my daily Qaza goal?",
-    answer:
-      "Nothing happens! Tawfiq does not use guilt-based streaks or penalize you for missing a day. If you fall behind, your completion horizon simply adjusts. You can always catch up the next day without feeling pressured or discouraged.",
-  },
-  {
-    question: "I feel overwhelmed by my total Qaza number. What should I do?",
-    answer:
-      "It is completely normal to feel overwhelmed, but remember that your sincere intention (Niyyah) to make them up is what matters most to Allah. We recommend setting a very small, manageable daily pace—even just one Qaza prayer a day. Focus on the daily habit, not the total number.",
+      "Yes! Tawfiq includes Quran reading with translations, Dhikr counters for remembering Allah, and access to inspiring Quranic verses to deepen your understanding and connection with Islam.",
   },
 ];
 
@@ -331,22 +321,51 @@ function FAQSection() {
 // COMPONENT: BREATHING VERSES SECTION
 // ==========================================
 function BreathingVersesSection() {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  // Calculate the most relatable verse based on day and time
+  const [relatableVerse, setRelatableVerse] = useState(null);
 
-  // Automatically cycle through the verses every 6 seconds
   useEffect(() => {
+    const getRelatableVerse = () => {
+      const now = new Date();
+      const dayOfWeek = now.getDay(); // 0 (Sunday) to 6 (Saturday)
+      const hour = now.getHours();
+
+      // Determine time of day index
+      let timeOfDayIndex;
+      if (hour >= 5 && hour < 12) {
+        timeOfDayIndex = 0; // morning
+      } else if (hour >= 12 && hour < 17) {
+        timeOfDayIndex = 1; // afternoon
+      } else if (hour >= 17 && hour < 21) {
+        timeOfDayIndex = 2; // evening
+      } else {
+        timeOfDayIndex = 3; // night (21:00-4:59)
+      }
+
+      // Calculate index: (dayOfWeek * 4 + timeOfDayIndex) % verses.length
+      const index = (dayOfWeek * 4 + timeOfDayIndex) % verses.length;
+      return verses[index];
+    };
+
+    setRelatableVerse(getRelatableVerse());
+
+    // Update every hour to reflect time of day changes
     const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % verses.length);
-    }, 6000);
+      setRelatableVerse(getRelatableVerse());
+    }, 3600000); // 1 hour
+
     return () => clearInterval(timer);
   }, []);
+
+  if (!relatableVerse) {
+    return null;
+  }
 
   return (
     <section className="relative bg-[#F0FDF4] py-10 md:py-14 overflow-hidden flex items-center justify-center">
       <div className="relative max-w-3xl mx-auto px-6 text-center w-full">
         <AnimatePresence mode="wait">
           <motion.div
-            key={currentIndex}
             initial={{ x: 50 }}
             animate={{ x: 0 }}
             exit={{ x: -50 }}
@@ -355,7 +374,7 @@ function BreathingVersesSection() {
           >
             {/* Eyebrow Label */}
             <p className="text-[11px] font-['Geist',sans-serif] tracking-[0.25em] uppercase text-green-600 mb-16 md:mb-20 font-semibold">
-              {verses[currentIndex].reference}
+              {relatableVerse.reference}
             </p>
 
             {/* Arabic Text */}
@@ -363,12 +382,12 @@ function BreathingVersesSection() {
               className="font-arabic text-[clamp(2rem,6vw,4.25rem)] leading-[1.9] text-green-950"
               dir="rtl"
             >
-              {verses[currentIndex].arabic}
+              {relatableVerse.arabic}
             </p>
 
             {/* English Translation */}
             <p className="font-['Newsreader',serif] text-xl md:text-2xl italic font-light text-green-700 leading-relaxed mt-4 md:mt-6">
-              {verses[currentIndex].english}
+              {relatableVerse.english}
             </p>
           </motion.div>
         </AnimatePresence>

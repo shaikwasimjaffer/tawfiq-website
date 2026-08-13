@@ -74,27 +74,16 @@ function NavLink({ item, isActive, onClick }) {
   );
 }
 
-export default function Navbar() {
+export default function Navbar({ showContact, setShowContact, formData, setFormData, formStatus, setFormStatus, shaking, setShaking, handleContactSubmit }) {
   const [scrolled, setScrolled] = useState(false);
   const [activeItem, setActiveItem] = useState("qaza");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showScanner, setShowScanner] = useState(false);
-  const [showContact, setShowContact] = useState(false);
 
   // Unified morphing animation state applied to ALL desktop actions
   const [animatingAction, setAnimatingAction] = useState(null);
 
   const location = useLocation();
-
-  // Contact Form State
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    category: "General Question",
-    message: "",
-  });
-  const [formStatus, setFormStatus] = useState("idle");
-  const [shaking, setShaking] = useState(false);
 
   // Handle scroll blur effect
   useEffect(() => {
@@ -202,58 +191,6 @@ export default function Navbar() {
       setShowScanner(true);
       setTimeout(() => setAnimatingAction(null), 400);
     }, 450);
-  };
-
-  const handleContactSubmit = async (e) => {
-    e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) {
-      setShaking(true);
-      setFormStatus("error");
-      setTimeout(() => {
-        setShaking(false);
-        setFormStatus("idle");
-      }, 1000);
-      return;
-    }
-
-    setFormStatus("loading");
-
-    try {
-      const templateParams = {
-        to_email: "tawfiq.base44@gmail.com",
-        from_name: formData.name,
-        reply_to: formData.email,
-        category: formData.category,
-        message: formData.message,
-      };
-
-      await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        templateParams,
-        EMAILJS_PUBLIC_KEY,
-      );
-
-      setFormStatus("success");
-      setTimeout(() => {
-        setFormStatus("idle");
-        setFormData({
-          name: "",
-          email: "",
-          category: "General Question",
-          message: "",
-        });
-        setShowContact(false);
-      }, 2000);
-    } catch (error) {
-      console.error("Failed to send email:", error);
-      setFormStatus("error");
-      setShaking(true);
-      setTimeout(() => {
-        setShaking(false);
-        setFormStatus("idle");
-      }, 1500);
-    }
   };
 
   // Mobile navigation header text switcher based on scroll position

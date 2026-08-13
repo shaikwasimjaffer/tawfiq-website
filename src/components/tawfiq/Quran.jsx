@@ -280,6 +280,21 @@ export default function Quran() {
     setMemTimer(0);
   }, [memAyahIndex, memMode]);
 
+  // Close Tafsir panel with Escape key
+  useEffect(() => {
+    const handleEscape = (event) => {
+      if (event.key === "Escape" && selectedVerseForPanel) {
+        setSelectedVerseForPanel(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleEscape);
+
+    return () => {
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, [selectedVerseForPanel]);
+
   const handleEnded = () => {
     if (current < ayahs.length) {
       setProgress(0);

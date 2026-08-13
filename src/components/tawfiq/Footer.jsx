@@ -18,7 +18,7 @@ const BismillahButton = ({
   </button>
 );
 
-export default function Footer({ onOpenScanner }) {
+export default function Footer({ onOpenScanner, showContact, setShowContact }) {
   // Re-implemented functional link objects
   const footerCategories = [
     {
@@ -58,7 +58,7 @@ export default function Footer({ onOpenScanner }) {
         { name: "Our Mission", path: "/mission" },
         { name: "Changelog", path: "/changelog" },
         { name: "GitHub", path: "https://github.com" },
-        { name: "Contact", path: "/contact" },
+        { name: "Contact", path: "/contact", onClick: () => setShowContact(true) },
       ],
     },
   ];
@@ -80,22 +80,31 @@ export default function Footer({ onOpenScanner }) {
               <ul className="flex flex-col gap-3">
                 {category.links.map((link, linkIdx) => (
                   <li key={linkIdx}>
-                    {link.path.startsWith("http") ? (
-                      <a
-                        href={link.path}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                    {link.onClick ? (
+                      <button
+                        onClick={link.onClick}
                         className="text-[15px] text-green-900 hover:text-green-700 transition-colors duration-300"
                       >
                         {link.name}
-                      </a>
+                      </button>
                     ) : (
-                      <Link
-                        to={link.path}
-                        className="text-[15px] text-green-900 hover:text-green-700 transition-colors duration-300"
-                      >
-                        {link.name}
-                      </Link>
+                      link.path.startsWith("http") || link.name === "Our Mission" ? (
+                        <a
+                          href={link.path}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[15px] text-green-900 hover:text-green-700 transition-colors duration-300"
+                        >
+                          {link.name}
+                        </a>
+                      ) : (
+                        <Link
+                          to={link.path}
+                          className="text-[15px] text-green-900 hover:text-green-700 transition-colors duration-300"
+                        >
+                          {link.name}
+                        </Link>
+                      )
                     )}
                   </li>
                 ))}
@@ -177,5 +186,4 @@ export default function Footer({ onOpenScanner }) {
         </div>
       </div>
     </footer>
-  );
-}
+);}
