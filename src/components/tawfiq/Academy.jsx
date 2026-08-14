@@ -558,10 +558,10 @@ export default function TawfiqLearningHub() {
             03 — The Academy
           </p>
           <h2 className="text-3xl sm:text-5xl lg:text-6xl font-['Newsreader',serif] font-light text-green-950 tracking-tight leading-tight">
-            Learn your faith. Deepen your connection.
+            Know Your Faith. <span className="text-[#16A34A]">Know Your Creator</span>
           </h2>
           <p className="mt-3 sm:mt-4 text-sm sm:text-lg font-['Newsreader',serif] font-light text-green-700 max-w-lg mx-auto leading-relaxed px-2">
-            Explore Islam through meaningful lessons, from the 99 Names of Allah to Salah, Seerah, Duas, and beyond.
+            Explore the beauty of Islam through the 99 Names of Allah, daily Duas, Salah, Wudu, Seerah, and more, all in one place.
           </p>
         </motion.div>
 

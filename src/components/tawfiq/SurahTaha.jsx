@@ -209,19 +209,29 @@ const verses = [
 // ==========================================
 const faqs = [
   {
-    question: "What exactly can I do with Tawfiq?",
+    question: "What is Tawfiq, and how can it become part of my daily life?",
     answer:
-      "Tawfiq helps you track your daily Salah, calculate missed (Qaza) prayers, read the Quran, perform Dhikr, find the Qibla direction, and build consistency in your worship - all completely free with no ads or paywalls.",
+      "Tawfiq is a comprehensive Islamic companion app designed to help you integrate faith into your daily routine through guided lessons, prayer tracking, Quranic reminders, and spiritual growth tools that work seamlessly with your lifestyle.",
   },
   {
-    question: "How does Tawfiq help me stay consistent with my Salah?",
+    question: "I’ve fallen behind with my prayers. Can Tawfiq help me start again without feeling overwhelmed?",
     answer:
-      "Tawfiq lets you log your daily prayers, set reminders, visualize your prayer streaks, and track both your current Salah and Qaza makeup prayers together, making it easier to build a consistent worship habit.",
+      "Absolutely. Tawfiq offers gentle, step-by-step guidance to help you reconnect with your prayers at your own pace, with personalized reminders, motivational streak tracking, and Qaza (makeup) prayer assistance that removes guilt and builds confidence.",
   },
   {
-    question: "Can Tawfiq help me understand Islam and learn more?",
+    question: "How does Tawfiq help me understand and practice Islam beyond just tracking my prayers?",
     answer:
-      "Yes! Tawfiq includes Quran reading with translations, Dhikr counters for remembering Allah, and access to inspiring Quranic verses to deepen your understanding and connection with Islam.",
+      "Tawfiq goes beyond basic tracking by offering interactive lessons on the 99 Names of Allah, Duas for daily life, Seerah stories, Wudu guides, and practical Islamic teachings that help you live your faith with understanding and purpose.",
+  },
+  {
+    question: "What makes Tawfiq different from a regular prayer or Quran app?",
+    answer:
+      "Unlike basic tracking apps, Tawfiq combines spiritual education with practical tools - offering contextual learning, guided practices, and holistic faith development that connects knowledge with action in your daily worship and character building.",
+  },
+  {
+    question: "Do I need to know much about Islam to start using Tawfiq?",
+    answer:
+      "Not at all. Tawfiq is designed for everyone - whether you're beginning your journey or looking to deepen your practice. Content is presented in accessible, bite-sized formats that meet you where you are and grow with you.",
   },
 ];
 

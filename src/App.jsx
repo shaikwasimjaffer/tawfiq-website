@@ -5,6 +5,7 @@ import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Mission from "./pages/Mission";
 import About from "./pages/About";
+import NotFound from "./pages/NotFound";
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="/terms" element={<Terms />} />
         <Route path="/mission" element={<Mission />} />
         <Route path="/about" element={<About />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

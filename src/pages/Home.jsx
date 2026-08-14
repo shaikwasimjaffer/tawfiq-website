@@ -7,11 +7,13 @@ import Academy from "@/components/tawfiq/Academy";
 
 // 1. Updated the import to match your file name exactly
 import TawfiqAI from "@/components/tawfiq/TawfiqAI";
+import Transformation from "@/components/tawfiq/Transformation";
 
 import SurahTaha from "@/components/tawfiq/SurahTaha";
 import Footer from "@/components/tawfiq/Footer";
 import { motion } from "framer-motion";
 import emailjs from "@emailjs/browser";
+import { Check } from "lucide-react";
 
 // EmailJS Configuration Keys
 const EMAILJS_SERVICE_ID = "service_8msblsf";
@@ -141,6 +143,7 @@ export default function Home() {
 
       {/* 2. Place the component here */}
       <TawfiqAI />
+      <Transformation />
 
       <SurahTaha />
       <Footer
@@ -303,7 +306,12 @@ export default function Home() {
                   {formStatus === "loading" && (
                     <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                   )}
-                  {formStatus === "success" && "��✓ Message sent successfully."}
+                  {formStatus === "success" && (
+                    <>
+                      <Check className="h-4 w-4 mr-2" />
+                      Message sent successfully.
+                    </>
+                  )}
                   {formStatus === "error" &&
                     "Failed. Please fill all fields."}
                 </button>

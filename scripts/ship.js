@@ -32,13 +32,18 @@ try {
     }
 
     try {
-      run(`git commit -m "${message}"`);
+      // Use execSync with string command for simplicity and reliability
+      console.log(`\n> git commit -m "${message}"`);
+      execSync(`git commit -m "${message}"`, { stdio: 'inherit' });
       run("git push");
       run("npm run deploy");
 
       console.log("\n🎉 Successfully deployed to GitHub Pages!");
     } catch (err) {
-      console.error("\n❌ Ship failed.");
+      // Improved error handling
+      console.error("\n❌ Ship failed:");
+      console.error(err.message);
+      process.exit(1);
     }
 
     rl.close();
