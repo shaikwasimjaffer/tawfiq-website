@@ -1,39 +1,43 @@
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
+import BismillahButton from "./BismillahButton";
 
-export default function Transformation() {
+export default function Transformation({ showScanner, setShowScanner }) {
   const beforePoints = [
-    "Prayers easily slip through the day",
-    "Missed Salah becomes difficult to keep track of",
-    "Qaza feels overwhelming and uncertain",
-    "Duas and Islamic knowledge are scattered",
-    "Hard to see your progress and consistency",
+    "Prayers slip through your day unnoticed",
+    "Missed Salah piles up without clear tracking",
+    "Qaza feels confusing and hard to start",
+    "Islamic knowledge is scattered everywhere",
+    "You can't see your worship consistency clearly",
   ];
 
   const afterPoints = [
-    "Stay connected with all five daily prayers",
-    "Understand and recover missed Salah with Qaza tracking",
-    "Learn Duas, Salah, Wudu, and the 99 Names of Allah",
-    "Build a deeper understanding of Islam through the Academy",
-    "See your worship journey, progress, and consistency clearly",
-    "Receive meaningful guidance through TawfiqAI",
+    "Stay connected with your five daily prayers",
+    "Recover missed Salah with a clear Qaza journey",
+    "Learn Islam through one guided Academy",
+    "Understand your worship and see your consistency grow",
+    "Ask questions and receive guidance grounded in Islamic knowledge",
   ];
 
   return (
-    <section className="relative bg-[#F7F5F1] overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
+    <section className="bg-[#F0FDF4] overflow-hidden py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Matching the website heading pattern - Tawfiq in green */}
+        <h2 className="text-3xl sm:text-5xl lg:text-6xl font-['Newsreader',serif] font-light text-green-950 tracking-tight leading-tight text-center mb-10">
+          See what changes when you have <span className="text-[#16A34A]">Tawfiq</span>
+        </h2>
+        <div className="relative grid lg:grid-cols-2 gap-10 items-stretch">
           {/* Left Panel: Before Tawfiq */}
           <motion.div
             initial={{ x: -100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="bg-[#F0FDF4] rounded-xl p-8"
+            className="bg-white rounded-xl p-8 border border-gray-200 flex flex-col h-full"
           >
-            <h2 className="font-['Newsreader',serif] font-light text-3xl md:text-4xl text-green-950 mb-4">
+            <h2 className="font-['Newsreader',serif] font-light text-3xl md:text-4xl text-green-800 mb-4">
               Before Tawfiq
             </h2>
-            <p className="text-green-800 mb-6">
+            <p className="text-gray-600 mb-6 leading-relaxed">
               When worship feels scattered.
             </p>
             <div className="space-y-4">
@@ -42,13 +46,11 @@ export default function Transformation() {
                   key={index}
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  translation={{ duration: 0.5, delay: index * 0.1 }}
                   className="flex items-start"
                 >
-                  <span className="flex-shrink-0 flex items-center justify-center w-5 h-5 border border-green-300 rounded-full">
-                  </span>
-                  <span className="ml-3 text-green-700">
-                    {point}
+                  <span className="ml-3 text-gray-500">
+                    • {point}
                   </span>
                 </motion.div>
               ))}
@@ -59,13 +61,13 @@ export default function Transformation() {
           <motion.div
             initial={{ x: 100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="bg-[#064E3B] rounded-xl p-8"
+            translation={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            className="bg-[#064E3B] rounded-xl p-8 flex flex-col h-full"
           >
             <h2 className="font-['Newsreader',serif] font-light text-3xl md:text-4xl text-white mb-4">
               With Tawfiq
             </h2>
-            <p className="text-white/90 mb-6">
+            <p className="text-white/90 mb-6 leading-relaxed">
               When your faith has a place to grow.
             </p>
             <div className="space-y-4">
@@ -74,19 +76,35 @@ export default function Transformation() {
                   key={index}
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  translation={{ duration: 0.5, delay: index * 0.1 }}
                   className="flex items-start"
                 >
-                  <span className="flex-shrink-0 flex items-center justify-center w-5 h-5 bg-white/20 text-white rounded-full">
-                    <Check className="h-4 w-4" />
+                  <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 bg-white/20 text-white rounded-full">
+                    <Check className="h-5 w-5" />
                   </span>
-                  <span className="ml-3 text-white">
+                  <span className="ml-3 text-white font-medium">
                     {point}
                   </span>
                 </motion.div>
               ))}
+              {/* Make first item slightly stronger */}
+              <style>
+                {`
+                  .space-y-4 > :first-child .ml-3 {
+                    font-weight: 600;
+                  }
+                `}
+              </style>
             </div>
           </motion.div>
+        </div>
+
+        {/* Bismillah Button Below Cards */}
+        <div className="mt-10 flex items-center justify-center">
+          <BismillahButton onClick={() => {
+            // Trigger the scanner overlay by setting showScanner to true
+            setShowScanner(true);
+          }} />
         </div>
       </div>
     </section>
