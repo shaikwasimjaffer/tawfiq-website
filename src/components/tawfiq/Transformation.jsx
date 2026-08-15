@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import BismillahButton from "./BismillahButton";
 
-export default function Transformation({ showScanner, setShowScanner }) {
+export default function Transformation() {
   const beforePoints = [
     "Prayers slip through your day unnoticed",
     "Missed Salah piles up without clear tracking",
@@ -99,14 +99,7 @@ export default function Transformation({ showScanner, setShowScanner }) {
           </motion.div>
         </div>
 
-        {/* Bismillah Button Below Cards */}
-        <div className="mt-10 flex items-center justify-center">
-          <BismillahButton onClick={() => {
-            // Trigger the scanner overlay by setting showScanner to true
-            setShowScanner(true);
-          }} />
-        </div>
-      </div>
+              </div>
     </section>
   );
 }
