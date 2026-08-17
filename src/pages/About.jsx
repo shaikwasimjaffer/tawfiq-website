@@ -1,16 +1,21 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import SEO from "@/components/SEO";
 
 export default function About() {
   return (
+    <SEO
+      title="About Tawfiq - Islamic Prayer Tracker App"
+      description="Learn about Tawfiq, the #1 Islamic prayer tracker app founded by Shaik Wasim Jaffer. Discover our story, mission, and how we help Muslims worldwide stay consistent in worship."
+    >
+    {/* THE FIX: Changed to a fixed overlay (fixed top-0 left-0 w-full h-[100dvh]).
+        This forces the component to be exactly the size of the screen and scroll internally. */}
     <motion.div
       initial={{ x: "100%", boxShadow: "-30px 0 50px rgba(28, 25, 23, 0.15)" }}
       animate={{ x: 0, boxShadow: "0px 0 0px rgba(28, 25, 23, 0)" }}
       exit={{ x: "-30%", opacity: 0 }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      // THE FIX: Changed to a fixed overlay (fixed top-0 left-0 w-full h-[100dvh]).
-      // This forces the component to be exactly the size of the screen and scroll internally.
       className="fixed top-0 left-0 w-full h-[100dvh] overflow-y-auto bg-[#F9F8F6] z-[100]"
     >
       <div className="max-w-2xl mx-auto px-6 pt-12 pb-24 md:py-24 lg:px-12 min-h-full">
@@ -85,5 +90,6 @@ export default function About() {
         </Link>
       </div>
     </motion.div>
+    </SEO>
   );
 }

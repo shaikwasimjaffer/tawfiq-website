@@ -1,9 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import SEO from "@/components/SEO";
 
 export default function Privacy() {
   return (
+    <SEO
+      title="Tawfiq Privacy Policy - Islamic Prayer Tracker"
+      description="Read Tawfiq's privacy policy detailing how we protect your spiritual data, prayer records, and personal information. Founded by Shaik Wasim Jaffer."
+    >
     <motion.div
       initial={{ x: "100%", boxShadow: "-30px 0 50px rgba(28, 25, 23, 0.15)" }}
       animate={{ x: 0, boxShadow: "0px 0 0px rgba(28, 25, 23, 0)" }}
@@ -64,5 +69,6 @@ export default function Privacy() {
         </Link>
       </div>
     </motion.div>
+    </SEO>
   );
 }

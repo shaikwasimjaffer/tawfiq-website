@@ -340,8 +340,8 @@ export default function Hero() {
             whileHover={{ scale: 1.0, filter: "brightness(1.03)" }}
             initial={{ scale: 0.98, filter: "brightness(1.0)" }}
             animate={{ scale: 1.0, filter: "brightness(1.0)" }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-            className="cursor-pointer inline-block pointer-events-auto px-4 py-2"
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  className="cursor-pointer inline-block pointer-events-auto px-4 py-2"
           >
             {/* Dynamic Arabic text */}
             <h2
@@ -521,3 +521,4 @@ export default function Hero() {
     </section>
   );
 }
+

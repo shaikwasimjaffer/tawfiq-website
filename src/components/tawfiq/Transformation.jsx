@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
-import BismillahButton from "./BismillahButton";
 
 export default function Transformation() {
   const beforePoints = [

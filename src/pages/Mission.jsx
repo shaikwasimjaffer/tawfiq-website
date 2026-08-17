@@ -1,9 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import SEO from "@/components/SEO";
 
 export default function Mission() {
   return (
+    <SEO
+      title="Tawfiq Mission - Islamic Prayer Tracker Purpose"
+      description="Discover the mission of Tawfiq: to facilitate a deeper connection with Allah through innovative Islamic technology founded by Shaik Wasim Jaffer."
+    >
     <motion.div
       initial={{ x: "100%", boxShadow: "-30px 0 50px rgba(28, 25, 23, 0.15)" }}
       animate={{ x: 0, boxShadow: "0px 0 0px rgba(28, 25, 23, 0)" }}
@@ -82,5 +87,6 @@ export default function Mission() {
         </Link>
       </div>
     </motion.div>
+    </SEO>
   );
 }

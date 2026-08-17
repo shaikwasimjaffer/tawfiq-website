@@ -1,64 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Primary Meta Tags -->
-    <title>
-Tawfiq - Islamic Prayer Tracker & Salah Companion
-</title>
-<meta
-name="description"
-content="Tawfiq - The #1 Islamic Prayer Tracker App. Track Salah, calculate Qaza, read Quran, perform Dhikr, find Qibla. Download Tawfiq app for iOS & Android. Official Tawfiq website."
-/>
-<meta property="og:locale" content="en_US">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Tawfiq Islamic Prayer Tracker">
-    <meta name="keywords" content="tawfiq, tawfiq app, tawfiq website, tawfiq islamic app, prayer tracker, salah tracker, qaza calculator, muslim prayer app, quran reader, dhikr counter, qibla finder, islamic prayer tracker, salah app, muslim app, islamic app, tawfiq download, tawfiq ios, tawfiq android" />
+    <!-- Primary SEO -->
+    <title>Tawfiq | Islamic Prayer Tracker & Salah Companion</title>
+
+    <meta
+      name="description"
+      content="Tawfiq is an Islamic prayer companion for tracking Salah, managing Qaza prayers, reading Quran, performing Dhikr, finding the Qibla, and building consistency in worship."
+    />
+
     <meta name="author" content="Tawfiq" />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#0D3B2A" />
-    
-    <!-- Canonical URL -->
+
+    <!-- Canonical -->
     <link rel="canonical" href="https://tawfiq.in/" />
 
-    <!-- Favicons & App Icons -->
-   <link rel="icon" type="image/png" href="/tawfiq.png" />
-   
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/tawfiq.png" />
 
-    <!-- Open Graph / Facebook -->
+    <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://tawfiq.in/" />
     <meta property="og:site_name" content="Tawfiq" />
-    <meta property="og:title" content="Tawfiq - #1 Islamic Prayer Tracker & Qaza Calculator App" />
-    <meta property="og:description" content="Discover Tawfiq - the #1 Islamic prayer tracker app. Track Salah, calculate Qaza, read Quran, perform Dhikr, find Qibla. Download the official Tawfiq app for iOS & Android." />
+    <meta
+      property="og:title"
+      content="Tawfiq | Islamic Prayer Tracker & Salah Companion"
+    />
+    <meta
+      property="og:description"
+      content="Track Salah, manage Qaza prayers, read Quran, perform Dhikr, find the Qibla, and build consistency in worship with Tawfiq."
+    />
     <meta property="og:image" content="https://tawfiq.in/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Tawfiq Islamic Prayer Companion"
+    />
+    <meta property="og:locale" content="en_US" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Tawfiq | Prayer Tracker & Qaza Calculator" />
-    <meta name="twitter:description" content="Track Salah, calculate Qaza prayers, read Quran, perform Dhikr and grow consistently." />
-    <meta name="twitter:image" content="https://tawfiq.in/og-image.jpg" />
+    <meta
+      name="twitter:title"
+      content="Tawfiq | Islamic Prayer Tracker & Salah Companion"
+    />
+    <meta
+      name="twitter:description"
+      content="Track Salah, manage Qaza prayers, read Quran, perform Dhikr, find the Qibla, and build consistency in worship."
+    />
+    <meta
+      name="twitter:image"
+      content="https://tawfiq.in/og-image.jpg"
+    />
 
-    <!-- Structured Data (JSON-LD) -->
+    <!-- Google Site Name -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Tawfiq",
+        "alternateName": "tawfiq.in",
+        "url": "https://tawfiq.in/"
+      }
+    </script>
+
+    <!-- Tawfiq Web Application -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "WebApplication",
         "name": "Tawfiq",
-        "url": "https://tawfiq.in",
+        "url": "https://tawfiq.in/",
         "applicationCategory": "LifestyleApplication",
         "operatingSystem": "Web",
-        "description": "Islamic prayer tracker with Qaza calculator, Quran, Dhikr and Qibla."
+        "description": "Tawfiq is an Islamic prayer companion for tracking Salah, managing Qaza prayers, reading Quran, performing Dhikr, and finding the Qibla."
+      }
+    </script>
+
+    <!-- Tawfiq Organization + Founder -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://tawfiq.in/#organization",
+            "name": "Tawfiq",
+            "url": "https://tawfiq.in/",
+            "description": "Tawfiq is an Islamic prayer companion for tracking Salah, managing Qaza prayers, reading Quran, performing Dhikr, and finding the Qibla.",
+            "founder": {
+              "@id": "https://tawfiq.in/#founder"
+            }
+          },
+          {
+            "@type": "Person",
+            "@id": "https://tawfiq.in/#founder",
+            "name": "Shaik Wasim Jaffer",
+            "jobTitle": "Founder of Tawfiq",
+            "worksFor": {
+              "@id": "https://tawfiq.in/#organization"
+            },
+            "sameAs": [
+              "https://www.linkedin.com/in/shaik-wasim-jaffer-b8157140a/",
+              "https://github.com/shaikwasimjaffer"
+            ]
+          }
+        ]
       }
     </script>
   </head>
+
   <body>
     <div id="root"></div>
-    <!-- Make sure this path matches your actual entry point (e.g., main.jsx or main.tsx) -->
+
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
