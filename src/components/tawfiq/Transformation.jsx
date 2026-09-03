@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Check } from "lucide-react";
+import { Check, Droplet } from "lucide-react";
 
 export default function Transformation() {
   const beforePoints = [
@@ -45,7 +45,7 @@ export default function Transformation() {
                   key={index}
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  translation={{ duration: 0.5, delay: index * 0.1 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
                   className="flex items-start"
                 >
                   <span className="ml-3 text-gray-500">
@@ -57,11 +57,12 @@ export default function Transformation() {
           </motion.div>
 
           {/* Right Panel: With Tawfiq */}
-          <motion.div
-            initial={{ x: 100, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            translation={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="bg-[#064E3B] rounded-xl p-8 flex flex-col h-full"
+          <div
+            className="bg-[#064E3B] rounded-xl p-8 flex flex-col h-full relative"
+            style={{
+              boxShadow: '0 0 8px 1px rgba(5, 150, 105, 0.15), 0 0 15px 2px rgba(5, 150, 105, 0.08)',
+              position: 'relative'
+            }}
           >
             <h2 className="font-['Newsreader',serif] font-light text-3xl md:text-4xl text-white mb-4">
               With Tawfiq
@@ -75,7 +76,7 @@ export default function Transformation() {
                   key={index}
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  translation={{ duration: 0.5, delay: index * 0.1 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
                   className="flex items-start"
                 >
                   <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 bg-white/20 text-white rounded-full">
@@ -95,10 +96,13 @@ export default function Transformation() {
                 `}
               </style>
             </div>
-          </motion.div>
+            {/* Decorative water droplet icon */}
+            <div className="absolute top-0 right-0 -mt-12 -mr-12">
+              <Droplet className="h-16 w-16 text-white/10" />
+            </div>
+          </div>
         </div>
-
-              </div>
+      </div>
     </section>
   );
 }

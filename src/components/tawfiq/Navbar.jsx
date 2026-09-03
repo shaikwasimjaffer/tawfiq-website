@@ -62,7 +62,6 @@ function NavLink({ item, isActive, onClick }) {
     >
       <span className="relative z-10">{item.label}</span>
 
-      {/* Subtle Active Indicator Dot */}
       {isActive && (
         <motion.div
           layoutId="navActiveDot"
@@ -79,20 +78,16 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
   const [activeItem, setActiveItem] = useState("qaza");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showScanner, setShowScanner] = useState(false);
-
-  // Unified morphing animation state applied to ALL desktop actions
   const [animatingAction, setAnimatingAction] = useState(null);
 
   const location = useLocation();
 
-  // Handle scroll blur effect
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Prevent scrolling when mobile menu, scanner, or contact modal is open
   useEffect(() => {
     if (isMenuOpen || showScanner || showContact) {
       document.body.style.overflow = "hidden";
@@ -101,7 +96,6 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
     }
   }, [isMenuOpen, showScanner, showContact]);
 
-  // Section Observer for Active Dots
   useEffect(() => {
     const observerCallback = (entries) => {
       entries.forEach((entry) => {
@@ -122,8 +116,11 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
       observerOptions,
     );
 
-    navItems.forEach((item) => {
-      const element = document.getElementById(item.id);
+    // Make sure your sections in the DOM have id="before-after" and id="faq"
+    const sectionsToTrack = [...navItems.map(item => item.id), "before-after", "faq"];
+
+    sectionsToTrack.forEach((id) => {
+      const element = document.getElementById(id);
       if (element) {
         observer.observe(element);
       }
@@ -193,14 +190,20 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
     }, 450);
   };
 
-  // Mobile navigation header text switcher based on scroll position
-  const mobileNavText = !scrolled
-    ? "Tawfiq"
-    : navItems.find((item) => item.id === activeItem)?.label || "Tawfiq";
+  // -------------------------------------------------------------
+  // Dynamic mobile navigation header text based on active section
+  // -------------------------------------------------------------
+  let mobileNavText = "Tawfiq";
+  if (activeItem === "faq") {
+    mobileNavText = "FAQ";
+  } else if (activeItem === "before-after") {
+    mobileNavText = "Tawfiq";
+  } else {
+    mobileNavText = navItems.find((item) => item.id === activeItem)?.label || "Tawfiq";
+  }
 
   return (
     <>
-      {/* FLOATING GLASS PILL NAVBAR CONTAINER */}
       <motion.header
         initial={{ y: -30, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -218,13 +221,11 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
               : "bg-white/20 backdrop-blur-xl border border-white/30 shadow-[0_12px_32px_-8px_rgba(5,46,22,0.04),inset_0_1px_1px_rgba(255,255,255,0.5)]"
           }`}
         >
-          {/* Main Content Wrapper */}
           <motion.div
             className="w-full flex items-center justify-between"
             animate={{ opacity: animatingAction ? 0 : 1 }}
             transition={{ duration: 0.3 }}
           >
-            {/* MOBILE LEFT: Menu Icon */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="md:hidden relative z-50 p-2 -ml-2 text-green-950 focus:outline-none cursor-pointer group"
@@ -249,7 +250,6 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
               </div>
             </button>
 
-            {/* LOGO & DYNAMIC MOBILE TITLE */}
             <div className="absolute left-1/2 -translate-x-1/2 md:static md:translate-x-0 z-50">
               <Link
                 to="/"
@@ -283,7 +283,6 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
                   Tawfiq
                 </span>
 
-                {/* MOBILE TEXT: Dynamic Section Tracker */}
                 <div className="block md:hidden overflow-hidden h-6 flex items-center">
                   <AnimatePresence mode="wait">
                     <motion.span
@@ -301,7 +300,6 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
               </Link>
             </div>
 
-            {/* DESKTOP CENTER: Navigation Items */}
             <div className="hidden md:flex items-center gap-1">
               {navItems.map((item) => (
                 <NavLink
@@ -323,12 +321,10 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
               </motion.button>
             </div>
 
-            {/* DESKTOP RIGHT Spacer */}
             <div className="hidden md:block w-[190px]" />
             <div className="block md:hidden w-8" />
           </motion.div>
 
-          {/* DESKTOP RIGHT: The Magic Expanding Pill CTA */}
           <motion.div
             className="hidden md:flex absolute inset-y-0 items-center justify-end z-[60] pointer-events-none"
             animate={{
@@ -339,7 +335,7 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
           >
             <motion.button
               onClick={handleBismillahClick}
-              whileHover={{ y: -1 }} // very small hover movement
+              whileHover={{ y: -1 }}
               className={`group bg-[#15803D] hover:bg-[#146c33] text-white flex items-center justify-center font-['Geist',sans-serif] overflow-hidden pointer-events-auto cursor-pointer shadow-sm border border-white/20 transition-all ${
                 animatingAction ? "" : "px-5 py-3 md:px-6 md:py-3.5"
               }`}
@@ -380,9 +376,6 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
         </nav>
       </motion.header>
 
-      {/* =========================================
-          CONTACT EXPERIENCE OVERLAY
-          ========================================= */}
       <AnimatePresence>
         {showContact && (
           <motion.div
@@ -392,7 +385,6 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className="fixed inset-0 z-[110] bg-[#F0FDF4] overflow-y-auto overflow-x-hidden flex flex-col pt-24 pb-24 px-6 font-['Geist',sans-serif]"
           >
-            {/* Back Button */}
             <motion.button
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -406,9 +398,7 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
               Back to Site
             </motion.button>
 
-            {/* Container */}
             <div className="w-full max-w-3xl mx-auto flex flex-col mt-4 sm:mt-8">
-              {/* Header */}
               <div className="mb-12">
                 <span className="text-[10px] tracking-[0.25em] uppercase text-[#16A34A] font-semibold block mb-3">
                   Support
@@ -424,13 +414,11 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
                 </p>
               </div>
 
-              {/* Conversation Form */}
               <form
                 onSubmit={handleContactSubmit}
                 className={`flex flex-col gap-10 ${shaking ? "animate-bounce" : ""}`}
               >
                 <div className="space-y-12 text-lg sm:text-2xl font-['Newsreader',serif] text-green-900">
-                  {/* Line 1: Name */}
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 flex-wrap">
                     <span className="text-green-700 font-light">
                       Let's get in touch. My name is
@@ -450,7 +438,6 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
                     />
                   </div>
 
-                  {/* Line 2: Email */}
                   <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 flex-wrap">
                     <span className="text-green-700 font-light">
                       You can reply to me at
@@ -470,7 +457,6 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
                     />
                   </div>
 
-                  {/* Line 3: Category Selectors */}
                   <div className="flex flex-col gap-4 pt-2">
                     <span className="text-green-700 font-light text-base sm:text-xl">
                       I'm writing because:
@@ -503,7 +489,6 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
                     </div>
                   </div>
 
-                  {/* Line 4: Dynamic Message Input */}
                   <div className="flex flex-col gap-3 pt-2">
                     <div className="flex items-center justify-between">
                       <span className="text-green-700 font-light text-base sm:text-xl">
@@ -533,7 +518,6 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
                   </div>
                 </div>
 
-                {/* Submit Action */}
                 <div className="pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
                   <motion.button
                     type="submit"
@@ -556,7 +540,6 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
                 </div>
               </form>
 
-              {/* Support Footer */}
               <div className="mt-24 pt-12 border-t border-green-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 text-xs text-green-700 font-['Geist',sans-serif]">
                 <div>
                   <p className="text-green-600 uppercase tracking-widest mb-1 text-[10px]">
@@ -601,9 +584,6 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
         )}
       </AnimatePresence>
 
-      {/* =========================================
-          PREMIUM DOWNLOAD EXPERIENCE OVERLAY
-          ========================================= */}
       <AnimatePresence>
         {showScanner && (
           <motion.div
@@ -613,7 +593,6 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className="fixed inset-0 z-[100] bg-[#F0FDF4] overflow-y-auto overflow-x-hidden flex flex-col items-center pt-24 pb-16 px-6 font-['Geist',sans-serif]"
           >
-            {/* Back Button */}
             <motion.button
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -627,7 +606,6 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
               Back to Site
             </motion.button>
 
-            {/* Cinematic Typography Header Container */}
             <div className="w-full max-w-4xl mx-auto flex flex-col items-center text-center mt-8 sm:mt-12 mb-4">
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
@@ -651,23 +629,43 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
               </motion.p>
             </div>
 
-            {/* Centered QR Code */}
             <div className="w-full max-w-xl mx-auto mt-10 sm:mt-16 flex flex-col items-center justify-center">
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.6, duration: 0.6 }}
-                className="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-green-200/50 mb-8 flex flex-col items-center"
+                className="relative bg-[#16A34A] p-10 sm:p-12 rounded-[2rem] sm:rounded-[2.5rem] shadow-xl mb-8 flex flex-col items-center justify-center overflow-hidden"
               >
-                <img
-                  src={qrImage}
-                  alt="Scan to download"
-                  className="w-56 h-56 sm:w-64 sm:h-64 object-contain mix-blend-multiply"
-                />
+                {/* Top Text */}
+                <div className="absolute top-0 left-0 w-full h-10 sm:h-12 flex items-center justify-center">
+                  <span className="text-white/90 text-[10px] sm:text-[11px] font-['Geist',sans-serif] uppercase tracking-[0.4em] font-semibold pl-[0.4em]">Tawfiq</span>
+                </div>
+                
+                {/* Bottom Text */}
+                <div className="absolute bottom-0 left-0 w-full h-10 sm:h-12 flex items-center justify-center">
+                  <span className="text-white/90 text-[10px] sm:text-[11px] font-['Geist',sans-serif] uppercase tracking-[0.4em] font-semibold pl-[0.4em]">Tawfiq</span>
+                </div>
+                
+                {/* Left Text */}
+                <div className="absolute left-0 top-0 h-full w-10 sm:w-12 flex items-center justify-center">
+                  <span className="-rotate-90 whitespace-nowrap text-white/90 text-[10px] sm:text-[11px] font-['Geist',sans-serif] uppercase tracking-[0.4em] font-semibold pl-[0.4em]">Tawfiq</span>
+                </div>
+                
+                {/* Right Text */}
+                <div className="absolute right-0 top-0 h-full w-10 sm:w-12 flex items-center justify-center">
+                  <span className="rotate-90 whitespace-nowrap text-white/90 text-[10px] sm:text-[11px] font-['Geist',sans-serif] uppercase tracking-[0.4em] font-semibold pl-[0.4em]">Tawfiq</span>
+                </div>
+
+                <div className="bg-white p-3 sm:p-4 rounded-xl sm:rounded-2xl relative z-10 flex items-center justify-center shadow-sm">
+                  <img
+                    src={qrImage}
+                    alt="Scan to download"
+                    className="w-48 h-48 sm:w-56 sm:h-56 object-contain mix-blend-multiply"
+                  />
+                </div>
               </motion.div>
             </div>
 
-            {/* Features & Trust Signals */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -711,9 +709,6 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
         )}
       </AnimatePresence>
 
-      {/* =========================================
-          MOBILE MENU FULLSCREEN OVERLAY
-          ========================================= */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
@@ -759,7 +754,6 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
                 Contact
               </motion.button>
 
-              {/* Elevated Mobile Bismillah CTA */}
               <motion.button
                 onClick={() => {
                   setIsMenuOpen(false);

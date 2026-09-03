@@ -45,23 +45,32 @@ const PRAYERS = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
 const HABITS = ["Never", "Sometimes", "Usually", "Always"];
 
 export default function Qaza() {
+  // Routing State
+  const [isStandalone, setIsStandalone] = useState(false);
+
   // App State
   const [hasEstimated, setHasEstimated] = useState(false);
   const [totalOwed, setTotalOwed] = useState(0);
-
-  // Modal & Wizard State
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalStep, setModalStep] = useState(1);
+
+  // Check if we are in the "New Tab" Full Form view
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.hash === "#qaza-calculator") {
+      setIsStandalone(true);
+      // Lock background scrolling just in case the original page is long
+      document.body.style.overflow = "hidden";
+    }
+  }, []);
 
   // Global Settings
   const [gender, setGender] = useState("");
-  const [currentAge, setCurrentAge] = useState(25);
-  const [pubertyAge, setPubertyAge] = useState(12);
+  const [currentAge, setCurrentAge] = useState(0);
+  const [pubertyAge, setPubertyAge] = useState(0);
   const [subtractMenses, setSubtractMenses] = useState(false);
 
   // Consistency State
   const [prayerStatus, setPrayerStatus] = useState("consistent");
-  const [prayingAge, setPrayingAge] = useState(18);
+  const [prayingAge, setPrayingAge] = useState(0);
 
   // Estimation State
   const [scholarMode, setScholarMode] = useState("moderate");
@@ -73,8 +82,8 @@ export default function Qaza() {
   const [phases, setPhases] = useState([
     {
       id: 1,
-      startAge: 12,
-      endAge: 18,
+      startAge: 0,
+      endAge: 0,
       prayers: {
         Fajr: "Never",
         Dhuhr: "Never",
@@ -86,7 +95,6 @@ export default function Qaza() {
   ]);
 
   // --- Core Validation & Dependency Logic ---
-
   useEffect(() => {
     if (pubertyAge > currentAge) setPubertyAge(currentAge);
     if (prayingAge > currentAge) setPrayingAge(currentAge);
@@ -126,27 +134,6 @@ export default function Qaza() {
       return newP;
     });
   }, [currentAge, pubertyAge, prayingAge, prayerStatus]);
-
-  useEffect(() => {
-    if (isModalOpen) document.body.style.overflow = "hidden";
-    else document.body.style.overflow = "unset";
-
-    // Handle Escape key to close modal
-    const handleEscapeKey = (e) => {
-      if (e.key === "Escape") {
-        setIsModalOpen(false);
-      }
-    };
-
-    if (isModalOpen) {
-      document.addEventListener("keydown", handleEscapeKey);
-    }
-
-    return () => {
-      document.body.style.overflow = "unset";
-      document.removeEventListener("keydown", handleEscapeKey);
-    };
-  }, [isModalOpen]);
 
   // --- Helpers for Phase Management ---
   const handleAddPhase = () => {
@@ -213,7 +200,6 @@ export default function Qaza() {
   // --- Core Calculation Logic ---
   const estimates = useMemo(() => {
     let baseTotal = 0;
-    const breakdowns = [];
     const daysPerYear = gender === "female" && subtractMenses ? 281 : 365;
 
     if (prayerStatus === "never") {
@@ -223,15 +209,6 @@ export default function Qaza() {
         let phaseDebt = totalDays * 5;
         phaseDebt = Math.round(phaseDebt * SCHOLAR_MODIFIERS[scholarMode]);
         baseTotal += phaseDebt;
-
-        breakdowns.push({
-          id: "never-consistent",
-          startAge: pubertyAge,
-          endAge: currentAge,
-          years,
-          days: totalDays,
-          debt: phaseDebt,
-        });
       }
     } else {
       phases.forEach((phase) => {
@@ -249,51 +226,12 @@ export default function Qaza() {
 
         phaseDebt = Math.round(phaseDebt * SCHOLAR_MODIFIERS[scholarMode]);
         baseTotal += phaseDebt;
-
-        breakdowns.push({
-          ...phase,
-          years,
-          days: totalDays,
-          debt: phaseDebt,
-        });
       });
     }
 
     let finalTotal = Math.max(0, baseTotal + manualAdjustment);
-    let conf = 3;
-    let detailPoints = prayerStatus === "consistent" ? phases.length : 2;
-
-    if (prayerStatus === "consistent") {
-      const hasVariedHabits = phases.some((p) =>
-        Object.values(p.prayers).some((h) => h !== "Never"),
-      );
-      if (hasVariedHabits) detailPoints += 1;
-      detailPoints += 1;
-    }
-    if (manualAdjustment !== 0) detailPoints += 1;
-
-    if (detailPoints >= 4) conf = 5;
-    else if (detailPoints >= 2) conf = 4;
-    else conf = 3;
-
-    let spread = 0.12;
-    if (conf === 4) spread = 0.08;
-    if (conf === 5) spread = 0.04;
-
-    const low = Math.floor(finalTotal * (1 - spread));
-    const high = Math.ceil(finalTotal * (1 + spread));
-
-    return { baseTotal, finalTotal, breakdowns, conf, low, high };
-  }, [
-    phases,
-    gender,
-    subtractMenses,
-    scholarMode,
-    manualAdjustment,
-    prayerStatus,
-    currentAge,
-    pubertyAge,
-  ]);
+    return { baseTotal, finalTotal };
+  }, [phases, gender, subtractMenses, scholarMode, manualAdjustment, prayerStatus, currentAge, pubertyAge]);
 
   const activePace = customPace ? parseInt(customPace) || dailyPace : dailyPace;
 
@@ -308,152 +246,55 @@ export default function Qaza() {
   const handleCommitEstimate = () => {
     setTotalOwed(estimates.finalTotal);
     setHasEstimated(true);
-    setIsModalOpen(false);
     setModalStep(1);
-
-    const element = document.getElementById("qaza-tracker");
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    
+    // Scroll the fixed container to top
+    const container = document.getElementById("qaza-standalone-container");
+    if (container) container.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  return (
-    <section
-      id="qaza"
-      className="relative bg-[#F0FDF4] py-24 md:py-32 overflow-hidden selection:bg-[#16A34A] selection:text-white"
-    >
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
-        .custom-scrollbar::-webkit-scrollbar { width: 8px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background-color: #86EFAC;
-            border-radius: 999px;
-            border: 2px solid #F0FDF4;
-            background-clip: padding-box; 
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #22C55E; }
-        .custom-scrollbar { scrollbar-width: thin; scrollbar-color: #86EFAC transparent; }
-        `,
-        }}
-      />
+  const handleOpenFormNewTab = () => {
+    const url = new URL(window.location.href);
+    url.hash = "qaza-calculator";
+    window.open(url.toString(), "_blank", "noopener,noreferrer");
+  };
 
-      {/* 1. Header */}
-      <div className="max-w-4xl mx-auto px-6 md:px-10 pb-12 md:pb-16 text-center">
-        <div className="max-w-2xl mx-auto">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            className="font-['Newsreader',serif] font-light text-[clamp(2.5rem,5vw,5rem)] leading-[1.1] tracking-[-0.02em] text-green-950 mb-6"
-          >
-            Missed prayers don't have to stay{" "}
-            <span className="italic font-normal text-[#16A34A]">
-              unfinished.
-            </span>
-          </motion.h2>
+  // ==========================================
+  // UI: FULL SCREEN FORM (NEW TAB)
+  // ==========================================
+  if (isStandalone) {
+    return (
+      <div 
+        id="qaza-standalone-container"
+        className="fixed inset-0 z-[9999] w-screen h-screen bg-[#F0FDF4] flex flex-col selection:bg-[#16A34A] selection:text-white overflow-y-auto overflow-x-hidden"
+      >
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+            .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+            .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+            .custom-scrollbar::-webkit-scrollbar-thumb {
+                background-color: #86EFAC;
+                border-radius: 999px;
+                border: 2px solid #F0FDF4;
+                background-clip: padding-box; 
+            }
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #22C55E; }
+            .custom-scrollbar { scrollbar-width: thin; scrollbar-color: #86EFAC transparent; }
+          `,
+          }}
+        />
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.2 }}
-            className="flex flex-col items-center space-y-4"
-          >
-            <p className="font-['Manrope'] text-[clamp(1.1rem,1.5vw,1.25rem)] md:text-[clamp(1.25rem,2vw,1.5rem)] text-green-600 leading-[1.7] font-light max-w-xl">
-              Recover your Qaza with clarity, structure, and consistency.
-            </p>
-
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="bg-green-950 text-white font-['Manrope'] font-medium text-[clamp(0.875rem,1.5vw,1rem)] py-3.5 px-6 md:px-8 rounded-full hover:bg-[#16A34A] transition-colors duration-300 shadow-sm font-[clamp(0.875rem,1.5vw,1rem)]"
-            >
-              {hasEstimated ? "Update Estimate" : "Estimate Your Qaza"}
-            </button>
-          </motion.div>
-        </div>
-      </div>
-
-      {/* 2. Tracker Reading */}
-      <AnimatePresence initial={false}>
-        {hasEstimated && (
-          <motion.div
-            id="qaza-tracker"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            transition={{
-              duration: 0.7,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="max-w-2xl mx-auto px-6 md:px-10"
-          >
-            <div className="text-center space-y-6">
-              {/* Eyebrow Label */}
-              <p className="text-[11px] font-['Geist',sans-serif] tracking-[0.25em] uppercase text-green-600 font-semibold">
-                The Journey
-              </p>
-
-              {/* Main Number */}
-              <div className="flex items-baseline gap-4">
-                <AnimatedNumber value={totalOwed} className="font-['Manrope'] font-light text-[clamp(4rem,10vw,6rem)] leading-[0.9] tracking-[-0.02em] text-green-950" />
-                <p className="font-['Manrope'] text-2xl md:text-3xl text-green-700 italic font-light leading-[0.9]">
-                  prayers remain.
-                </p>
-              </div>
-
-              {/* Completion Timeline */}
-              <p className="font-['Manrope'] text-[clamp(1.25rem,2vw,1.5rem)] text-green-900 font-light leading-[1.6] max-w-xl mx-auto">
-                At your current pace, you will complete this journey in{" "}
-                <span className="italic font-normal text-[#16A34A]">
-                  {calculateHorizon(totalOwed)}
-                </span>
-              </p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Luxury Editorial Modal */}
-      <AnimatePresence>
-        {isModalOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsModalOpen(false)}
-              className="fixed inset-0 bg-green-950/60 backdrop-blur-[4px] z-40"
-            />
-
-            <div className="fixed inset-0 flex items-center justify-center p-4 z-50 pointer-events-none">
+        <div className="w-full flex-grow pt-16 pb-24 px-6 md:px-12 lg:px-20">
+          <AnimatePresence mode="wait">
+            {!hasEstimated ? (
               <motion.div
-                initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                className="custom-scrollbar bg-[#F0FDF4] border border-green-200/80 w-full max-w-[36rem] p-6 md:p-8 shadow-2xl relative pointer-events-auto text-left flex flex-col max-h-[90vh] overflow-y-auto"
-                style={{ borderRadius: "0.5rem" }}
+                key="form"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="w-full max-w-6xl mx-auto relative"
               >
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="absolute top-4 right-4 text-green-400 hover:text-green-800 transition-colors z-10 h-8 w-8 flex items-center justify-center rounded-hover:bg-green-100"
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                  </svg>
-                </button>
-
                 <AnimatePresence mode="wait">
                   {/* --- STEP 1 --- */}
                   {modalStep === 1 && (
@@ -464,27 +305,21 @@ export default function Qaza() {
                       exit={{ opacity: 0, x: -20 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <div className="flex justify-between items-center mb-4">
-                        <p className="text-[10px] font-['Geist',sans-serif] tracking-[0.25em] uppercase text-green-500 font-semibold">
-                          Step 1 of 3
-                        </p>
-                      </div>
-
-                      <h3 className="font-['Newsreader',serif] font-medium text-[clamp(1.875rem,3vw,2.25rem)] md:text-[clamp(2.25rem,4vw,2.75rem)] text-green-950 mb-6 tracking-[-0.02em] leading-[1.2]">
+                      <h3 className="font-['Newsreader',serif] font-medium text-[clamp(2.5rem,4vw,3.5rem)] text-green-950 mb-6 tracking-[-0.02em] leading-[1.1]">
                         Estimate Your Missed Prayers
                       </h3>
-                      <p className="font-['Manrope'] text-[clamp(1rem,1.5vw,1.125rem)] text-green-600 leading-[1.7] mb-6">
+                      <p className="font-['Manrope'] text-[clamp(1.125rem,2vw,1.25rem)] text-green-600 leading-[1.7] mb-12 max-w-2xl">
                         Answer a few questions to build an accurate starting point.
                       </p>
 
-                      <div className="space-y-10">
+                      <div className="space-y-12">
                         {/* Core Setup */}
-                        <div className="space-y-6">
+                        <div className="space-y-10">
                           <div className="space-y-4">
-                            <label className="block font-['Manrope'] font-medium text-[clamp(0.875rem,1.5vw,1rem)] text-green-950 mb-3">
+                            <label className="block font-['Manrope'] font-medium text-[clamp(1rem,2vw,1.125rem)] text-green-950 mb-4">
                               Select your gender
                             </label>
-                            <div className="grid grid-cols-2 gap-3">
+                            <div className="grid grid-cols-2 gap-4">
                               {[
                                 { id: "male", label: "Male" },
                                 { id: "female", label: "Female" },
@@ -493,10 +328,9 @@ export default function Qaza() {
                                   key={option.id}
                                   onClick={() => {
                                     setGender(option.id);
-                                    if (option.id === "male")
-                                      setSubtractMenses(false);
+                                    if (option.id === "male") setSubtractMenses(false);
                                   }}
-                                  className={`w-full text-center px-4 py-3 border transition-colors duration-200 font-['Manrope'] text-[clamp(0.875rem,1.5vw,1rem)] cursor-pointer ${
+                                  className={`w-full text-center px-6 py-4 border transition-colors duration-200 font-['Manrope'] text-[clamp(1rem,2vw,1.125rem)] cursor-pointer ${
                                     gender === option.id
                                       ? "border-green-950 bg-green-950/5 text-green-950 font-medium"
                                       : "border-green-200 bg-white/50 text-green-700 hover:border-[#16A34A]"
@@ -516,38 +350,27 @@ export default function Qaza() {
                                 exit={{ opacity: 0, height: 0 }}
                                 className="overflow-hidden"
                               >
-                                <label className="flex items-center gap-3 cursor-pointer group">
+                                <label className="flex items-center gap-4 cursor-pointer group">
                                   <input
                                     type="checkbox"
                                     className="hidden"
                                     checked={subtractMenses}
-                                    onChange={() =>
-                                      setSubtractMenses(!subtractMenses)
-                                    }
+                                    onChange={() => setSubtractMenses(!subtractMenses)}
                                   />
                                   <div
-                                    className={`w-4 h-4 flex items-center justify-center border transition-colors duration-200 ${
+                                    className={`w-5 h-5 flex items-center justify-center border transition-colors duration-200 ${
                                       subtractMenses
                                         ? "border-green-950 bg-green-950"
                                         : "border-green-200 bg-white/50 group-hover:border-[#16A34A]"
                                     }`}
                                   >
                                     {subtractMenses && (
-                                      <svg
-                                        width="12"
-                                        height="12"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="white"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                      >
+                                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                         <polyline points="20 6 9 17 4 12"></polyline>
                                       </svg>
                                     )}
                                   </div>
-                                  <span className="font-['Manrope'] text-[clamp(0.875rem,1.5vw,1rem)] text-green-950">
+                                  <span className="font-['Manrope'] text-[clamp(1rem,2vw,1.125rem)] text-green-950">
                                     Exclude menstruation days
                                   </span>
                                 </label>
@@ -557,82 +380,68 @@ export default function Qaza() {
 
                           {/* Tactile Slider: Current Age */}
                           <div>
-                            <div className="flex justify-between items-center mb-3">
-                              <label className="font-['Manrope'] font-medium text-[clamp(0.875rem,1.5vw,1rem)] text-green-950">
+                            <div className="flex justify-between items-center mb-4">
+                              <label className="font-['Manrope'] font-medium text-[clamp(1rem,2vw,1.125rem)] text-green-950">
                                 Current Age?
                               </label>
-                              <span className="font-['Manrope'] text-[clamp(0.875rem,1.5vw,1rem)] font-semibold text-[#16A34A]">
+                              <span className="font-['Manrope'] text-[clamp(1.125rem,2vw,1.25rem)] font-semibold text-[#16A34A]">
                                 {currentAge}
                               </span>
                             </div>
                             <input
                               type="range"
-                              min="9"
+                              min="0"
                               max="90"
                               step="1"
                               value={currentAge}
-                              onChange={(e) =>
-                                setCurrentAge(Number(e.target.value))
-                              }
-                              className="w-full accent-[#16A34A] bg-green-200 h-1.5 rounded-lg cursor-pointer"
+                              onChange={(e) => setCurrentAge(Number(e.target.value))}
+                              className="w-full accent-[#16A34A] bg-green-200 h-2 rounded-lg cursor-pointer"
                             />
-                            <div className="flex justify-between text-[clamp(0.75rem,1.5vw,0.875rem)] text-green-500 font-['Manrope'] mt-1.5 tracking-wider font-semibold">
-                              <span>9</span>
+                            <div className="flex justify-between text-[clamp(0.875rem,1.5vw,1rem)] text-green-500 font-['Manrope'] mt-2 tracking-wider font-semibold">
+                              <span>0</span>
                               <span>90</span>
                             </div>
                           </div>
 
                           {/* Tactile Slider: Puberty Age */}
                           <div>
-                            <div className="flex justify-between items-center mb-3">
-                              <label className="font-['Manrope'] font-medium text-[clamp(0.875rem,1.5vw,1rem)] text-green-950">
+                            <div className="flex justify-between items-center mb-4">
+                              <label className="font-['Manrope'] font-medium text-[clamp(1rem,2vw,1.125rem)] text-green-950">
                                 Puberty Age?
                               </label>
-                              <span className="font-['Manrope'] text-[clamp(0.875rem,1.5vw,1rem)] font-semibold text-[#16A34A]">
+                              <span className="font-['Manrope'] text-[clamp(1.125rem,2vw,1.25rem)] font-semibold text-[#16A34A]">
                                 {pubertyAge}
                               </span>
                             </div>
                             <input
                               type="range"
-                              min="9"
-                              max={currentAge}
+                              min="0"
+                              max={Math.max(1, currentAge)}
                               step="1"
                               value={pubertyAge}
-                              onChange={(e) =>
-                                setPubertyAge(Number(e.target.value))
-                              }
-                              className="w-full accent-[#16A34A] bg-green-200 h-1.5 rounded-lg cursor-pointer"
+                              onChange={(e) => setPubertyAge(Number(e.target.value))}
+                              className="w-full accent-[#16A34A] bg-green-200 h-2 rounded-lg cursor-pointer"
                             />
-                            <div className="flex justify-between text-[clamp(0.75rem,1.5vw,0.875rem)] text-green-500 font-['Manrope'] mt-1.5 tracking-wider font-semibold">
-                              <span>9</span>
-                              <span>{currentAge}</span>
+                            <div className="flex justify-between text-[clamp(0.875rem,1.5vw,1rem)] text-green-500 font-['Manrope'] mt-2 tracking-wider font-semibold">
+                              <span>0</span>
+                              <span>{Math.max(1, currentAge)}</span>
                             </div>
                           </div>
 
                           {/* Prayer Consistency Logic */}
-                          <div className="pt-2">
-                            <label className="block font-['Manrope'] font-medium text-[clamp(0.875rem,1.5vw,1rem)] text-green-950 mb-3">
+                          <div className="pt-4">
+                            <label className="block font-['Manrope'] font-medium text-[clamp(1rem,2vw,1.125rem)] text-green-950 mb-4">
                               Prayer Consistency
                             </label>
 
-                            <div className="space-y-2 mb-5">
+                            <div className="space-y-3 mb-8">
                               <label
-                                className={`flex items-center gap-3 p-3 border cursor-pointer transition-colors ${
-                                  prayerStatus === "consistent"
-                                    ? "border-green-950 bg-green-950/5 font-medium"
-                                    : "border-green-200 bg-white/50 hover:border-[#16A34A]"
+                                className={`flex items-center gap-4 p-4 border cursor-pointer transition-colors ${
+                                  prayerStatus === "consistent" ? "border-green-950 bg-green-950/5 font-medium" : "border-green-200 bg-white/50 hover:border-[#16A34A]"
                                 }`}
                               >
-                                <div
-                                  className={`w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${
-                                    prayerStatus === "consistent"
-                                      ? "border-green-950"
-                                      : "border-green-400"
-                                  }`}
-                                >
-                                  {prayerStatus === "consistent" && (
-                                    <div className="w-2 h-2 bg-green-950 rounded-full" />
-                                  )}
+                                <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${prayerStatus === "consistent" ? "border-green-950" : "border-green-400"}`}>
+                                  {prayerStatus === "consistent" && <div className="w-2.5 h-2.5 bg-green-950 rounded-full" />}
                                 </div>
                                 <input
                                   type="radio"
@@ -641,28 +450,18 @@ export default function Qaza() {
                                   checked={prayerStatus === "consistent"}
                                   onChange={() => setPrayerStatus("consistent")}
                                 />
-                                <span className="font-['Manrope'] text-[clamp(0.875rem,1.5vw,1rem)] text-green-950">
+                                <span className="font-['Manrope'] text-[clamp(1rem,2vw,1.125rem)] text-green-950">
                                   I began praying consistently
                                 </span>
                               </label>
 
                               <label
-                                className={`flex items-center gap-3 p-3 border cursor-pointer transition-colors ${
-                                  prayerStatus === "never"
-                                    ? "border-green-950 bg-green-950/5 font-medium"
-                                    : "border-green-200 bg-white/50 hover:border-[#16A34A]"
+                                className={`flex items-center gap-4 p-4 border cursor-pointer transition-colors ${
+                                  prayerStatus === "never" ? "border-green-950 bg-green-950/5 font-medium" : "border-green-200 bg-white/50 hover:border-[#16A34A]"
                                 }`}
                               >
-                                <div
-                                  className={`w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${
-                                    prayerStatus === "never"
-                                      ? "border-green-950"
-                                      : "border-green-400"
-                                  }`}
-                                >
-                                  {prayerStatus === "never" && (
-                                    <div className="w-2 h-2 bg-green-950 rounded-full" />
-                                  )}
+                                <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-colors ${prayerStatus === "never" ? "border-green-950" : "border-green-400"}`}>
+                                  {prayerStatus === "never" && <div className="w-2.5 h-2.5 bg-green-950 rounded-full" />}
                                 </div>
                                 <input
                                   type="radio"
@@ -671,58 +470,58 @@ export default function Qaza() {
                                   checked={prayerStatus === "never"}
                                   onChange={() => setPrayerStatus("never")}
                                 />
-                                <span className="font-['Manrope'] text-[clamp(0.875rem,1.5vw,1rem)] text-green-950">
+                                <span className="font-['Manrope'] text-[clamp(1rem,2vw,1.125rem)] text-green-950">
                                   I have never prayed consistently
                                 </span>
                               </label>
                             </div>
 
                             {/* Tactile Slider: Praying Age */}
-                            <div
-                              className={`transition-all duration-300 ${
-                                prayerStatus === "never"
-                                  ? "opacity-30 pointer-events-none grayscale"
-                                  : "opacity-100"
-                              }`}
-                            >
-                              <div className="flex justify-between items-center mb-3">
-                                <label className="font-['Manrope'] font-medium text-[1.1rem] text-green-950">
-                                  When did you begin praying consistently?
-                                </label>
-                                <span className="font-['Manrope'] text-lg font-semibold text-[#16A34A]">
-                                  {prayingAge}
-                                </span>
-                              </div>
-                              <input
-                                type="range"
-                                min={pubertyAge}
-                                max={currentAge}
-                                step="1"
-                                value={prayingAge}
-                                onChange={(e) =>
-                                  setPrayingAge(Number(e.target.value))
-                                }
-                                disabled={prayerStatus === "never"}
-                                className="w-full accent-[#16A34A] bg-green-200 h-1.5 rounded-lg cursor-pointer disabled:cursor-not-allowed"
-                              />
-                              <div className="flex justify-between text-[10px] text-green-500 font-['Manrope'] mt-1.5 tracking-wider font-semibold">
-                                <span>{pubertyAge}</span>
-                                <span>{currentAge}</span>
-                              </div>
-                            </div>
+                            <AnimatePresence>
+                              {prayerStatus === "consistent" && (
+                                <motion.div
+                                  initial={{ opacity: 0, height: 0 }}
+                                  animate={{ opacity: 1, height: "auto" }}
+                                  exit={{ opacity: 0, height: 0 }}
+                                  className="overflow-hidden"
+                                >
+                                  <div className="pb-2">
+                                    <div className="flex justify-between items-center mb-4">
+                                      <label className="font-['Manrope'] font-medium text-[clamp(1rem,2vw,1.125rem)] text-green-950">
+                                        When did you begin praying consistently?
+                                      </label>
+                                      <span className="font-['Manrope'] text-[clamp(1.125rem,2vw,1.25rem)] font-semibold text-[#16A34A]">
+                                        {prayingAge}
+                                      </span>
+                                    </div>
+                                    <input
+                                      type="range"
+                                      min={pubertyAge}
+                                      max={Math.max(pubertyAge + 1, currentAge)}
+                                      step="1"
+                                      value={prayingAge}
+                                      onChange={(e) => setPrayingAge(Number(e.target.value))}
+                                      className="w-full accent-[#16A34A] bg-green-200 h-2 rounded-lg cursor-pointer"
+                                    />
+                                    <div className="flex justify-between text-[clamp(0.875rem,1.5vw,1rem)] text-green-500 font-['Manrope'] mt-2 tracking-wider font-semibold">
+                                      <span>{pubertyAge}</span>
+                                      <span>{Math.max(pubertyAge + 1, currentAge)}</span>
+                                    </div>
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
                           </div>
 
                           {/* Scholar Mode */}
-                          <div className="pt-2">
-                            <div className="flex justify-between items-center mb-3">
-                              <label className="font-['Manrope'] font-medium text-[clamp(0.875rem,1.5vw,1rem)] text-green-950">
+                          <div className="pt-4">
+                            <div className="flex justify-between items-center mb-4">
+                              <label className="font-['Manrope'] font-medium text-[clamp(1rem,2vw,1.125rem)] text-green-950">
                                 Calculation Method
                               </label>
                               <button
-                                onClick={() =>
-                                  setShowScholarInfo(!showScholarInfo)
-                                }
-                                className="text-[clamp(0.75rem,1.5vw,0.875rem)] uppercase tracking-widest font-['Manrope'] text-[#16A34A] hover:text-green-950 underline underline-offset-2 font-semibold cursor-pointer"
+                                onClick={() => setShowScholarInfo(!showScholarInfo)}
+                                className="text-[clamp(0.875rem,1.5vw,1rem)] uppercase tracking-widest font-['Manrope'] text-[#16A34A] hover:text-green-950 underline underline-offset-2 font-semibold cursor-pointer"
                               >
                                 Learn More
                               </button>
@@ -736,43 +535,35 @@ export default function Qaza() {
                                   exit={{ opacity: 0, height: 0 }}
                                   className="overflow-hidden"
                                 >
-                                  <p className="text-[clamp(0.75rem,1.5vw,0.875rem)] text-green-700 font-['Manrope'] mb-3 p-3 bg-white/50 border border-green-200 font-light">
-                                    Provides different estimation models based
-                                    on varying fiqh assumptions. Does not
-                                    dictate which opinion is correct.
+                                  <p className="text-[clamp(0.875rem,1.5vw,1rem)] text-green-700 font-['Manrope'] mb-4 p-4 bg-white/50 border border-green-200 font-light">
+                                    Provides different estimation models based on varying fiqh assumptions. Does not dictate which opinion is correct.
                                   </p>
                                 </motion.div>
                               )}
                             </AnimatePresence>
 
-                            <div className="grid grid-cols-3 gap-2">
-                              {["conservative", "moderate", "maximum"].map(
-                                (mode) => (
-                                  <button
-                                    key={mode}
-                                    onClick={() => setScholarMode(mode)}
-                                    className={`py-3 text-[14px] font-['Manrope'] capitalize border transition-colors cursor-pointer ${
-                                      scholarMode === mode
-                                        ? "border-green-950 bg-green-950/5 font-medium text-green-950"
-                                        : "border-green-200 text-green-700 hover:border-[#16A34A]"
-                                    }`}
-                                  >
-                                    {mode}
-                                  </button>
-                                ),
-                              )}
+                            <div className="grid grid-cols-3 gap-3">
+                              {["conservative", "moderate", "maximum"].map((mode) => (
+                                <button
+                                  key={mode}
+                                  onClick={() => setScholarMode(mode)}
+                                  className={`py-4 text-[clamp(0.875rem,1.5vw,1rem)] font-['Manrope'] capitalize border transition-colors cursor-pointer ${
+                                    scholarMode === mode
+                                      ? "border-green-950 bg-green-950/5 font-medium text-green-950"
+                                      : "border-green-200 text-green-700 hover:border-[#16A34A]"
+                                  }`}
+                                >
+                                  {mode}
+                                </button>
+                              ))}
                             </div>
                           </div>
                         </div>
 
-                        <div className="flex justify-end pt-4 border-t border-green-200">
+                        <div className="flex justify-end pt-8 border-t border-green-200">
                           <button
-                            onClick={() =>
-                              setModalStep(
-                                prayerStatus === "consistent" ? 2 : 3,
-                              )
-                            }
-                            className="bg-green-950 text-white font-['Manrope'] text-[clamp(0.875rem,1.5vw,1rem)] font-medium tracking-tight py-3 px-8 rounded-full hover:bg-[#16A34A] transition-colors duration-300 shadow-sm cursor-pointer"
+                            onClick={() => setModalStep(prayerStatus === "consistent" ? 2 : 3)}
+                            className="bg-green-950 text-white font-['Manrope'] text-[clamp(1rem,1.5vw,1.125rem)] font-medium tracking-tight py-4 px-10 rounded-full hover:bg-[#16A34A] transition-colors duration-300 shadow-sm cursor-pointer"
                           >
                             Next Step
                           </button>
@@ -790,52 +581,35 @@ export default function Qaza() {
                       exit={{ opacity: 0, x: -20 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <div className="flex justify-between items-center mb-4">
-                        <p className="text-[10px] font-['Geist',sans-serif] tracking-[0.25em] uppercase text-green-500 font-semibold">
-                          Step 2 of 3
-                        </p>
-                      </div>
-
-                      <h3 className="font-['Newsreader',serif] font-medium text-[clamp(1.875rem,3vw,2.25rem)] md:text-[clamp(2.25rem,4vw,2.75rem)] text-green-950 mb-6 tracking-[-0.02em] leading-[1.2]">
+                      <h3 className="font-['Newsreader',serif] font-medium text-[clamp(2.5rem,4vw,3.5rem)] text-green-950 mb-6 tracking-[-0.02em] leading-[1.1]">
                         Detail Your Journey
                       </h3>
-                      <p className="font-['Manrope'] text-[clamp(1rem,1.5vw,1.125rem)] text-green-600 leading-[1.7] mb-6">
-                        Break down the years between {pubertyAge} and{" "}
-                        {prayingAge} to reflect when your habits changed.
+                      <p className="font-['Manrope'] text-[clamp(1.125rem,2vw,1.25rem)] text-green-600 leading-[1.7] mb-12 max-w-2xl">
+                        Break down the years between {pubertyAge} and {prayingAge} to reflect when your habits changed.
                       </p>
 
-                      <div className="space-y-6">
+                      <div className="space-y-8">
                         {phases.map((phase, index) => (
-                          <div
-                            key={phase.id}
-                            className="p-5 border border-green-200 bg-white/50 relative"
-                          >
+                          <div key={phase.id} className="p-6 md:p-8 border border-green-200 bg-white/50 relative">
                             {phases.length > 1 && (
                               <button
                                 onClick={() => handleDeletePhase(index)}
-                                className="absolute top-4 right-4 text-green-500 hover:text-red-500 transition-colors"
+                                className="absolute top-6 right-6 text-green-500 hover:text-red-500 transition-colors"
                               >
-                                <svg
-                                  width="16"
-                                  height="16"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="2"
-                                >
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                   <line x1="18" y1="6" x2="6" y2="18"></line>
                                   <line x1="6" y1="6" x2="18" y2="18"></line>
                                 </svg>
                               </button>
                             )}
 
-                            <h4 className="font-['Manrope'] text-[clamp(1rem,1.5vw,1.125rem)] font-medium text-green-950 mb-4">
+                            <h4 className="font-['Manrope'] text-[clamp(1.125rem,2vw,1.25rem)] font-medium text-green-950 mb-6">
                               Ages {phase.startAge} to {phase.endAge}
                             </h4>
 
                             {index < phases.length - 1 && (
-                              <div className="mb-6">
-                                <label className="block text-[clamp(0.75rem,1.5vw,0.875rem)] text-green-800 mb-2">
+                              <div className="mb-8">
+                                <label className="block text-[clamp(0.875rem,1.5vw,1rem)] text-green-800 mb-3">
                                   Adjust End Age
                                 </label>
                                 <input
@@ -844,33 +618,22 @@ export default function Qaza() {
                                   max={phases[index + 1].endAge - 1}
                                   step="1"
                                   value={phase.endAge}
-                                  onChange={(e) =>
-                                    updatePhaseBoundary(index, e.target.value)
-                                  }
-                                  className="w-full accent-[#16A34A] bg-green-200 h-1.5 rounded-lg cursor-pointer"
+                                  onChange={(e) => updatePhaseBoundary(index, e.target.value)}
+                                  className="w-full accent-[#16A34A] bg-green-200 h-2 rounded-lg cursor-pointer"
                                 />
                               </div>
                             )}
 
-                            <div className="space-y-3">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               {PRAYERS.map((prayer) => (
-                                <div
-                                  key={prayer}
-                                  className="flex justify-between items-center bg-[#F0FDF4] p-2 px-3 border border-green-100"
-                                >
-                                  <span className="font-['Manrope'] font-medium text-green-900 text-[clamp(0.875rem,1.5vw,1rem)]">
+                                <div key={prayer} className="flex justify-between items-center bg-[#F0FDF4] p-3 px-4 border border-green-100">
+                                  <span className="font-['Manrope'] font-medium text-green-900 text-[clamp(1rem,1.5vw,1.125rem)]">
                                     {prayer}
                                   </span>
                                   <select
                                     value={phase.prayers[prayer]}
-                                    onChange={(e) =>
-                                      updatePrayerHabit(
-                                        index,
-                                        prayer,
-                                        e.target.value,
-                                      )
-                                    }
-                                    className="bg-transparent text-[clamp(0.875rem,1.5vw,1rem)] text-green-800 font-['Manrope'] outline-none cursor-pointer"
+                                    onChange={(e) => updatePrayerHabit(index, prayer, e.target.value)}
+                                    className="bg-transparent text-[clamp(1rem,1.5vw,1.125rem)] text-green-800 font-['Manrope'] outline-none cursor-pointer"
                                   >
                                     {HABITS.map((habit) => (
                                       <option key={habit} value={habit}>
@@ -886,21 +649,21 @@ export default function Qaza() {
 
                         <button
                           onClick={handleAddPhase}
-                          className="w-full py-3 border border-dashed border-green-400 text-green-700 font-['Manrope'] text-[14px] hover:bg-green-100 transition-colors"
+                          className="w-full py-4 border border-dashed border-green-400 text-green-700 font-['Manrope'] text-[clamp(1rem,1.5vw,1.125rem)] hover:bg-green-100 transition-colors"
                         >
                           + Split into another phase
                         </button>
 
-                        <div className="flex justify-between pt-6 border-t border-green-200">
+                        <div className="flex justify-between pt-8 border-t border-green-200">
                           <button
                             onClick={() => setModalStep(1)}
-                            className="text-green-700 font-['Manrope'] text-[clamp(0.875rem,1.5vw,1rem)] font-medium hover:text-green-950 transition-colors"
+                            className="text-green-700 font-['Manrope'] text-[clamp(1rem,1.5vw,1.125rem)] font-medium hover:text-green-950 transition-colors"
                           >
                             Back
                           </button>
                           <button
                             onClick={() => setModalStep(3)}
-                            className="bg-green-950 text-white font-['Manrope'] text-[clamp(0.875rem,1.5vw,1rem)] font-medium tracking-tight py-3 px-8 rounded-full hover:bg-[#16A34A] transition-colors duration-300 shadow-sm"
+                            className="bg-green-950 text-white font-['Manrope'] text-[clamp(1rem,1.5vw,1.125rem)] font-medium tracking-tight py-4 px-10 rounded-full hover:bg-[#16A34A] transition-colors duration-300 shadow-sm"
                           >
                             Next Step
                           </button>
@@ -918,49 +681,38 @@ export default function Qaza() {
                       exit={{ opacity: 0, x: -20 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <div className="flex justify-between items-center mb-4">
-                        <p className="text-[10px] font-['Geist',sans-serif] tracking-[0.25em] uppercase text-green-500 font-semibold">
-                          Step 3 of 3
-                        </p>
-                      </div>
-
-                      <h3 className="font-['Newsreader',serif] font-medium text-[clamp(1.875rem,3vw,2.25rem)] md:text-[clamp(2.25rem,4vw,2.75rem)] text-green-950 mb-6 tracking-[-0.02em] leading-[1.2]">
+                      <h3 className="font-['Newsreader',serif] font-medium text-[clamp(2.5rem,4vw,3.5rem)] text-green-950 mb-6 tracking-[-0.02em] leading-[1.1]">
                         Pace & Refinement
                       </h3>
-                      <p className="font-['Manrope'] text-[clamp(1rem,1.5vw,1.125rem)] text-green-600 leading-[1.7] mb-6">
-                        Finalize your plan by setting your daily recovery pace
-                        and any manual adjustments.
+                      <p className="font-['Manrope'] text-[clamp(1.125rem,2vw,1.25rem)] text-green-600 leading-[1.7] mb-12 max-w-2xl">
+                        Finalize your plan by setting your daily recovery pace and any manual adjustments.
                       </p>
 
-                      <div className="space-y-8">
+                      <div className="space-y-10">
                         <div>
-                          <label className="block font-['Manrope'] font-medium text-[clamp(0.875rem,1.5vw,1rem)] text-green-950 mb-3">
+                          <label className="block font-['Manrope'] font-medium text-[clamp(1rem,2vw,1.125rem)] text-green-950 mb-3">
                             Manual Adjustment (Optional)
                           </label>
-                          <p className="text-[clamp(0.75rem,1.5vw,0.875rem)] text-green-600 mb-3">
-                            Add or subtract specific prayers if you have
-                            previously made some up.
+                          <p className="text-[clamp(0.875rem,1.5vw,1rem)] text-green-600 mb-4">
+                            Add or subtract specific prayers if you have previously made some up.
                           </p>
                           <input
                             type="number"
                             value={manualAdjustment}
-                            onChange={(e) =>
-                              setManualAdjustment(Number(e.target.value))
-                            }
-                            className="w-full bg-white/50 border border-green-200 p-3 font-['Manrope'] text-green-950 text-[clamp(0.875rem,1.5vw,1rem)] outline-none focus:border-[#16A34A]"
+                            onChange={(e) => setManualAdjustment(Number(e.target.value))}
+                            className="w-full bg-white/50 border border-green-200 p-4 font-['Manrope'] text-green-950 text-[clamp(1rem,1.5vw,1.125rem)] outline-none focus:border-[#16A34A]"
                             placeholder="e.g. -500"
                           />
                         </div>
 
                         <div>
-                          <label className="block font-['Manrope'] font-medium text-[clamp(0.875rem,1.5vw,1rem)] text-green-950 mb-3">
+                          <label className="block font-['Manrope'] font-medium text-[clamp(1rem,2vw,1.125rem)] text-green-950 mb-3">
                             Daily Pace
                           </label>
-                          <p className="text-[clamp(0.75rem,1.5vw,0.875rem)] text-green-600 mb-3">
-                            How many Qaza prayers do you plan to make up each
-                            day?
+                          <p className="text-[clamp(0.875rem,1.5vw,1rem)] text-green-600 mb-4">
+                            How many Qaza prayers do you plan to make up each day?
                           </p>
-                          <div className="grid grid-cols-4 gap-2 mb-3">
+                          <div className="grid grid-cols-4 gap-3 mb-4">
                             {[1, 3, 5, 10].map((pace) => (
                               <button
                                 key={pace}
@@ -968,7 +720,7 @@ export default function Qaza() {
                                   setDailyPace(pace);
                                   setCustomPace("");
                                 }}
-                                className={`py-2 text-[clamp(0.875rem,1.5vw,1rem)] font-['Manrope'] border transition-colors ${
+                                className={`py-4 text-[clamp(1rem,1.5vw,1.125rem)] font-['Manrope'] border transition-colors ${
                                   dailyPace === pace && !customPace
                                     ? "border-green-950 bg-green-950/5 font-medium text-green-950"
                                     : "border-green-200 text-green-700 hover:border-[#16A34A]"
@@ -982,25 +734,21 @@ export default function Qaza() {
                             type="number"
                             value={customPace}
                             onChange={(e) => setCustomPace(e.target.value)}
-                            className="w-full bg-white/50 border border-green-200 p-3 font-['Manrope'] text-green-950 text-[clamp(0.875rem,1.5vw,1rem)] outline-none focus:border-[#16A34A]"
+                            className="w-full bg-white/50 border border-green-200 p-4 font-['Manrope'] text-green-950 text-[clamp(1rem,1.5vw,1.125rem)] outline-none focus:border-[#16A34A]"
                             placeholder="Or enter a custom number..."
                           />
                         </div>
 
-                        <div className="flex justify-between pt-6 border-t border-green-200">
+                        <div className="flex justify-between pt-8 border-t border-green-200">
                           <button
-                            onClick={() =>
-                              setModalStep(
-                                prayerStatus === "consistent" ? 2 : 1,
-                              )
-                            }
-                            className="text-green-700 font-['Manrope'] text-[clamp(0.875rem,1.5vw,1rem)] font-medium hover:text-green-950 transition-colors"
+                            onClick={() => setModalStep(prayerStatus === "consistent" ? 2 : 1)}
+                            className="text-green-700 font-['Manrope'] text-[clamp(1rem,1.5vw,1.125rem)] font-medium hover:text-green-950 transition-colors"
                           >
                             Back
                           </button>
                           <button
                             onClick={handleCommitEstimate}
-                            className="bg-[#16A34A] text-white font-['Manrope'] text-[clamp(0.875rem,1.5vw,1rem)] font-medium tracking-tight py-3 px-8 rounded-full hover:bg-green-600 transition-colors duration-300 shadow-sm"
+                            className="bg-[#16A34A] text-white font-['Manrope'] text-[clamp(1rem,1.5vw,1.125rem)] font-medium tracking-tight py-4 px-10 rounded-full hover:bg-green-600 transition-colors duration-300 shadow-sm"
                           >
                             Finalize Estimate
                           </button>
@@ -1010,10 +758,88 @@ export default function Qaza() {
                   )}
                 </AnimatePresence>
               </motion.div>
-            </div>
-          </>
-        )}
-      </AnimatePresence>
+            ) : (
+              // --- RESULT TRACKER (NEW TAB) ---
+              <motion.div
+                key="result"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="w-full max-w-4xl mx-auto text-center"
+              >
+                <div className="space-y-12 py-16">
+                  <p className="text-xs md:text-sm font-['Geist',sans-serif] tracking-[0.25em] uppercase text-green-600 font-semibold">
+                    The Journey
+                  </p>
+
+                  <div className="flex flex-col md:flex-row items-center md:items-baseline justify-center gap-4 md:gap-6">
+                    <span className="font-['Newsreader',serif] font-medium text-[clamp(5rem,10vw,8rem)] leading-none tracking-[-0.04em] text-green-950">
+                      <AnimatedNumber value={totalOwed} />
+                    </span>
+                    <span className="font-['Manrope'] text-[clamp(1.5rem,2.5vw,2.25rem)] text-green-700 italic font-light">
+                      prayers remain.
+                    </span>
+                  </div>
+
+                  <p className="font-['Manrope'] text-[clamp(1.25rem,2vw,1.5rem)] text-green-900 font-light leading-relaxed max-w-2xl mx-auto">
+                    At your current pace, you will complete this journey in{" "}
+                    <span className="italic font-medium text-[#16A34A]">
+                      {calculateHorizon(totalOwed)}
+                    </span>
+                  </p>
+                  
+                  <div className="pt-8">
+                    <button
+                      onClick={() => setHasEstimated(false)}
+                      className="bg-green-950 text-white font-['Manrope'] text-[clamp(1rem,1.5vw,1.125rem)] py-4 px-10 rounded-full hover:bg-[#16A34A] transition-colors duration-300 shadow-sm"
+                    >
+                      Recalculate Estimate
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+    );
+  }
+
+  // ==========================================
+  // UI: LANDING PAGE SECTION
+  // ==========================================
+  return (
+    <section id="qaza" className="relative bg-[#F0FDF4] py-24 md:py-32 overflow-hidden selection:bg-[#16A34A] selection:text-white">
+      <div className="max-w-4xl mx-auto px-6 md:px-10 pb-12 md:pb-16 text-center">
+        <div className="max-w-2xl mx-auto">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="font-['Newsreader',serif] font-light text-3xl sm:text-5xl lg:text-6xl leading-[1.1] tracking-[-0.02em] text-green-950 mb-6"
+          >
+            Missed prayers don't have to stay{" "}
+            <span className="italic font-normal text-[#16A34A]">unfinished.</span>
+          </motion.h2>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.2 }}
+            className="flex flex-col items-center space-y-4"
+          >
+            <p className="font-['Manrope'] text-[clamp(1.1rem,1.5vw,1.25rem)] md:text-[clamp(1.25rem,2vw,1.5rem)] text-green-600 leading-[1.7] font-light max-w-xl">
+              Recover your Qaza with clarity, structure, and consistency.
+            </p>
+
+            <button
+              onClick={handleOpenFormNewTab}
+              className="bg-green-950 text-white font-['Manrope'] font-medium text-[clamp(0.875rem,1.5vw,1rem)] py-3.5 px-6 md:px-8 rounded-full hover:bg-[#16A34A] transition-colors duration-300 shadow-sm font-[clamp(0.875rem,1.5vw,1rem)]"
+            >
+              Estimate Your Qaza
+            </button>
+          </motion.div>
+        </div>
+      </div>
     </section>
   );
 }
