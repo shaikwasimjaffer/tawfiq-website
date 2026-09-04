@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
-import emailjs from "@emailjs/browser";
 
 // Note: Ensure this path correctly points to your QR image
 import qrImage from "../../assets/qr code.png";
@@ -107,7 +106,7 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
 
     const observerOptions = {
       root: null,
-      rootMargin: "-80px 0px -60% 0px",
+      rootMargin: "-100px 0px -50% 0px",
       threshold: 0,
     };
 
@@ -116,7 +115,6 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
       observerOptions,
     );
 
-    // Make sure your sections in the DOM have id="before-after" and id="faq"
     const sectionsToTrack = [...navItems.map(item => item.id), "before-after", "faq"];
 
     sectionsToTrack.forEach((id) => {
@@ -130,43 +128,32 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
   }, []);
 
   const handleLogoClick = (e) => {
-    if (location.pathname === "/") {
-      e.preventDefault();
-      if (animatingAction) return;
-      setAnimatingAction({ type: "logo", label: "Tawfiq" });
+    e.preventDefault();
+    
+    setIsMenuOpen(false);
+    setShowScanner(false);
+    setShowContact(false);
 
-      setTimeout(() => {
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth",
-        });
-        setIsMenuOpen(false);
-        setShowScanner(false);
-        setShowContact(false);
-
-        setTimeout(() => setAnimatingAction(null), 400);
-      }, 450);
-    }
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   const handleNavClick = (e, item) => {
-    if (location.pathname === "/") {
-      e.preventDefault();
-      if (animatingAction) return;
+    e.preventDefault();
+    
+    setActiveItem(item.id);
 
-      setAnimatingAction({ type: "nav", label: item.label });
+    if (isMenuOpen) setIsMenuOpen(false);
 
-      setTimeout(() => {
-        const element = document.getElementById(item.id);
-        if (element) {
-          const yOffset = -80;
-          const y =
-            element.getBoundingClientRect().top + window.scrollY + yOffset;
-          window.scrollTo({ top: y, behavior: "smooth" });
-        }
-
-        setTimeout(() => setAnimatingAction(null), 400);
-      }, 450);
+    const element = document.getElementById(item.id);
+    if (element) {
+      const yOffset = -80;
+      const y = element.getBoundingClientRect().top + window.scrollY + yOffset;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    } else {
+      window.location.href = `/${item.href}`;
     }
   };
 
@@ -190,9 +177,6 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
     }, 450);
   };
 
-  // -------------------------------------------------------------
-  // Dynamic mobile navigation header text based on active section
-  // -------------------------------------------------------------
   let mobileNavText = "Tawfiq";
   if (activeItem === "faq") {
     mobileNavText = "FAQ";
@@ -335,10 +319,7 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
           >
             <motion.button
               onClick={handleBismillahClick}
-              whileHover={{ y: -1 }}
-              className={`group bg-[#15803D] hover:bg-[#146c33] text-white flex items-center justify-center font-['Geist',sans-serif] overflow-hidden pointer-events-auto cursor-pointer shadow-sm border border-white/20 transition-all ${
-                animatingAction ? "" : "px-5 py-3 md:px-6 md:py-3.5"
-              }`}
+              className="group relative inline-flex items-center justify-center overflow-hidden rounded-full p-[1px] pointer-events-auto cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_rgba(22,163,74,0.4)]"
               animate={{
                 width: animatingAction ? "100%" : "auto",
                 height: animatingAction ? "100%" : "auto",
@@ -346,31 +327,55 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
               }}
               transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
             >
-              <AnimatePresence mode="wait">
-                {animatingAction ? (
-                  <motion.span
-                    key="animating-text"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.2, delay: 0.15 }}
-                    className="font-['Newsreader',serif] font-light italic text-2xl text-white tracking-wide"
-                  >
-                    {animatingAction.label}
-                  </motion.span>
-                ) : (
-                  <motion.div
-                    key="begin"
-                    exit={{ opacity: 0, filter: "blur(4px)" }}
-                    transition={{ duration: 0.2 }}
-                    className="flex items-center gap-3 text-[14px] md:text-[15px] font-medium tracking-tight whitespace-nowrap"
-                  >
-                    <span className="font-serif text-[16px] md:text-[18px] opacity-90 leading-none pt-0.5" dir="rtl">
-                      بسم الله
-                    </span>
-                    <span>Bismillah</span>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {/* Spinning Border Beam (Visible on Hover) */}
+              <span className="absolute inset-[-100%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_75%,#ffffff_100%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              
+              {/* Default Static Border */}
+              <span className="absolute inset-0 rounded-full border border-white/20 transition-opacity duration-300 group-hover:opacity-0" />
+              
+              {/* Inner 3D Button Content */}
+              <span className={`relative z-10 flex items-center justify-center w-full h-full rounded-full bg-gradient-to-b from-[#16A34A] to-[#15803D] shadow-[inset_0_1px_0_rgba(255,255,255,0.3)] text-white font-['Geist',sans-serif] transition-all ${
+                animatingAction ? "" : "px-5 py-3 md:px-6 md:py-3.5"
+              }`}>
+                <AnimatePresence mode="wait">
+                  {animatingAction ? (
+                    <motion.span
+                      key="animating-text"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.2, delay: 0.15 }}
+                      className="font-['Newsreader',serif] font-light italic text-2xl text-white tracking-wide"
+                    >
+                      {animatingAction.label}
+                    </motion.span>
+                  ) : (
+                    <motion.div
+                      key="begin"
+                      exit={{ opacity: 0, filter: "blur(4px)" }}
+                      transition={{ duration: 0.2 }}
+                      className="relative flex items-center justify-center text-[14px] md:text-[15px] font-medium tracking-tight whitespace-nowrap"
+                    >
+                      <div className="flex items-center gap-3 transition-opacity duration-300 group-hover:opacity-0 absolute">
+                        <span className="font-serif text-[16px] md:text-[18px] opacity-90 leading-none pt-0.5" dir="rtl">
+                          بسم الله
+                        </span>
+                        <span>Bismillah</span>
+                      </div>
+
+                      <div className="flex items-center gap-3 transition-opacity duration-300 opacity-0 group-hover:opacity-100 absolute">
+                        <span>Try Tawfiq</span>
+                      </div>
+
+                      <div className="flex items-center gap-3 invisible pointer-events-none">
+                        <span className="font-serif text-[16px] md:text-[18px] opacity-90 leading-none pt-0.5" dir="rtl">
+                          بسم الله
+                        </span>
+                        <span>Bismillah</span>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </span>
             </motion.button>
           </motion.div>
         </nav>
@@ -723,7 +728,7 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
                 <motion.a
                   key={item.id}
                   href={item.href}
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={(e) => handleNavClick(e, item)}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{
@@ -766,11 +771,18 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
                   duration: 0.5,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                whileHover={{ y: -1 }}
-                className="mt-4 flex items-center justify-center gap-3 px-6 py-3.5 bg-[#15803D] hover:bg-[#146c33] text-white rounded-full font-['Geist',sans-serif] font-medium tracking-tight cursor-pointer border border-white/20 shadow-sm transition-all"
+                className="group mt-4 relative inline-flex items-center justify-center overflow-hidden rounded-full p-[1px] cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_rgba(22,163,74,0.4)]"
               >
-                <span className="font-serif text-[18px] opacity-90 leading-none pt-0.5" dir="rtl">بسم الله</span>
-                <span className="text-[16px]">Bismillah</span>
+                {/* Spinning Border Beam (Visible on Hover) */}
+                <span className="absolute inset-[-100%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_75%,#ffffff_100%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                
+                {/* Default Static Border */}
+                <span className="absolute inset-0 rounded-full border border-white/20 transition-opacity duration-300 group-hover:opacity-0" />
+
+                {/* Inner 3D Button Content */}
+                <span className="relative z-10 flex items-center justify-center w-full h-full rounded-full px-8 py-3.5 bg-gradient-to-b from-[#16A34A] to-[#15803D] shadow-[inset_0_1px_0_rgba(255,255,255,0.3)] text-white font-['Geist',sans-serif] font-medium tracking-tight">
+                  <span className="text-[16px]">Try Tawfiq</span>
+                </span>
               </motion.button>
             </div>
 

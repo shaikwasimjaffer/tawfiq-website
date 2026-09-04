@@ -769,7 +769,6 @@ const faqs = [
 // COMPONENT: FAQ SECTION
 // ==========================================
 function FAQSection() {
-  // Changed initial state from 0 to null so all accordions start closed
   const [openIndex, setOpenIndex] = useState(null);
 
   const toggleFAQ = (index) => {
@@ -779,18 +778,15 @@ function FAQSection() {
   return (
     <section className="w-full bg-[#F0FDF4] py-24 px-4 sm:px-6 lg:px-8 font-['Geist',sans-serif]">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-start">
-        {/* Left Column: Title (Removed sticky properties to let it scroll up naturally) */}
         <div className="lg:col-span-4">
           <div className="relative inline-block">
             <h2 className="font-['Newsreader',serif] font-light text-6xl md:text-7xl text-green-950 tracking-tight">
               FAQ
             </h2>
-            {/* Custom thick underline replicating the screenshot's style */}
             <div className="absolute -bottom-2 left-0 w-full h-1.5 bg-green-950 rounded-full" />
           </div>
         </div>
 
-        {/* Right Column: Accordions */}
         <div className="lg:col-span-8 flex flex-col gap-4">
           {faqs.map((faq, index) => {
             const isOpen = openIndex === index;
@@ -858,50 +854,58 @@ function FAQSection() {
 }
 
 // ==========================================
-// COMPONENT: BREATHING VERSES SECTION
+// COMPONENT: BREATHING VERSES SECTION (MARQUEE)
 // ==========================================
 function BreathingVersesSection() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  // Automatically cycle through the verses every 6 seconds
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % verses.length);
-    }, 6000);
-    return () => clearInterval(timer);
-  }, []);
+  // Duplicate verses to create a seamless infinite loop
+  const duplicatedVerses = [...verses, ...verses];
 
   return (
-    <section className="relative bg-[#F0FDF4] py-10 md:py-14 overflow-hidden flex items-center justify-center">
-      <div className="relative max-w-3xl mx-auto px-6 text-center w-full">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentIndex}
-            initial={{ x: 50 }}
-            animate={{ x: 0 }}
-            exit={{ x: -50 }}
-            transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
-            className="flex flex-col items-center"
+    <section className="relative bg-[#F0FDF4] py-20 overflow-hidden flex items-center">
+      {/* Injecting CSS for the marquee */}
+      <style>
+        {`
+          @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+          }
+          .marquee-content {
+            display: flex;
+            width: max-content;
+            /* SLOWED DOWN: 900s for a very relaxed reading pace */
+            animation: marquee 900s linear infinite;
+          }
+          .marquee-content:hover {
+            animation-play-state: paused;
+          }
+        `}
+      </style>
+
+      <div className="marquee-content cursor-pointer">
+        {duplicatedVerses.map((verse, index) => (
+          <div
+            key={index}
+            className="flex flex-col items-center justify-center text-center px-12 md:px-24 w-[90vw] md:w-[800px]"
           >
             {/* Eyebrow Label */}
-            <p className="text-[11px] font-['Geist',sans-serif] tracking-[0.25em] uppercase text-green-600 mb-16 md:mb-20 font-semibold">
-              {verses[currentIndex].reference}
+            <p className="text-[11px] font-['Geist',sans-serif] tracking-[0.25em] uppercase text-green-600 mb-8 md:mb-12 font-semibold">
+              {verse.reference}
             </p>
 
             {/* Arabic Text */}
             <p
-              className="font-arabic text-[clamp(2rem,6vw,4.25rem)] leading-[1.9] text-green-950"
+              className="font-arabic text-[clamp(2rem,4vw,3.5rem)] leading-[1.9] text-green-950"
               dir="rtl"
             >
-              {verses[currentIndex].arabic}
+              {verse.arabic}
             </p>
 
             {/* English Translation */}
-            <p className="font-['Newsreader',serif] text-xl md:text-2xl italic font-light text-green-700 leading-relaxed mt-4 md:mt-6">
-              {verses[currentIndex].english}
+            <p className="font-['Newsreader',serif] text-lg md:text-xl italic font-light text-green-700 leading-relaxed mt-4 md:mt-6">
+              {verse.english}
             </p>
-          </motion.div>
-        </AnimatePresence>
+          </div>
+        ))}
       </div>
     </section>
   );

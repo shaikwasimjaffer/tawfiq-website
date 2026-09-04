@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence, animate } from "framer-motion";
+import { Sparkles } from "lucide-react";
 
 // Premium Number Animation Hook
 function AnimatedNumber({ value }) {
@@ -52,6 +53,9 @@ export default function Qaza() {
   const [hasEstimated, setHasEstimated] = useState(false);
   const [totalOwed, setTotalOwed] = useState(0);
   const [modalStep, setModalStep] = useState(1);
+  
+  // Button State
+  const [isClicked, setIsClicked] = useState(false);
 
   // Check if we are in the "New Tab" Full Form view
   useEffect(() => {
@@ -254,9 +258,14 @@ export default function Qaza() {
   };
 
   const handleOpenFormNewTab = () => {
-    const url = new URL(window.location.href);
-    url.hash = "qaza-calculator";
-    window.open(url.toString(), "_blank", "noopener,noreferrer");
+    // Add glow click effect before opening
+    setIsClicked(true);
+    setTimeout(() => {
+      setIsClicked(false);
+      const url = new URL(window.location.href);
+      url.hash = "qaza-calculator";
+      window.open(url.toString(), "_blank", "noopener,noreferrer");
+    }, 200);
   };
 
   // ==========================================
@@ -827,16 +836,28 @@ export default function Qaza() {
             transition={{ duration: 1, delay: 0.2 }}
             className="flex flex-col items-center space-y-4"
           >
-            <p className="font-['Manrope'] text-[clamp(1.1rem,1.5vw,1.25rem)] md:text-[clamp(1.25rem,2vw,1.5rem)] text-green-600 leading-[1.7] font-light max-w-xl">
+            <p className="font-['Manrope'] text-[clamp(1.1rem,1.5vw,1.25rem)] md:text-[clamp(1.25rem,2vw,1.5rem)] text-green-600 leading-[1.7] font-light max-w-xl mb-4">
               Recover your Qaza with clarity, structure, and consistency.
             </p>
 
-            <button
-              onClick={handleOpenFormNewTab}
-              className="bg-green-950 text-white font-['Manrope'] font-medium text-[clamp(0.875rem,1.5vw,1rem)] py-3.5 px-6 md:px-8 rounded-full hover:bg-[#16A34A] transition-colors duration-300 shadow-sm font-[clamp(0.875rem,1.5vw,1rem)]"
-            >
-              Estimate Your Qaza
-            </button>
+            <div className="relative group inline-flex items-center justify-center pt-2">
+              <div 
+                className={`absolute inset-0 bg-[#16A34A] rounded-full blur-md transition-all duration-300 pointer-events-none mt-2 ${
+                  isClicked ? "opacity-100 scale-110" : "opacity-0 group-hover:opacity-60"
+                }`} 
+              />
+              
+              <button
+                onClick={handleOpenFormNewTab}
+                data-state={isClicked ? "clicked" : undefined}
+                className="glow-btn relative bg-green-950 text-white font-['Manrope'] font-medium text-[clamp(0.875rem,1.5vw,1rem)] py-3.5 px-6 md:px-8 rounded-full border border-[#16A34A]/30 shadow-[0_0_15px_rgba(21,128,61,0.4)] hover:shadow-[0_0_25px_rgba(21,128,61,0.7)] data-[state=clicked]:shadow-[0_0_40px_rgba(21,128,61,0.9)] hover:bg-[#15803D] transition-all duration-300 cursor-pointer z-10"
+              >
+                <span className="flex items-center justify-center gap-1.5">
+                  Estimate Your Qaza
+                  <Sparkles size={16} className="ml-1 opacity-90" />
+                </span>
+              </button>
+            </div>
           </motion.div>
         </div>
       </div>

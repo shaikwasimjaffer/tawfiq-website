@@ -159,75 +159,6 @@ const ayahs = [
   },
 ];
 
-// Waveform component
-const Waveform = ({ isPlaying }) => (
-  <div className="flex items-end gap-[2px] h-3">
-    {[...Array(16)].map((_, i) => (
-      <motion.div
-        key={i}
-        className="w-[1.5px] bg-[#16A34A] rounded-full origin-bottom"
-        animate={{
-          height: isPlaying
-            ? [
-                `${Math.random() * 40 + 20}%`,
-                `${Math.random() * 60 + 40}%`,
-                "30%",
-              ]
-            : "20%",
-        }}
-        transition={{
-          duration: 0.8 + Math.random() * 0.5,
-          repeat: Infinity,
-          repeatType: "mirror",
-          ease: "easeInOut",
-        }}
-      />
-    ))}
-  </div>
-);
-
-// Circular progress indicator
-const CircularProgress = ({ percentage }) => {
-  const radius = 9;
-  const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (percentage / 100) * circumference;
-
-  return (
-    <div className="relative flex items-center justify-center w-8 h-8">
-      <svg
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        className="rotate-[-90deg]"
-      >
-        <circle
-          cx="12"
-          cy="12"
-          r={radius}
-          fill="none"
-          stroke="#DCFCE7"
-          strokeWidth="1.5"
-        />
-        <motion.circle
-          cx="12"
-          cy="12"
-          r={radius}
-          fill="none"
-          stroke="#16A34A"
-          strokeWidth="1.5"
-          strokeDasharray={circumference}
-          animate={{ strokeDashoffset }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          strokeLinecap="round"
-        />
-      </svg>
-      <span className="absolute text-[8px] font-['Geist',sans-serif] text-green-600 font-medium tabular-nums">
-        {Math.round(percentage)}%
-      </span>
-    </div>
-  );
-};
-
 export default function Quran() {
   const [current, setCurrent] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -248,10 +179,6 @@ export default function Quran() {
   const [memComplete, setMemComplete] = useState(false);
 
   const audioRef = useRef(null);
-
-  const overallPercentage = isComplete
-    ? 100
-    : Math.min(((current - 1 + progress) / ayahs.length) * 100, 100);
 
   // Audio Effect
   useEffect(() => {
@@ -430,11 +357,6 @@ export default function Quran() {
             >
               <div className="relative bg-white/80 rounded border border-green-200/50 shadow-[0_40px_100px_-40px_rgba(22,163,74,0.15)] overflow-hidden">
                 <div className="absolute top-0 left-0 h-[2px] w-full bg-green-100 z-10">
-                  <motion.div
-                    className="h-full bg-[#16A34A]"
-                    animate={{ width: `${overallPercentage}%` }}
-                    transition={{ duration: 0.4, ease: "linear" }}
-                  />
                 </div>
 
                 <div className="p-6 sm:p-10 md:p-16">
@@ -463,10 +385,6 @@ export default function Quran() {
                           <span className="w-2 h-2 rounded-full bg-emerald-700" />
                           Ghunnah
                         </span>
-                      </div>
-                      <div className="flex items-center gap-4 sm:gap-6">
-                        <Waveform isPlaying={isPlaying} />
-                        <CircularProgress percentage={overallPercentage} />
                       </div>
                     </div>
                   </div>
