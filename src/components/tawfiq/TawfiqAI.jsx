@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
-import { Check } from "lucide-react";
 
 // --- MOCK DATA: GOLDEN PATH DEMO ---
 const answers = {
@@ -138,20 +137,28 @@ export default function LandingPageDemo() {
     }
   }, [phase]);
 
-  // 3. Thinking Steps
+  // 3. Thinking Steps (Updated Reasoning UI logic)
   useEffect(() => {
     if (phase === "thinking" || isRegenerating) {
       setThinkingStep(0);
 
-      const timings = [500, 1000, 1500, 2000];
+      // Start the steps without an initial delay for a more responsive feel
+      const timings = [0, 900, 1800];
+      const timeouts = [];
+
       timings.forEach((time, index) => {
-        setTimeout(() => setThinkingStep(index + 1), time);
+        const t = setTimeout(() => setThinkingStep(index + 1), time);
+        timeouts.push(t);
       });
 
-      setTimeout(() => {
+      const finalT = setTimeout(() => {
         if (isRegenerating) setIsRegenerating(false);
         else setPhase("answering");
-      }, 2500);
+      }, 2800);
+      timeouts.push(finalT);
+
+      // Cleanup to prevent overlaps if user rapidly toggles modes
+      return () => timeouts.forEach(clearTimeout);
     }
   }, [phase, isRegenerating]);
 
@@ -181,7 +188,6 @@ export default function LandingPageDemo() {
           <span className="text-[#16A34A] italic">Tawfiq AI</span>
         </h2>
 
-        {/* Added Description */}
         <motion.p
           initial={{ opacity: 0, y: 15 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
@@ -194,7 +200,7 @@ export default function LandingPageDemo() {
       </motion.div>
 
       <div className="w-full max-w-3xl flex flex-col gap-6">
-        {/* User Input / Bubble */}
+        {/* User Input / Premium Prompt Bubble */}
         <div className="flex justify-end min-h-[60px]">
           <AnimatePresence mode="wait">
             {phase === "idle" || phase === "typing" ? (
@@ -206,24 +212,32 @@ export default function LandingPageDemo() {
                   y: phase === "idle" ? 10 : 0,
                 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="w-full bg-white p-4 sm:p-5 rounded-2xl border border-green-200 shadow-sm text-green-950 text-base sm:text-lg flex items-center font-['Geist',sans-serif]"
+                className="w-full bg-white px-5 py-3.5 sm:px-6 sm:py-4 rounded-2xl border border-green-200 shadow-sm text-green-950 text-sm sm:text-base flex items-center font-['Geist',sans-serif]"
               >
-                {typedText}
-                <motion.span
-                  animate={{ opacity: [1, 0] }}
-                  transition={{ repeat: Infinity, duration: 0.8 }}
-                  className="inline-block w-0.5 h-5 sm:h-6 bg-green-500 ml-1"
-                />
+                <div className="opacity-40 text-sm sm:text-base shrink-0 mr-3 sm:mr-4">👤</div>
+                <div className="flex-1 flex font-medium tracking-wide">
+                  {typedText}
+                  <motion.span
+                    animate={{ opacity: [1, 0] }}
+                    transition={{ repeat: Infinity, duration: 0.8 }}
+                    className="inline-block w-0.5 h-5 sm:h-5 bg-green-500 ml-1"
+                  />
+                </div>
               </motion.div>
             ) : (
               <motion.div
                 key="bubble"
-                initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                className="bg-green-950 text-white p-4 sm:p-5 rounded-2xl rounded-tr-sm shadow-sm text-base sm:text-lg max-w-[90%] sm:max-w-[85%] flex gap-3 sm:gap-4 items-start font-['Geist',sans-serif]"
+                className="bg-[#064E3B] text-emerald-50 px-5 py-3.5 sm:px-6 sm:py-4 rounded-2xl shadow-[0_8px_24px_-6px_rgba(6,78,59,0.4)] border border-[#065F46] max-w-[95%] sm:max-w-[85%] flex gap-3 sm:gap-4 items-start font-['Geist',sans-serif]"
               >
-                <div className="mt-1 opacity-50 text-sm shrink-0">👤</div>
-                <div>{fullQuestion}</div>
+                <div className="mt-0.5 opacity-80 text-sm sm:text-base shrink-0">👤</div>
+                <div className="flex flex-col w-full">
+                  <div className="pb-2.5 text-sm sm:text-base font-medium tracking-wide">
+                    {fullQuestion}
+                  </div>
+                  <div className="w-full h-px bg-gradient-to-r from-emerald-500/50 to-transparent" />
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
@@ -235,33 +249,32 @@ export default function LandingPageDemo() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="w-full bg-white rounded-3xl p-6 sm:p-12 shadow-[0_10px_40px_-20px_rgba(22,163,74,0.05)] border border-green-200/60"
+              className="w-full bg-white rounded-3xl p-6 sm:p-12 shadow-[0_10px_40px_-20px_rgba(22,163,74,0.05)] border border-green-200/60 overflow-hidden"
             >
               {/* Thinking State */}
               {phase === "thinking" || isRegenerating ? (
-                <div className="flex flex-col gap-3 py-4 text-green-600 font-['Newsreader',serif] font-light">
-                  <div className="text-xs uppercase tracking-widest font-['Geist',sans-serif] font-semibold text-green-500 mb-2">
-                    ✦ Tawfiq AI
-                  </div>
-                  <ThinkingLine
-                    text="Consulting Quran"
-                    active={thinkingStep >= 1}
+                <div className="flex flex-col py-4 px-2">
+                  <SubtleThinkingItem
+                    title="Quran"
+                    activeSubtitle="Searching relevant verses"
+                    doneSubtitle="Relevant verses found"
+                    step={thinkingStep}
+                    targetStep={1}
                   />
-                  <ThinkingLine
-                    text="Consulting Hadith"
-                    active={thinkingStep >= 2}
+                  <SubtleThinkingItem
+                    title="Hadith"
+                    activeSubtitle="Cross-checking narrations"
+                    doneSubtitle="Relevant narrations found"
+                    step={thinkingStep}
+                    targetStep={2}
                   />
-                  <ThinkingLine
-                    text="Consulting Seerah"
-                    active={thinkingStep >= 3}
+                  <SubtleThinkingItem
+                    title="Seerah"
+                    activeSubtitle="Building historical context"
+                    doneSubtitle="Historical context built"
+                    step={thinkingStep}
+                    targetStep={3}
                   />
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: thinkingStep >= 4 ? 1 : 0 }}
-                    className="text-[#16A34A] italic mt-2"
-                  >
-                    Building explanation...
-                  </motion.div>
                 </div>
               ) : (
                 /* Answer State */
@@ -417,24 +430,49 @@ export default function LandingPageDemo() {
 
 // --- Helper Components ---
 
-const ThinkingLine = ({ text, active }) => (
-  <motion.div
-    initial={{ opacity: 0, x: -10 }}
-    animate={{ opacity: active ? 1 : 0.4, x: 0 }}
-    className="flex items-center gap-3 text-base sm:text-lg"
-  >
-    <div
-      className={`w-5 h-5 rounded-full flex items-center justify-center border transition-colors duration-500 ${
-        active
-          ? "bg-[#16A34A] border-[#16A34A] text-white"
-          : "border-green-300 text-transparent"
-      }`}
+const SubtleThinkingItem = ({ title, activeSubtitle, doneSubtitle, step, targetStep }) => {
+  const status = step < targetStep ? "hidden" : step === targetStep ? "loading" : "done";
+
+  // When hidden, we render nothing to let the list "build" smoothly down the page
+  if (status === "hidden") return null;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 5 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="flex justify-between items-start w-full sm:max-w-[300px] mb-7 last:mb-2"
     >
-      <Check size={12} strokeWidth={3} />
-    </div>
-    {text}
-  </motion.div>
-);
+      <div className="flex flex-col">
+        <div className="flex items-center gap-2 text-green-950 font-medium font-['Geist',sans-serif] text-sm">
+          <span className="text-[#16A34A] text-[13px] mt-0.5">✦</span> {title}
+        </div>
+        <div className="text-[15px] text-green-700/80 font-['Newsreader',serif] ml-6 mt-0.5">
+          {status === "done" ? doneSubtitle : activeSubtitle}
+        </div>
+      </div>
+      
+      <div className="text-[#16A34A] text-sm font-bold flex items-center h-5 w-6 justify-center">
+        {status === "done" ? (
+          <motion.span
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-green-600 font-medium text-base"
+          >
+            ✓
+          </motion.span>
+        ) : (
+          <motion.span
+            animate={{ opacity: [0.3, 1, 0.3] }}
+            transition={{ repeat: Infinity, duration: 1.2, ease: "easeInOut" }}
+            className="tracking-widest mt-[-2px] text-lg"
+          >
+            ···
+          </motion.span>
+        )}
+      </div>
+    </motion.div>
+  );
+};
 
 const Section = ({ title, children, delay }) => (
   <motion.div

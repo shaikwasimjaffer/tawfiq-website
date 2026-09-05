@@ -19,7 +19,6 @@ const BismillahButton = ({
 );
 
 export default function Footer({ onOpenScanner, showContact, setShowContact }) {
-  // Re-implemented functional link objects
   const footerCategories = [
     {
       title: "GET STARTED",
@@ -64,6 +63,14 @@ export default function Footer({ onOpenScanner, showContact, setShowContact }) {
   ];
 
   const [isRevealed, setIsRevealed] = useState(false);
+
+  // Scroll to top function identical to the Navbar logo click
+  const handleScrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
 
   return (
     <footer className="relative overflow-hidden bg-[#F0FDF4] pt-24 pb-16">
@@ -124,14 +131,15 @@ export default function Footer({ onOpenScanner, showContact, setShowContact }) {
           >
           </motion.div>
 
-          {/* Animated 3D Reveal Wordmark */}
+          {/* Animated 3D Reveal Wordmark - Now Clickable */}
           <motion.div
             viewport={{ once: true, amount: 0.5 }}
             onViewportEnter={() => {
               // Triggers the flip exactly once, 3 seconds after coming into view
               setTimeout(() => setIsRevealed(true), 3000);
             }}
-            className="w-full relative flex flex-col items-center justify-center py-4"
+            onClick={handleScrollToTop}
+            className="w-full relative flex flex-col items-center justify-center py-4 cursor-pointer group"
             style={{ perspective: "2000px" }}
           >
             {/* Invisible spacer to maintain layout height while absolute elements animate */}
@@ -148,7 +156,7 @@ export default function Footer({ onOpenScanner, showContact, setShowContact }) {
                 duration: 0.7,
                 ease: "easeInOut",
               }}
-              className="absolute inset-0 w-full h-full flex items-center justify-center"
+              className="absolute inset-0 w-full h-full flex items-center justify-center transition-transform duration-300 group-hover:scale-[1.02] group-active:scale-95"
               style={{ transformStyle: "preserve-3d" }}
             >
               {/* Front Face: English */}
@@ -186,4 +194,5 @@ export default function Footer({ onOpenScanner, showContact, setShowContact }) {
         </div>
       </div>
     </footer>
-);}
+  );
+}
