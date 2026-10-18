@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
 
@@ -11,10 +11,10 @@ const EMAILJS_TEMPLATE_ID = "template_9gd6lm2";
 const EMAILJS_PUBLIC_KEY = "5iuNuXg40cmMgueNJ";
 
 const navItems = [
-  { id: "qaza", label: "Qaza", href: "#qaza" },
+  { id: "tawfiq-ai", label: "Tawfiq AI", href: "#tawfiq-ai" },
   { id: "quran", label: "Quran", href: "#quran" },
   { id: "academy", label: "Academy", href: "#academy" },
-  { id: "tawfiq-ai", label: "Tawfiq AI", href: "#tawfiq-ai" },
+  { id: "qaza", label: "Qaza", href: "#qaza" },
 ];
 
 const categoryConfig = {
@@ -72,20 +72,135 @@ function NavLink({ item, isActive, onClick }) {
   );
 }
 
-export default function Navbar({ showContact, setShowContact, formData, setFormData, formStatus, setFormStatus, shaking, setShaking, handleContactSubmit }) {
+export default function Navbar({
+  showScanner: externalShowScanner,
+  setShowScanner: externalSetShowScanner,
+  showContact,
+  setShowContact,
+  formData,
+  setFormData,
+  formStatus,
+  setFormStatus,
+  shaking,
+  setShaking,
+  handleContactSubmit,
+}) {
   const [scrolled, setScrolled] = useState(false);
   const [activeItem, setActiveItem] = useState("qaza");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [showScanner, setShowScanner] = useState(false);
+  const [internalShowScanner, setInternalShowScanner] = useState(false);
+  const showScanner = externalShowScanner !== undefined ? externalShowScanner : internalShowScanner;
+  const setShowScanner = externalSetShowScanner || setInternalShowScanner;
   const [animatingAction, setAnimatingAction] = useState(null);
+  const [isOverGreen, setIsOverGreen] = useState(false);
+
+  const headerRef = useRef(null);
+  const buttonRef = useRef(null);
 
   const location = useLocation();
 
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+  const checkBackground = useCallback(() => {
+    if (!buttonRef.current) return;
+    const rect = buttonRef.current.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+
+    const x = rect.left + rect.width / 2;
+    const y = rect.top + rect.height / 2;
+
+    let overGreen = false;
+
+    // 1. Direct bounding box check on designated dark green cards/sections
+    const darkElements = document.querySelectorAll(
+      '[data-bg="dark-green"], .bg-\\[\\#064E3B\\]'
+    );
+    for (const el of darkElements) {
+      const elRect = el.getBoundingClientRect();
+      if (
+        x >= elRect.left &&
+        x <= elRect.right &&
+        y >= elRect.top &&
+        y <= elRect.bottom
+      ) {
+        overGreen = true;
+        break;
+      }
+    }
+
+    // 2. Generic fallback check via elementsFromPoint
+    if (!overGreen && typeof document.elementsFromPoint === "function") {
+      const elements = document.elementsFromPoint(x, y);
+      for (const el of elements) {
+        if (!el || el === document.documentElement || el === document.body) continue;
+        if (headerRef.current && headerRef.current.contains(el)) continue;
+
+        if (
+          el.getAttribute?.("data-bg") === "dark-green" ||
+          el.getAttribute?.("data-theme") === "dark" ||
+          el.closest?.('[data-bg="dark-green"]') ||
+          el.closest?.('[data-theme="dark"]') ||
+          el.closest?.(".bg-\\[\\#064E3B\\]") ||
+          el.closest?.(".bg-green-950")
+        ) {
+          overGreen = true;
+          break;
+        }
+
+        try {
+          const bg = window.getComputedStyle(el).backgroundColor;
+          if (bg && bg !== "transparent" && bg !== "rgba(0, 0, 0, 0)") {
+            const match = bg.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
+            if (match) {
+              const r = parseInt(match[1], 10);
+              const g = parseInt(match[2], 10);
+              const b = parseInt(match[3], 10);
+              const a = match[4] !== undefined ? parseFloat(match[4]) : 1;
+
+              if (a > 0.4) {
+                const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+                if (luminance < 130 && g > r && g >= b) {
+                  overGreen = true;
+                  break;
+                }
+                if (luminance >= 130) {
+                  overGreen = false;
+                  break;
+                }
+              }
+            }
+          }
+        } catch {
+          // ignore style read errors
+        }
+      }
+    }
+
+    setIsOverGreen(overGreen);
   }, []);
+
+  useEffect(() => {
+    let ticking = false;
+    const handleScrollAndCheck = () => {
+      setScrolled(window.scrollY > 20);
+
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          checkBackground();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    checkBackground();
+
+    window.addEventListener("scroll", handleScrollAndCheck, { passive: true });
+    window.addEventListener("resize", handleScrollAndCheck, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScrollAndCheck);
+      window.removeEventListener("resize", handleScrollAndCheck);
+    };
+  }, [checkBackground]);
 
   useEffect(() => {
     if (isMenuOpen || showScanner || showContact) {
@@ -177,6 +292,13 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
     }, 450);
   };
 
+  const handleCloseScanner = () => {
+    setShowScanner(false);
+    if (window.location.pathname === "/download") {
+      window.history.replaceState(null, "", "/");
+    }
+  };
+
   let mobileNavText = "Tawfiq";
   if (activeItem === "faq") {
     mobileNavText = "FAQ";
@@ -189,6 +311,7 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
   return (
     <>
       <motion.header
+        ref={headerRef}
         initial={{ y: -30, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ type: "spring", stiffness: 100, damping: 20, delay: 0.1 }}
@@ -318,7 +441,9 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
             transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
           >
             <motion.button
+              ref={buttonRef}
               onClick={handleBismillahClick}
+              onMouseEnter={checkBackground}
               className="group relative inline-flex items-center justify-center overflow-hidden rounded-full p-[1px] pointer-events-auto cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_rgba(22,163,74,0.4)]"
               animate={{
                 width: animatingAction ? "100%" : "auto",
@@ -327,8 +452,19 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
               }}
               transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
             >
-              {/* Spinning Border Beam (Visible on Hover) */}
-              <span className="absolute inset-[-100%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_75%,#ffffff_100%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              {/* Spinning Border Beam - White (Visible when background is green/dark) */}
+              <span
+                className={`absolute inset-[-100%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_75%,#ffffff_100%)] transition-opacity duration-300 pointer-events-none ${
+                  isOverGreen ? "opacity-0 group-hover:opacity-100" : "opacity-0"
+                }`}
+              />
+
+              {/* Spinning Border Beam - Green (Visible when background is white/light) */}
+              <span
+                className={`absolute inset-[-100%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_75%,#16A34A_100%)] transition-opacity duration-300 pointer-events-none ${
+                  !isOverGreen ? "opacity-0 group-hover:opacity-100" : "opacity-0"
+                }`}
+              />
               
               {/* Default Static Border */}
               <span className="absolute inset-0 rounded-full border border-white/20 transition-opacity duration-300 group-hover:opacity-0" />
@@ -773,8 +909,8 @@ export default function Navbar({ showContact, setShowContact, formData, setFormD
                 }}
                 className="group mt-4 relative inline-flex items-center justify-center overflow-hidden rounded-full p-[1px] cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_rgba(22,163,74,0.4)]"
               >
-                {/* Spinning Border Beam (Visible on Hover) */}
-                <span className="absolute inset-[-100%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_75%,#ffffff_100%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                {/* Spinning Border Beam (Visible on Hover - Green on light modal background) */}
+                <span className="absolute inset-[-100%] animate-[spin_3s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,transparent_0%,transparent_75%,#16A34A_100%)] opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 
                 {/* Default Static Border */}
                 <span className="absolute inset-0 rounded-full border border-white/20 transition-opacity duration-300 group-hover:opacity-0" />

@@ -137,12 +137,11 @@ export default function Home() {
         handleContactSubmit={handleContactSubmit}
       />
       <Hero />
-      <Qaza />
+      <TawfiqAI />
       <Quran />
       <Academy />
 
-      {/* 2. Place the component here */}
-      <TawfiqAI />
+      <Qaza />
       <Transformation />
 
       <SurahTaha />
