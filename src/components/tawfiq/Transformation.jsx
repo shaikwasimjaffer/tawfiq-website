@@ -5,8 +5,14 @@ import { Check, Droplet } from "lucide-react";
 // Note: Ensure this path matches the location of your QR image
 import qrImage from "../../assets/qr code.png";
 
-export default function Transformation() {
-  const [showScanner, setShowScanner] = useState(false);
+export default function Transformation({
+  showScanner: externalShowScanner,
+  setShowScanner: externalSetShowScanner,
+} = {}) {
+  const [internalShowScanner, setInternalShowScanner] = useState(false);
+  const showScanner = externalShowScanner !== undefined ? externalShowScanner : internalShowScanner;
+  const setShowScanner = externalSetShowScanner || setInternalShowScanner;
+  const isExternal = externalShowScanner !== undefined;
 
   // Prevent background scrolling when the modal is open
   useEffect(() => {
@@ -48,7 +54,7 @@ export default function Transformation() {
               whileInView={{ x: 0, opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              className="bg-white rounded-xl p-8 border border-gray-200 flex flex-col h-full"
+              className="bg-white rounded-xl p-8 border border-gray-300 flex flex-col h-full"
             >
               <h2 className="font-['Newsreader',serif] font-light text-3xl md:text-4xl text-green-800 mb-4">
                 Before Tawfiq
@@ -74,51 +80,110 @@ export default function Transformation() {
               </div>
             </motion.div>
 
-            {/* Right Panel: With Tawfiq */}
+            {/* Right Panel: With Tawfiq (After Topic Card) */}
             <motion.div
+              data-bg="dark-green"
               initial={{ x: 100, opacity: 0 }}
               whileInView={{ x: 0, opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              className="bg-[#064E3B] rounded-xl p-8 flex flex-col h-full relative"
-              style={{
-                boxShadow: '0 0 8px 1px rgba(5, 150, 105, 0.15), 0 0 15px 2px rgba(5, 150, 105, 0.08)',
-              }}
+              className="relative flex flex-col h-full group"
             >
-              <h2 className="font-['Newsreader',serif] font-light text-3xl md:text-4xl text-white mb-4 relative z-10">
-                With Tawfiq
-              </h2>
-              <p className="text-white/90 mb-6 leading-relaxed relative z-10">
-                When your faith has a place to grow.
-              </p>
-              <div className="space-y-4 relative z-10">
-                {afterPoints.map((point, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ y: 20, opacity: 0 }}
-                    whileInView={{ y: 0, opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="flex items-start"
-                  >
-                    <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 bg-white/20 text-white rounded-full">
-                      <Check className="h-5 w-5" />
-                    </span>
-                    <span className="ml-3 text-white font-medium">
-                      {point}
-                    </span>
-                  </motion.div>
-                ))}
-                <style>
-                  {`
-                    .space-y-4 > :first-child .ml-3 {
-                      font-weight: 600;
-                    }
-                  `}
-                </style>
-              </div>
-              <div className="absolute top-0 right-0 -mt-12 -mr-12 pointer-events-none">
-                <Droplet className="h-16 w-16 text-white/10" />
+              {/* Outer Lightning Aura / Ambient Bloom */}
+              <div
+                className="absolute -inset-[3px] rounded-2xl bg-gradient-to-r from-emerald-500/30 via-emerald-400/25 to-teal-400/30 blur-lg pointer-events-none transition-opacity duration-500 opacity-80 group-hover:opacity-100"
+                style={{
+                  animation: "lightningAuraPulse 4s ease-in-out infinite",
+                }}
+              />
+
+              {/* Main Card with Lightning Border */}
+              <div
+                className="relative rounded-xl p-[2px] flex flex-col h-full overflow-hidden transition-all duration-300 shadow-[0_0_20px_rgba(5,150,105,0.25),0_0_40px_rgba(16,185,129,0.15)] group-hover:shadow-[0_0_30px_rgba(52,211,153,0.4),0_0_60px_rgba(16,185,129,0.3)]"
+                style={{
+                  animation: "lightningVoltageCrackle 3.5s ease-in-out infinite",
+                }}
+              >
+                {/* 1. Static base border line for crisp definition */}
+                <div className="absolute inset-0 rounded-xl border border-emerald-400/35 pointer-events-none z-10" />
+
+                {/* 2. Primary Fast Electric Lightning Beam */}
+                <div
+                  className="absolute inset-[-150%] pointer-events-none"
+                  style={{
+                    background:
+                      "conic-gradient(from 0deg at 50% 50%, transparent 0deg, transparent 255deg, rgba(5,150,105,0.1) 275deg, rgba(16,185,129,0.35) 300deg, rgba(52,211,153,0.75) 325deg, #34D399 342deg, #6EE7B7 350deg, #A7F3D0 355deg, #FFFFFF 358.5deg, #CFFAFE 359.5deg, transparent 360deg)",
+                    animation: "lightningSpin 3.6s linear infinite",
+                  }}
+                />
+
+                {/* 3. Secondary Electric Counter-Arc / Surge */}
+                <div
+                  className="absolute inset-[-150%] pointer-events-none mix-blend-screen"
+                  style={{
+                    background:
+                      "conic-gradient(from 180deg at 50% 50%, transparent 0deg, transparent 295deg, rgba(16,185,129,0.2) 320deg, rgba(52,211,153,0.6) 342deg, #6EE7B7 352deg, #A7F3D0 356.5deg, #FFFFFF 358.5deg, transparent 360deg)",
+                    animation: "lightningSpinReverse 5.2s linear infinite",
+                  }}
+                />
+
+                {/* 4. Electric Voltage Crackle & Glow Filter Layer */}
+                <div
+                  className="absolute inset-[-150%] pointer-events-none blur-[5px]"
+                  style={{
+                    background:
+                      "conic-gradient(from 0deg at 50% 50%, transparent 0deg, transparent 275deg, rgba(16,185,129,0.4) 305deg, #34D399 335deg, #6EE7B7 350deg, #FFFFFF 358deg, transparent 360deg)",
+                    animation: "lightningSpin 3.6s linear infinite",
+                  }}
+                />
+
+                {/* Inner Card Content */}
+                <div className="relative z-10 bg-[#064E3B] rounded-[10px] p-8 flex flex-col h-full w-full overflow-hidden">
+                  {/* Subtle Top Divine Radiance */}
+                  <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-72 h-36 bg-emerald-400/10 rounded-full blur-2xl pointer-events-none" />
+
+                  {/* Corner Lightning Brackets (High-voltage Accent Marks) */}
+                  <div className="absolute top-2.5 left-2.5 w-3 h-3 border-t-2 border-l-2 border-emerald-400/60 rounded-tl-sm pointer-events-none z-10" />
+                  <div className="absolute top-2.5 right-2.5 w-3 h-3 border-t-2 border-r-2 border-emerald-400/60 rounded-tr-sm pointer-events-none z-10" />
+                  <div className="absolute bottom-2.5 left-2.5 w-3 h-3 border-b-2 border-l-2 border-emerald-400/60 rounded-bl-sm pointer-events-none z-10" />
+                  <div className="absolute bottom-2.5 right-2.5 w-3 h-3 border-b-2 border-r-2 border-emerald-400/60 rounded-br-sm pointer-events-none z-10" />
+
+                  <h2 className="font-['Newsreader',serif] font-light text-3xl md:text-4xl text-white mb-4 relative z-10">
+                    With Tawfiq
+                  </h2>
+                  <p className="text-white/90 mb-6 leading-relaxed relative z-10">
+                    When your faith has a place to grow.
+                  </p>
+                  <div className="space-y-4 relative z-10">
+                    {afterPoints.map((point, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ y: 20, opacity: 0 }}
+                        whileInView={{ y: 0, opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                        className="flex items-start"
+                      >
+                        <span className="flex-shrink-0 flex items-center justify-center w-6 h-6 bg-white/20 text-white rounded-full">
+                          <Check className="h-5 w-5" />
+                        </span>
+                        <span className="ml-3 text-white font-medium">
+                          {point}
+                        </span>
+                      </motion.div>
+                    ))}
+                    <style>
+                      {`
+                        .space-y-4 > :first-child .ml-3 {
+                          font-weight: 600;
+                        }
+                      `}
+                    </style>
+                  </div>
+                  <div className="absolute top-0 right-0 -mt-12 -mr-12 pointer-events-none">
+                    <Droplet className="h-16 w-16 text-white/10" />
+                  </div>
+                </div>
               </div>
             </motion.div>
           </div>
@@ -132,6 +197,63 @@ export default function Transformation() {
             className="mt-16 flex justify-center w-full"
           >
             <style>{`
+              @keyframes lightningSpin {
+                from {
+                  transform: rotate(0deg);
+                }
+                to {
+                  transform: rotate(360deg);
+                }
+              }
+              @keyframes lightningSpinReverse {
+                from {
+                  transform: rotate(360deg);
+                }
+                to {
+                  transform: rotate(0deg);
+                }
+              }
+              @keyframes lightningAuraPulse {
+                0%, 100% {
+                  opacity: 0.65;
+                  transform: scale(1);
+                }
+                50% {
+                  opacity: 0.95;
+                  transform: scale(1.008);
+                }
+              }
+              @keyframes lightningVoltageCrackle {
+                0%, 100% {
+                  opacity: 0.94;
+                  filter: drop-shadow(0 0 10px rgba(52, 211, 153, 0.55)) brightness(1.05);
+                }
+                14% {
+                  opacity: 1;
+                  filter: drop-shadow(0 0 16px rgba(110, 231, 183, 0.9)) brightness(1.25);
+                }
+                28% {
+                  opacity: 0.88;
+                  filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.45)) brightness(1);
+                }
+                42% {
+                  opacity: 1;
+                  filter: drop-shadow(0 0 22px rgba(167, 243, 208, 0.95)) brightness(1.35);
+                }
+                44% {
+                  opacity: 0.9;
+                  filter: drop-shadow(0 0 9px rgba(16, 185, 129, 0.5)) brightness(1.05);
+                }
+                68% {
+                  opacity: 1;
+                  filter: drop-shadow(0 0 18px rgba(52, 211, 153, 0.85)) brightness(1.28);
+                }
+                85% {
+                  opacity: 0.91;
+                  filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.5)) brightness(1.02);
+                }
+              }
+
               .tawfiq-pearl {
                 --bg: #16A34A;
                 --radius: 100px;
@@ -266,7 +388,7 @@ export default function Transformation() {
 
       {/* Embedded Scanner Overlay Modal */}
       <AnimatePresence>
-        {showScanner && (
+        {!isExternal && showScanner && (
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -337,14 +459,33 @@ export default function Transformation() {
                   <span className="rotate-90 whitespace-nowrap text-white/90 text-[10px] sm:text-[11px] font-['Geist',sans-serif] uppercase tracking-[0.4em] font-semibold pl-[0.4em]">Tawfiq</span>
                 </div>
 
-                <div className="bg-white p-3 sm:p-4 rounded-xl sm:rounded-2xl relative z-10 flex items-center justify-center shadow-sm">
+                <a
+                  href="https://originaltawfiq.vercel.app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-white p-3 sm:p-4 rounded-xl sm:rounded-2xl relative z-10 flex items-center justify-center shadow-sm cursor-pointer hover:scale-105 transition-transform duration-300 group/qr"
+                  title="Open Tawfiq Web App"
+                >
                   <img
                     src={qrImage}
-                    alt="Scan to download"
+                    alt="Scan to open https://originaltawfiq.vercel.app"
                     className="w-48 h-48 sm:w-56 sm:h-56 object-contain mix-blend-multiply"
                   />
-                </div>
+                </a>
               </motion.div>
+
+              <motion.a
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7, duration: 0.5 }}
+                href="https://originaltawfiq.vercel.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-green-700/10 hover:bg-green-700/20 text-[#052E16] text-xs sm:text-sm font-semibold tracking-wide transition-all duration-300 hover:scale-105"
+              >
+                <span>Or open directly in browser</span>
+                <span className="text-[#16A34A]">→</span>
+              </motion.a>
             </div>
 
             <motion.div

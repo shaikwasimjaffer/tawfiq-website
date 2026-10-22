@@ -797,14 +797,33 @@ export default function Navbar({
                   <span className="rotate-90 whitespace-nowrap text-white/90 text-[10px] sm:text-[11px] font-['Geist',sans-serif] uppercase tracking-[0.4em] font-semibold pl-[0.4em]">Tawfiq</span>
                 </div>
 
-                <div className="bg-white p-3 sm:p-4 rounded-xl sm:rounded-2xl relative z-10 flex items-center justify-center shadow-sm">
+                <a
+                  href="https://originaltawfiq.vercel.app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-white p-3 sm:p-4 rounded-xl sm:rounded-2xl relative z-10 flex items-center justify-center shadow-sm cursor-pointer hover:scale-105 transition-transform duration-300 group/qr"
+                  title="Open Tawfiq Web App"
+                >
                   <img
                     src={qrImage}
-                    alt="Scan to download"
+                    alt="Scan to open https://originaltawfiq.vercel.app"
                     className="w-48 h-48 sm:w-56 sm:h-56 object-contain mix-blend-multiply"
                   />
-                </div>
+                </a>
               </motion.div>
+
+              <motion.a
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.7, duration: 0.5 }}
+                href="https://originaltawfiq.vercel.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-green-700/10 hover:bg-green-700/20 text-[#052E16] text-xs sm:text-sm font-semibold tracking-wide transition-all duration-300 hover:scale-105"
+              >
+                <span>Or open directly in browser</span>
+                <span className="text-[#16A34A]">→</span>
+              </motion.a>
             </div>
 
             <motion.div
