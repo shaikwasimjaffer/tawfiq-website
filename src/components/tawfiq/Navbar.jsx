@@ -179,31 +179,21 @@ export default function Navbar({
 
   useEffect(() => {
     let ticking = false;
-    const handleScrollAndCheck = () => {
-      setScrolled(window.scrollY > 20);
-
+    const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          checkBackground();
+          setScrolled(window.scrollY > 20);
           ticking = false;
         });
         ticking = true;
       }
     };
 
-    const timer = setTimeout(() => {
-      checkBackground();
-    }, 120);
-
-    window.addEventListener("scroll", handleScrollAndCheck, { passive: true });
-    window.addEventListener("resize", handleScrollAndCheck, { passive: true });
-
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
-      clearTimeout(timer);
-      window.removeEventListener("scroll", handleScrollAndCheck);
-      window.removeEventListener("resize", handleScrollAndCheck);
+      window.removeEventListener("scroll", handleScroll);
     };
-  }, [checkBackground]);
+  }, []);
 
   useEffect(() => {
     if (isMenuOpen || showScanner || showContact) {
@@ -585,7 +575,7 @@ export default function Navbar({
                         formStatus === "error" && !formData.name
                           ? "border-red-400"
                           : "border-green-300 focus:border-[#16A34A]"
-                      } pb-1 outline-none transition-all duration-300 text-green-950 placeholder:text-green-400 flex-1 min-w-[220px]`}
+                      } pb-1 outline-none transition-all duration-300 text-green-950 placeholder:text-green-600 flex-1 min-w-[220px]`}
                     />
                   </div>
 
@@ -595,6 +585,9 @@ export default function Navbar({
                     </span>
                     <input
                       type="email"
+                      id="navbar-contact-email"
+                      name="email"
+                      aria-label="Your email address"
                       placeholder="name@example.com"
                       value={formData.email}
                       onChange={(e) =>
@@ -604,7 +597,7 @@ export default function Navbar({
                         formStatus === "error" && !formData.email
                           ? "border-red-400"
                           : "border-green-300 focus:border-[#16A34A]"
-                      } pb-1 outline-none transition-all duration-300 text-green-950 placeholder:text-green-400 flex-1 min-w-[220px]`}
+                      } pb-1 outline-none transition-all duration-300 text-green-950 placeholder:text-green-600 flex-1 min-w-[220px]`}
                     />
                   </div>
 
@@ -664,7 +657,7 @@ export default function Navbar({
                         formStatus === "error" && !formData.message
                           ? "border-red-400"
                           : "border-green-200 focus:border-[#16A34A]"
-                      } outline-none transition-all duration-300 text-green-950 placeholder:text-green-400/60 resize-none`}
+                      } outline-none transition-all duration-300 text-green-950 placeholder:text-green-600/60 resize-none`}
                     />
                   </div>
                 </div>

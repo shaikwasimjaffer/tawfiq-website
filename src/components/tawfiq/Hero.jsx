@@ -234,9 +234,7 @@ export default function Hero() {
         >
           {/* Slowly breathing/shifting gradient background */}
           <motion.div
-            animate={{
-              backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"],
-            }}
+            animate={{ opacity: [0.75, 1, 0.75], scale: [1, 1.02, 1] }}
             transition={{
               duration: 25,
               repeat: Infinity,
@@ -337,9 +335,9 @@ export default function Hero() {
           className="absolute z-10 w-full px-6 text-center flex flex-col items-center justify-center"
         >
           <motion.div
-            whileHover={{ scale: 1.0, filter: "brightness(1.03)" }}
-            initial={{ scale: 0.98, filter: "brightness(1.0)" }}
-            animate={{ scale: 1.0, filter: "brightness(1.0)" }}
+            whileHover={{ scale: 1.02 }}
+            initial={{ scale: 0.98 }}
+            animate={{ scale: 1.0 }}
                   transition={{ duration: 0.4, ease: "easeOut" }}
                   className="cursor-pointer inline-block pointer-events-auto px-4 py-2"
           >
@@ -469,9 +467,9 @@ export default function Hero() {
           className="absolute z-30 text-center px-6 max-w-[100vw] overflow-hidden flex flex-col items-center"
         >
           <motion.div
-            whileHover={{ scale: 1.0, filter: "brightness(1.03)" }}
-            initial={{ scale: 0.98, filter: "brightness(1.0)" }}
-            animate={{ scale: 1.0, filter: "brightness(1.0)" }}
+            whileHover={{ scale: 1.02 }}
+            initial={{ scale: 0.98 }}
+            animate={{ scale: 1.0 }}
             transition={{ duration: 0.4, ease: "easeOut" }}
             className="cursor-pointer inline-block pointer-events-auto px-4 py-2"
           >

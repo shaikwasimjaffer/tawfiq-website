@@ -309,9 +309,9 @@ export default function Quran() {
           </motion.div>
         </div>
 
-        <div className="flex flex-nowrap items-center justify-start sm:justify-center gap-1 sm:gap-2 bg-black/5 p-1.5 rounded-full border border-green-900/10 w-max max-w-full overflow-x-auto mx-auto scrollbar-hide backdrop-blur-sm">
+        <div role="tablist" aria-label="Quran view modes" className="flex flex-nowrap items-center justify-start sm:justify-center gap-1 sm:gap-2 bg-black/5 p-1.5 rounded-full border border-green-900/10 w-max max-w-full overflow-x-auto mx-auto scrollbar-hide backdrop-blur-sm">
           <button
-            type="button" role="tab" aria-selected={activeTab === "reading"} aria-label="Reading mode" onClick={() => setActiveTab("reading")}
+            id="tab-reading" aria-controls="panel-reading" type="button" role="tab" aria-selected={activeTab === "reading"} aria-label="Mushaf Reading mode" onClick={() => setActiveTab("reading")}
             className={`whitespace-nowrap px-4 py-2 rounded-full text-[10px] sm:text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer ${
               activeTab === "reading"
                 ? "bg-green-950 text-white shadow-sm"
@@ -321,7 +321,7 @@ export default function Quran() {
             Mushaf
           </button>
           <button
-            type="button" role="tab" aria-selected={activeTab === "themes"} aria-label="Themes mode" onClick={() => setActiveTab("themes")}
+            id="tab-themes" aria-controls="panel-themes" type="button" role="tab" aria-selected={activeTab === "themes"} aria-label="Quran Themes mode" onClick={() => setActiveTab("themes")}
             className={`whitespace-nowrap px-4 py-2 rounded-full text-[10px] sm:text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer ${
               activeTab === "themes"
                 ? "bg-green-950 text-white shadow-sm"
@@ -331,7 +331,7 @@ export default function Quran() {
             Themes
           </button>
           <button
-            type="button" role="tab" aria-selected={activeTab === "memorization"} aria-label="Memorization mode" onClick={() => setActiveTab("memorization")}
+            id="tab-memorize" aria-controls="panel-memorize" type="button" role="tab" aria-selected={activeTab === "memorization"} aria-label="Quran Memorization mode" onClick={() => setActiveTab("memorization")}
             className={`whitespace-nowrap px-4 py-2 rounded-full text-[10px] sm:text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer ${
               activeTab === "memorization"
                 ? "bg-green-950 text-white shadow-sm"
@@ -349,6 +349,9 @@ export default function Quran() {
           {activeTab === "reading" && (
             <motion.div
               key="tab-reading"
+              role="tabpanel"
+              id="panel-reading"
+              aria-labelledby="tab-reading"
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
@@ -424,7 +427,7 @@ export default function Quran() {
                                   }`}
                                 >
                                   <Tajweed segments={a.segments} />
-                                  <span className="inline-flex items-center justify-center w-7 h-7 mx-1 align-middle rounded-full border border-green-300 text-[11px] font-['Geist',sans-serif] text-green-500 not-italic group-hover:border-[#16A34A] group-hover:text-[#16A34A]">
+                                  <span className="inline-flex items-center justify-center w-7 h-7 mx-1 align-middle rounded-full border border-green-300 text-[11px] font-['Geist',sans-serif] text-green-700 not-italic group-hover:border-[#16A34A] group-hover:text-[#16A34A]">
                                     {a.n}
                                   </span>
                                 </p>
@@ -437,7 +440,7 @@ export default function Quran() {
                                       className={`font-['Newsreader',serif] italic font-light transition-all duration-500 ${
                                         active
                                           ? "text-green-800 text-base"
-                                          : "text-green-500 text-sm"
+                                          : "text-green-700 text-sm"
                                       }`}
                                     >
                                       {a.translation}
@@ -573,6 +576,9 @@ export default function Quran() {
           {activeTab === "themes" && (
             <motion.div
               key="tab-themes"
+              role="tabpanel"
+              id="panel-themes"
+              aria-labelledby="tab-themes"
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
@@ -658,6 +664,9 @@ export default function Quran() {
           {activeTab === "memorization" && (
             <motion.div
               key="tab-memorization"
+              role="tabpanel"
+              id="panel-memorize"
+              aria-labelledby="tab-memorize"
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
@@ -968,7 +977,7 @@ export default function Quran() {
                     </div>
                   ))}
                 </div>
-                <p className="text-[10px] text-green-500 mt-2 font-mono">
+                <p className="text-[10px] text-green-700 mt-2 font-mono">
                   Root mapping: {selectedVerseForPanel.root}
                 </p>
               </div>

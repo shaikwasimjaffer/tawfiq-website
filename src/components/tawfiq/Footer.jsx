@@ -161,9 +161,9 @@ export default function Footer({ onOpenScanner, showContact, setShowContact }) {
             style={{ perspective: "2000px" }}
           >
             {/* Invisible spacer to maintain layout height while absolute elements animate */}
-            <h2 aria-hidden="true" className="invisible font-serif uppercase font-normal leading-[0.8] tracking-[-0.04em] text-[21vw] select-none whitespace-nowrap">
+            <span aria-hidden="true" className="invisible block font-serif uppercase font-normal leading-[0.8] tracking-[-0.04em] text-[21vw] select-none whitespace-nowrap">
               TAWFIQ
-            </h2>
+            </span>
 
             <motion.div
               animate={{
@@ -178,12 +178,12 @@ export default function Footer({ onOpenScanner, showContact, setShowContact }) {
               style={{ transformStyle: "preserve-3d" }}
             >
               {/* Front Face: English */}
-              <h2
-                className="absolute font-serif uppercase font-normal leading-[0.8] tracking-[-0.04em] text-green-950 text-[21vw] select-none whitespace-nowrap"
+              <span
+                className="absolute block font-serif uppercase font-normal leading-[0.8] tracking-[-0.04em] text-green-950 text-[21vw] select-none whitespace-nowrap"
                 style={{ backfaceVisibility: "hidden" }}
               >
                 TAWFIQ
-              </h2>
+              </span>
 
               {/* Back Face: Arabic */}
               <h2

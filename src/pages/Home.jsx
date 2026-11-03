@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, lazy, Suspense } from "react";
 import Navbar from "@/components/tawfiq/Navbar";
 import Hero from "@/components/tawfiq/Hero";
-import Qaza from "@/components/tawfiq/Qaza";
-import Quran from "@/components/tawfiq/Quran";
-import Academy from "@/components/tawfiq/Academy";
-import TawfiqAI from "@/components/tawfiq/TawfiqAI";
-import Transformation from "@/components/tawfiq/Transformation";
-import SurahTaha from "@/components/tawfiq/SurahTaha";
-import Footer from "@/components/tawfiq/Footer";
+
+const TawfiqAI = lazy(() => import("@/components/tawfiq/TawfiqAI"));
+const Quran = lazy(() => import("@/components/tawfiq/Quran"));
+const Academy = lazy(() => import("@/components/tawfiq/Academy"));
+const Qaza = lazy(() => import("@/components/tawfiq/Qaza"));
+const Transformation = lazy(() => import("@/components/tawfiq/Transformation"));
+const SurahTaha = lazy(() => import("@/components/tawfiq/SurahTaha"));
+const Footer = lazy(() => import("@/components/tawfiq/Footer"));
 import { motion, AnimatePresence } from "framer-motion";
 import { Check } from "lucide-react";
 
@@ -127,18 +128,19 @@ export default function Home() {
 
       <main id="main-content" className="relative">
         <Hero />
-        <TawfiqAI />
-        <Quran />
-        <Academy />
-        <Qaza />
-        <Transformation />
-        <SurahTaha />
+        <Suspense fallback={<div className="min-h-[400px] bg-[#F0FDF4]" />}>
+          <TawfiqAI />
+          <Quran />
+          <Academy />
+          <Qaza />
+          <Transformation />
+          <SurahTaha />
+          <Footer
+            showContact={showContact}
+            setShowContact={setShowContact}
+          />
+        </Suspense>
       </main>
-
-      <Footer
-        showContact={showContact}
-        setShowContact={setShowContact}
-      />
 
       {/* Contact Modal */}
       <AnimatePresence>

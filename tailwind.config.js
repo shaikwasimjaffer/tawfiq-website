@@ -1,7 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
-  content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
+  content: [
+    "./index.html",
+    "./src/pages/**/*.{ts,tsx,js,jsx}",
+    "./src/components/tawfiq/**/*.{ts,tsx,js,jsx}",
+    "./src/components/shared/**/*.{ts,tsx,js,jsx}",
+    "./src/components/*.{ts,tsx,js,jsx}",
+    "./src/components/ui/{button,dialog,input,input-otp,label,separator,sheet,skeleton,toast,toaster,toggle,tooltip,use-toast}.{ts,tsx,js,jsx}",
+  ],
   theme: {
     extend: {
       borderRadius: {

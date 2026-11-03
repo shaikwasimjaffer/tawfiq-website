@@ -303,9 +303,8 @@ function PreviewVisuals({ title }) {
       return (
         <motion.div
           animate={{
-            opacity: [0.2, 1, 0.2],
-            filter: ["blur(4px)", "blur(0px)", "blur(4px)"],
-            scale: [0.95, 1, 0.95],
+            opacity: [0.35, 1, 0.35],
+            scale: [0.96, 1.02, 0.96],
           }}
           transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
           className="flex items-center justify-center"
@@ -343,22 +342,20 @@ function PreviewVisuals({ title }) {
       return (
         <div className="relative flex items-center justify-center w-full h-24 text-4xl font-['Newsreader',serif] font-light text-[#16A34A]">
           <motion.span
-            className="absolute font-arabic"
+            className="absolute font-arabic will-change-transform"
             animate={{
               opacity: [1, 0, 1],
-              filter: ["blur(0px)", "blur(4px)", "blur(0px)"],
-              scale: [1, 0.8, 1],
+              scale: [1, 0.85, 1],
             }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           >
             سلام
           </motion.span>
           <motion.span
-            className="absolute"
+            className="absolute will-change-transform"
             animate={{
               opacity: [0, 1, 0],
-              filter: ["blur(4px)", "blur(0px)", "blur(4px)"],
-              scale: [0.8, 1, 0.8],
+              scale: [0.85, 1, 0.85],
             }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
           >
@@ -444,7 +441,7 @@ function WheelNode({
           <span
             className={`font-['Newsreader',serif] font-light tracking-wide transition-all duration-700 whitespace-nowrap ${isActive
                 ? "text-xl text-[#16A34A] font-normal"
-                : "text-base text-green-500 group-hover:text-green-700"
+                : "text-base text-green-700 group-hover:text-green-900"
               }`}
           >
             {topic.title}
@@ -797,7 +794,7 @@ export default function TawfiqLearningHub() {
                 {/* Drag Handle & Header */}
                 <div className="pt-3 pb-4 border-b border-green-100 shrink-0">
                   <div className="w-12 h-1.5 bg-green-200 rounded-full mx-auto mb-4" />
-                  <h3 className="text-center font-['Geist',sans-serif] font-semibold text-xs text-green-500 uppercase tracking-widest">
+                  <h3 className="text-center font-['Geist',sans-serif] font-semibold text-xs text-green-700 uppercase tracking-widest">
                     Choose Topic
                   </h3>
                 </div>
@@ -822,7 +819,7 @@ export default function TawfiqLearningHub() {
                       >
                         <div className="flex items-center gap-4 text-left">
                           <span
-                            className="font-arabic text-xl text-green-500 w-12 text-center"
+                            className="font-arabic text-xl text-green-700 w-12 text-center"
                             dir="rtl"
                           >
                             {topic.arabic}
@@ -877,7 +874,7 @@ export default function TawfiqLearningHub() {
                 exit={{ opacity: 0, x: -20, transition: { duration: 0.3 } }}
                 transition={{ delay: 0.3, duration: 0.6 }}
                 onClick={closeModule}
-                className="hidden sm:block fixed top-12 left-12 z-50 text-green-500 hover:text-green-900 tracking-widest uppercase text-xs font-semibold py-2 transition-colors cursor-pointer pointer-events-auto font-['Geist',sans-serif]"
+                className="hidden sm:block fixed top-12 left-12 z-50 text-green-700 hover:text-green-950 tracking-widest uppercase text-xs font-semibold py-2 transition-colors cursor-pointer pointer-events-auto font-['Geist',sans-serif]"
               >
                 ← Back to Academy
               </motion.button>
@@ -923,7 +920,7 @@ export default function TawfiqLearningHub() {
                     transition={{ duration: 0.6, delay: 0.3 }}
                     className="w-full max-w-3xl mb-12 sm:mb-24"
                   >
-                    <p className="text-[10px] sm:text-xs font-['Geist',sans-serif] tracking-[0.2em] uppercase text-green-500 mb-6 sm:mb-8 text-center font-semibold">
+                    <p className="text-[10px] sm:text-xs font-['Geist',sans-serif] tracking-[0.2em] uppercase text-green-700 mb-6 sm:mb-8 text-center font-semibold">
                       Inside Tawfiq
                     </p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6">

@@ -361,6 +361,8 @@ export default function Qaza() {
                               >
                                 <label className="flex items-center gap-4 cursor-pointer group">
                                   <input
+                                    id="qaza-menses-check"
+                                    aria-label="Exclude menstruation days from calculation"
                                     type="checkbox"
                                     className="hidden"
                                     checked={subtractMenses}
@@ -390,7 +392,7 @@ export default function Qaza() {
                           {/* Tactile Slider: Current Age */}
                           <div>
                             <div className="flex justify-between items-center mb-4">
-                              <label className="font-['Manrope'] font-medium text-[clamp(1rem,2vw,1.125rem)] text-green-950">
+                              <label htmlFor="qaza-current-age" className="font-['Manrope'] font-medium text-[clamp(1rem,2vw,1.125rem)] text-green-950">
                                 Current Age?
                               </label>
                               <span className="font-['Manrope'] text-[clamp(1.125rem,2vw,1.25rem)] font-semibold text-[#16A34A]">
@@ -398,6 +400,8 @@ export default function Qaza() {
                               </span>
                             </div>
                             <input
+                              id="qaza-current-age"
+                              aria-label="Current Age"
                               type="range"
                               min="0"
                               max="90"
@@ -415,7 +419,7 @@ export default function Qaza() {
                           {/* Tactile Slider: Puberty Age */}
                           <div>
                             <div className="flex justify-between items-center mb-4">
-                              <label className="font-['Manrope'] font-medium text-[clamp(1rem,2vw,1.125rem)] text-green-950">
+                              <label htmlFor="qaza-puberty-age" className="font-['Manrope'] font-medium text-[clamp(1rem,2vw,1.125rem)] text-green-950">
                                 Puberty Age?
                               </label>
                               <span className="font-['Manrope'] text-[clamp(1.125rem,2vw,1.25rem)] font-semibold text-[#16A34A]">
@@ -423,6 +427,8 @@ export default function Qaza() {
                               </span>
                             </div>
                             <input
+                              id="qaza-puberty-age"
+                              aria-label="Puberty Age"
                               type="range"
                               min="0"
                               max={Math.max(1, currentAge)}
@@ -453,6 +459,7 @@ export default function Qaza() {
                                   {prayerStatus === "consistent" && <div className="w-2.5 h-2.5 bg-green-950 rounded-full" />}
                                 </div>
                                 <input
+                                  aria-label="I began praying consistently"
                                   type="radio"
                                   className="hidden"
                                   name="prayerStatus"
@@ -473,6 +480,7 @@ export default function Qaza() {
                                   {prayerStatus === "never" && <div className="w-2.5 h-2.5 bg-green-950 rounded-full" />}
                                 </div>
                                 <input
+                                  aria-label="I have never prayed consistently"
                                   type="radio"
                                   className="hidden"
                                   name="prayerStatus"
@@ -496,7 +504,7 @@ export default function Qaza() {
                                 >
                                   <div className="pb-2">
                                     <div className="flex justify-between items-center mb-4">
-                                      <label className="font-['Manrope'] font-medium text-[clamp(1rem,2vw,1.125rem)] text-green-950">
+                                      <label htmlFor="qaza-praying-age" className="font-['Manrope'] font-medium text-[clamp(1rem,2vw,1.125rem)] text-green-950">
                                         When did you begin praying consistently?
                                       </label>
                                       <span className="font-['Manrope'] text-[clamp(1.125rem,2vw,1.25rem)] font-semibold text-[#16A34A]">
@@ -504,6 +512,8 @@ export default function Qaza() {
                                       </span>
                                     </div>
                                     <input
+                                      id="qaza-praying-age"
+                                      aria-label="Age when began praying consistently"
                                       type="range"
                                       min={pubertyAge}
                                       max={Math.max(pubertyAge + 1, currentAge)}
@@ -627,6 +637,7 @@ export default function Qaza() {
                                   Adjust End Age
                                 </label>
                                 <input
+                                  aria-label={`Adjust end age for phase ages ${phase.startAge} to ${phase.endAge}`}
                                   type="range"
                                   min={phase.startAge + 1}
                                   max={phases[index + 1].endAge - 1}
@@ -711,6 +722,8 @@ export default function Qaza() {
                             Add or subtract specific prayers if you have previously made some up.
                           </p>
                           <input
+                            id="qaza-manual-adjustment"
+                            aria-label="Manual Adjustment in prayers"
                             type="number"
                             value={manualAdjustment}
                             onChange={(e) => setManualAdjustment(Number(e.target.value))}
@@ -745,6 +758,8 @@ export default function Qaza() {
                             ))}
                           </div>
                           <input
+                            id="qaza-custom-pace"
+                            aria-label="Custom daily prayer pace"
                             type="number"
                             value={customPace}
                             onChange={(e) => setCustomPace(e.target.value)}

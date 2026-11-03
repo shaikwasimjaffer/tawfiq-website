@@ -480,7 +480,7 @@ const Section = ({ title, children, delay }) => (
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay, duration: 0.5 }}
   >
-    <div className="text-[10px] uppercase tracking-widest font-['Geist',sans-serif] font-semibold text-green-500 mb-3 sm:mb-4">
+    <div className="text-[10px] uppercase tracking-widest font-['Geist',sans-serif] font-semibold text-green-700 mb-3 sm:mb-4">
       {title}
     </div>
     {children}
