@@ -806,6 +806,10 @@ function FAQSection() {
                 }`}
               >
                 <button
+                  type="button"
+                  aria-expanded={isOpen}
+                  aria-controls={`faq-answer-${index}`}
+                  aria-label={faq.question}
                   onClick={() => toggleFAQ(index)}
                   className="w-full flex items-center justify-between p-6 sm:p-8 text-left outline-none cursor-pointer group"
                 >
@@ -888,7 +892,7 @@ function BreathingVersesSection() {
             className="flex flex-col items-center justify-center text-center px-12 md:px-24 w-[90vw] md:w-[800px]"
           >
             {/* Eyebrow Label */}
-            <p className="text-[11px] font-['Geist',sans-serif] tracking-[0.25em] uppercase text-green-600 mb-8 md:mb-12 font-semibold">
+            <p className="text-[11px] font-['Geist',sans-serif] tracking-[0.25em] uppercase text-green-800 font-semibold mb-8 md:mb-12 font-semibold">
               {verse.reference}
             </p>
 

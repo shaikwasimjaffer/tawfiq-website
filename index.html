@@ -15,12 +15,20 @@
     <meta name="author" content="Tawfiq" />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#0D3B2A" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Tawfiq" />
 
     <!-- Canonical -->
     <link rel="canonical" href="https://tawfiq.in/" />
+    <link rel="alternate" href="https://tawfiq.in/" hreflang="x-default" />
+    <link rel="alternate" href="https://tawfiq.in/" hreflang="en" />
 
-    <!-- Favicon -->
+    <!-- Favicon & Web Manifest -->
     <link rel="icon" type="image/png" href="/tawfiq.png" />
+    <link rel="apple-touch-icon" href="/tawfiq.png" />
+    <link rel="manifest" href="/manifest.json" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -58,14 +66,16 @@
       content="https://tawfiq.in/og-image.jpg"
     />
 
-    <!-- Google Site Name -->
+    <!-- Google Site Name & Search Structured Data -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "WebSite",
         "name": "Tawfiq",
-        "alternateName": "tawfiq.in",
-        "url": "https://tawfiq.in/"
+        "alternateName": ["tawfiq.in", "Tawfiq App"],
+        "url": "https://tawfiq.in/",
+        "inLanguage": "en",
+        "description": "Islamic prayer companion for tracking Salah, managing Qaza prayers, reading Quran, and building consistency in worship."
       }
     </script>
 
@@ -77,7 +87,12 @@
         "name": "Tawfiq",
         "url": "https://tawfiq.in/",
         "applicationCategory": "LifestyleApplication",
-        "operatingSystem": "Web",
+        "operatingSystem": "All",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
         "description": "Tawfiq is an Islamic prayer companion for tracking Salah, managing Qaza prayers, reading Quran, performing Dhikr, and finding the Qibla."
       }
     </script>
@@ -92,6 +107,7 @@
             "@id": "https://tawfiq.in/#organization",
             "name": "Tawfiq",
             "url": "https://tawfiq.in/",
+            "logo": "https://tawfiq.in/tawfiq.png",
             "description": "Tawfiq is an Islamic prayer companion for tracking Salah, managing Qaza prayers, reading Quran, performing Dhikr, and finding the Qibla.",
             "founder": {
               "@id": "https://tawfiq.in/#founder"

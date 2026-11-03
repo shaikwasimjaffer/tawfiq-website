@@ -191,12 +191,15 @@ export default function Navbar({
       }
     };
 
-    checkBackground();
+    const timer = setTimeout(() => {
+      checkBackground();
+    }, 120);
 
     window.addEventListener("scroll", handleScrollAndCheck, { passive: true });
     window.addEventListener("resize", handleScrollAndCheck, { passive: true });
 
     return () => {
+      clearTimeout(timer);
       window.removeEventListener("scroll", handleScrollAndCheck);
       window.removeEventListener("resize", handleScrollAndCheck);
     };
@@ -334,9 +337,12 @@ export default function Navbar({
             transition={{ duration: 0.3 }}
           >
             <button
+              type="button"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="md:hidden relative z-50 p-2 -ml-2 text-green-950 focus:outline-none cursor-pointer group"
-              aria-label="Toggle Menu"
+              aria-label="Toggle Navigation Menu"
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-navigation"
             >
               <div className="w-[22px] flex flex-col gap-[6px]">
                 <span
@@ -417,7 +423,9 @@ export default function Navbar({
                 />
               ))}
               <motion.button
+                type="button"
                 onClick={handleContactClick}
+                aria-label="Contact Tawfiq Team"
                 whileHover={{
                   backgroundColor: "rgba(22, 163, 74, 0.08)",
                   color: "#052E16",
@@ -442,8 +450,10 @@ export default function Navbar({
           >
             <motion.button
               ref={buttonRef}
+              type="button"
               onClick={handleBismillahClick}
               onMouseEnter={checkBackground}
+              aria-label="Try Tawfiq prayer companion"
               className="group relative inline-flex items-center justify-center overflow-hidden rounded-full p-[1px] pointer-events-auto cursor-pointer transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_25px_rgba(22,163,74,0.4)]"
               animate={{
                 width: animatingAction ? "100%" : "auto",
@@ -735,11 +745,13 @@ export default function Navbar({
             className="fixed inset-0 z-[100] bg-[#F0FDF4] overflow-y-auto overflow-x-hidden flex flex-col items-center pt-24 pb-16 px-6 font-['Geist',sans-serif]"
           >
             <motion.button
+              type="button"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2, duration: 0.5 }}
               onClick={() => setShowScanner(false)}
-              className="absolute top-8 left-6 sm:top-12 sm:left-12 text-green-600 hover:text-green-950 tracking-[0.2em] uppercase text-[10px] sm:text-xs font-semibold py-2 transition-colors cursor-pointer group flex items-center gap-2"
+              aria-label="Close scanner and return to site"
+              className="absolute top-8 left-6 sm:top-12 sm:left-12 text-green-800 hover:text-green-950 tracking-[0.2em] uppercase text-[10px] sm:text-xs font-semibold py-2 transition-colors cursor-pointer group flex items-center gap-2"
             >
               <span className="transform group-hover:-translate-x-1 transition-transform duration-300">
                 ←
@@ -898,6 +910,8 @@ export default function Navbar({
               ))}
 
               <motion.button
+                type="button"
+                aria-label="Open Contact Modal"
                 onClick={() => {
                   setIsMenuOpen(false);
                   setShowContact(true);
@@ -915,6 +929,8 @@ export default function Navbar({
               </motion.button>
 
               <motion.button
+                type="button"
+                aria-label="Open App Download Scanner"
                 onClick={() => {
                   setIsMenuOpen(false);
                   setShowScanner(true);

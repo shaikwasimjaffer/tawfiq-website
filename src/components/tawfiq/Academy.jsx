@@ -172,9 +172,9 @@ function PreviewVisuals({ title }) {
           {[1, 2, 3, 4, 5].map((i) => (
             <motion.div
               key={i}
-              className="w-4 rounded-t-full bg-green-200 origin-bottom"
+              className="w-4 h-16 rounded-t-full bg-green-200 origin-bottom"
               animate={{
-                height: ["20%", "100%", "20%"],
+                scaleY: [0.2, 1, 0.2],
                 backgroundColor: ["#bbf7d0", "#16A34A", "#bbf7d0"],
               }}
               transition={{
@@ -212,8 +212,8 @@ function PreviewVisuals({ title }) {
           {[1, 2, 3, 4, 5, 6, 7].map((i) => (
             <motion.div
               key={i}
-              className="w-2 bg-[#16A34A] rounded-full"
-              animate={{ height: ["10%", i % 2 === 0 ? "80%" : "100%", "10%"] }}
+              className="w-2 h-20 bg-[#16A34A] rounded-full origin-bottom"
+              animate={{ scaleY: [0.1, i % 2 === 0 ? 0.8 : 1, 0.1] }}
               transition={{
                 duration: 1.2,
                 repeat: Infinity,
@@ -319,8 +319,8 @@ function PreviewVisuals({ title }) {
       return (
         <div className="relative w-64 h-1 bg-green-200 rounded-full flex items-center">
           <motion.div
-            className="absolute left-0 h-full bg-[#16A34A] rounded-full"
-            animate={{ width: ["0%", "100%", "0%"] }}
+            className="absolute left-0 h-full w-full bg-[#16A34A] rounded-full origin-left"
+            animate={{ scaleX: [0, 1, 0] }}
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
           />
           {[20, 50, 80].map((pos, i) => (
@@ -434,20 +434,18 @@ function WheelNode({
           className="group relative flex flex-col items-center justify-center p-4 cursor-pointer focus:outline-none touch-manipulation"
         >
           <div
-            className={`w-2.5 h-2.5 rounded-full mb-3 transition-all duration-700 ${
-              isActive && isOpened
+            className={`w-2.5 h-2.5 rounded-full mb-3 transition-all duration-700 ${isActive && isOpened
                 ? "bg-[#16A34A] scale-150 shadow-[0_0_24px_rgba(22,163,74,0.8)]"
                 : isActive
                   ? "bg-[#16A34A] scale-125 shadow-[0_0_12px_rgba(22,163,74,0.6)]"
                   : "bg-green-300 group-hover:bg-green-400 group-hover:scale-110"
-            }`}
+              }`}
           />
           <span
-            className={`font-['Newsreader',serif] font-light tracking-wide transition-all duration-700 whitespace-nowrap ${
-              isActive
+            className={`font-['Newsreader',serif] font-light tracking-wide transition-all duration-700 whitespace-nowrap ${isActive
                 ? "text-xl text-[#16A34A] font-normal"
                 : "text-base text-green-500 group-hover:text-green-700"
-            }`}
+              }`}
           >
             {topic.title}
           </span>
@@ -554,113 +552,224 @@ export default function TawfiqLearningHub() {
           transition={{ duration: 0.5 }}
           className="relative text-center z-20 w-full px-4 mb-8 sm:mb-12 shrink-0 pt-4"
         >
-          <p className="text-[10px] sm:text-[11px] font-['Geist',sans-serif] tracking-[0.25em] uppercase text-green-500 mb-3 sm:mb-4">
+          <p className="text-[10px] sm:text-[11px] font-['Geist',sans-serif] tracking-[0.25em] uppercase text-green-800 font-semibold mb-3 sm:mb-4">
             03 — The Academy
           </p>
           <h2 className="text-3xl sm:text-5xl lg:text-6xl font-['Newsreader',serif] font-light text-green-950 tracking-tight leading-tight">
-            Know Your Faith. <span className="text-[#16A34A]">Know Your Creator</span>
+            Where Learning Meets <span className="text-[#16A34A]">Devotion</span>
           </h2>
-          <p className="mt-3 sm:mt-4 text-sm sm:text-lg font-['Newsreader',serif] font-light text-green-700 max-w-lg mx-auto leading-relaxed px-2">
+          <p className="mt-3 sm:mt-4 text-sm sm:text-lg font-['Newsreader',serif] font-light text-green-800 max-w-lg mx-auto leading-relaxed px-2">
             Explore the beauty of Islam through the 99 Names of Allah, daily Duas, Salah, Wudu, Seerah, and more, all in one place.
           </p>
         </motion.div>
 
-        {/* --- MAIN INTERACTIVE AREA --- */}
-        <div className="relative flex-1 w-full flex flex-col items-center justify-center min-h-[400px]">
-          {/* CENTER CONTENT (Shared Layout Mobile + Desktop) */}
-          <div className="relative sm:absolute z-30 flex flex-col items-center justify-center w-full max-w-lg sm:max-w-md text-center pointer-events-none px-6">
+        {/* --- MAIN INTERACTIVE AREA: THE MINIMALIST SACRED GALLERY (Panoramic Canvas) --- */}
+        <div className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* MOBILE VIEW (< lg): Minimal center card + Bottom sheet trigger */}
+          <div className="lg:hidden flex flex-col items-center justify-center min-h-[380px] text-center">
             <AnimatePresence mode="wait">
               <motion.div
-                key={`topic-${activeIndex}`}
-                initial={
-                  isReturning
-                    ? false
-                    : { opacity: 0, filter: "blur(4px)", y: 15 }
-                }
+                key={`mobile-topic-${activeIndex}`}
+                initial={{ opacity: 0, filter: "blur(4px)", y: 15 }}
                 animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
                 exit={{ opacity: 0, filter: "blur(4px)", y: -15 }}
-                transition={{ duration: 0.4 }}
-                className="flex flex-col items-center text-center w-full pointer-events-auto"
+                transition={{ duration: 0.35 }}
+                className="flex flex-col items-center text-center w-full max-w-md px-4"
               >
-                <span
-                  className="font-arabic text-6xl lg:text-7xl text-green-300/80 mb-6 leading-none"
-                  dir="rtl"
-                >
+                <span className="font-arabic text-6xl text-green-300/80 mb-4 leading-none" dir="rtl">
                   {selectedTopic.arabic}
                 </span>
 
-                {/* Title / Trigger (Opens Bottom Sheet on Mobile, disabled on Desktop) */}
                 <button
-                  onClick={() => {
-                    if (window.innerWidth < 640) {
-                      setIsBottomSheetOpen(true);
-                    }
-                  }}
-                  className="flex items-center justify-center gap-2 mb-3 sm:mb-4 text-green-950 active:opacity-60 transition-opacity sm:pointer-events-none"
+                  type="button"
+                  onClick={() => setIsBottomSheetOpen(true)}
+                  aria-label={`Choose topic, currently selected: ${selectedTopic.title}`}
+                  aria-haspopup="dialog"
+                  className="flex items-center justify-center gap-2 mb-3 text-green-950 active:opacity-60 transition-opacity cursor-pointer"
                 >
-                  <motion.h2
-                    layoutId={`title-${selectedTopic.title}`}
-                    className="font-['Newsreader',serif] font-light text-4xl sm:text-5xl tracking-tight leading-none"
-                  >
+                  <span className="font-['Newsreader',serif] font-light text-4xl tracking-tight leading-none">
                     {selectedTopic.title}
-                  </motion.h2>
-                  <div className="text-green-500 mt-1 sm:hidden">
+                  </span>
+                  <div className="text-green-700 mt-1">
                     <ChevronDown />
                   </div>
                 </button>
 
-                <motion.p
-                  layoutId={`desc-${selectedTopic.title}`}
-                  className="font-['Newsreader',serif] font-light text-base sm:text-xl italic text-green-700 leading-relaxed max-w-[280px] sm:max-w-md"
-                >
+                <p className="font-['Newsreader',serif] font-light text-base italic text-green-800 leading-relaxed mb-8">
                   {selectedTopic.sentence}
-                </motion.p>
+                </p>
+
+                <button
+                  type="button"
+                  onClick={() => setIsOverlayOpen(true)}
+                  aria-label={`Explore full ${selectedTopic.title} module`}
+                  className="font-['Geist',sans-serif] bg-green-950 text-green-100 px-8 py-3.5 rounded-full text-xs tracking-[0.15em] uppercase font-semibold active:bg-green-900 transition-colors shadow-lg cursor-pointer"
+                >
+                  Explore Module
+                </button>
               </motion.div>
             </AnimatePresence>
-
-            {/* Mobile "Explore Module" Button (Hidden on Desktop) */}
-            <div className="pointer-events-auto sm:hidden mt-10 mb-6 w-full flex justify-center">
-              <button
-                onClick={() => setIsOverlayOpen(true)}
-                className="font-['Geist',sans-serif] bg-green-950 text-green-100 px-8 py-4 rounded-full text-xs tracking-[0.15em] uppercase font-semibold active:bg-green-900 transition-colors shadow-lg"
-              >
-                Explore Module
-              </button>
-            </div>
           </div>
 
-          {/* --- DESKTOP WHEEL (Hidden on Mobile) --- */}
-          <motion.div
-            className={`hidden sm:flex relative items-center justify-center sm:w-[600px] sm:h-[600px] lg:w-[780px] lg:h-[780px] rounded-full border border-green-200/70 z-10 ${
-              isLocked ? "pointer-events-none" : ""
-            }`}
-            style={{ rotate: wheelRotation }}
-          >
-            <motion.div
-              animate={{ opacity: isOverlayOpen ? 0 : 1 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              className="absolute inset-0 w-full h-full pointer-events-none"
-            >
-              <div className="absolute inset-12 rounded-full border-[0.5px] border-green-200/50" />
-              <div className="absolute inset-24 rounded-full border border-green-200/40 border-dashed" />
-            </motion.div>
+          {/* LAPTOP / DESKTOP PANORAMIC SACRED GALLERY (lg+) */}
+          <div className="hidden lg:flex flex-col items-center w-full">
+            {/* 1. Floating Minimalist Timeline Ribbon */}
+            <div className="flex items-center justify-center gap-1.5 p-1.5 bg-white/80 backdrop-blur-md rounded-full border border-green-200/70 shadow-sm mb-10 max-w-5xl mx-auto overflow-x-auto">
+              {topics.map((topic, i) => {
+                const isActive = i === activeIndex;
+                return (
+                  <button
+                    type="button"
+                    key={topic.title}
+                    aria-label={`Select topic: ${topic.title}`}
+                    onClick={() => setActiveIndex(i)}
+                    className={`relative px-4 py-2 rounded-full text-xs font-['Geist',sans-serif] tracking-wide transition-all duration-300 cursor-pointer flex items-center gap-2 ${
+                      isActive
+                        ? "text-white font-medium shadow-md"
+                        : "text-green-800/70 hover:text-green-950 hover:bg-green-100/50 font-normal"
+                    }`}
+                  >
+                    {isActive && (
+                      <motion.div
+                        layoutId="active-gallery-pill"
+                        transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                        className="absolute inset-0 bg-green-950 rounded-full"
+                      />
+                    )}
+                    <span className="relative z-10 text-[10px] font-mono opacity-60">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="relative z-10 whitespace-nowrap">
+                      {topic.title}
+                    </span>
+                    {isActive && (
+                      <span className="relative z-10 w-1.5 h-1.5 rounded-full bg-[#16A34A]" />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
 
-            {topics.map((topic, i) => (
-              <WheelNode
-                key={topic.title}
-                topic={topic}
-                index={i}
-                angle={i * anglePerItem}
-                wheelRotation={wheelRotation}
-                isActive={i === activeIndex}
-                isOpened={isOverlayOpen && selectedTopic.title === topic.title}
-                isFaded={isOverlayOpen && selectedTopic.title !== topic.title}
-                onMouseEnter={() => handleHoverEnter(i)}
-                onMouseLeave={handleHoverLeave}
-                onClick={(e) => handleNodeClick(i, e)}
-              />
-            ))}
-          </motion.div>
+            {/* 2. The Panoramic Sacred Canvas */}
+            <div className="w-full max-w-6xl mx-auto relative">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={`gallery-canvas-${selectedTopic.title}`}
+                  initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
+                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  exit={{ opacity: 0, y: -20, filter: "blur(6px)" }}
+                  transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                  className="bg-gradient-to-b from-white/95 to-white/80 backdrop-blur-xl border border-green-200/80 rounded-[2.5rem] p-10 lg:p-14 shadow-[0_20px_60px_-15px_rgba(5,150,105,0.09)] relative overflow-hidden flex flex-col justify-between min-h-[540px]"
+                >
+                  {/* Ethereal Arabic Calligraphy Watermark in Background */}
+                  <div
+                    className="absolute -top-12 -right-8 font-arabic text-[220px] text-green-900/[0.04] select-none pointer-events-none leading-none z-0"
+                    dir="rtl"
+                  >
+                    {selectedTopic.arabic}
+                  </div>
+
+                  {/* Top Canvas Bar */}
+                  <div className="flex items-center justify-between relative z-10 mb-8 border-b border-green-100/80 pb-6">
+                    <div className="flex items-center gap-3">
+                      <span className="text-[11px] font-['Geist',sans-serif] tracking-[0.25em] uppercase text-emerald-800 font-semibold bg-emerald-50 px-3.5 py-1 rounded-full border border-emerald-200/60">
+                        Module {String(activeIndex + 1).padStart(2, "0")} of {String(topics.length).padStart(2, "0")}
+                      </span>
+                      <span className="text-xs text-green-800 font-['Geist',sans-serif]">
+                        {selectedTopic.subtitle}
+                      </span>
+                    </div>
+
+                    <span
+                      className="font-arabic text-4xl lg:text-5xl text-emerald-600/90 leading-none drop-shadow-sm"
+                      dir="rtl"
+                    >
+                      {selectedTopic.arabic}
+                    </span>
+                  </div>
+
+                  {/* Center Canvas Stage */}
+                  <div className="grid lg:grid-cols-12 gap-10 items-center relative z-10 my-auto">
+                    {/* Left: Giant Typography & Poetic Essence */}
+                    <div className="lg:col-span-7 flex flex-col justify-center">
+                      <h3 className="font-['Newsreader',serif] font-light text-5xl lg:text-6xl text-green-950 tracking-tight leading-[1.05] mb-5">
+                        {selectedTopic.title}
+                      </h3>
+
+                      <p className="font-['Newsreader',serif] font-light text-2xl lg:text-3xl italic text-green-800 leading-relaxed max-w-xl mb-8">
+                        "{selectedTopic.sentence}"
+                      </p>
+
+                      {/* Feature Highlights Minimal Pills */}
+                      <div className="flex flex-wrap gap-2.5">
+                        {selectedTopic.features.slice(0, 3).map((feat, idx) => (
+                          <span
+                            key={idx}
+                            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-green-50/80 border border-green-200/60 text-green-900 text-xs font-['Geist',sans-serif]"
+                          >
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#16A34A]" />
+                            {feat}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Right: The Generative Pedestal Shrine */}
+                    <div className="lg:col-span-5 flex flex-col items-center">
+                      <div className="w-full bg-gradient-to-br from-green-50 via-[#F0FDF4] to-emerald-50/50 rounded-3xl p-8 border border-green-200/60 shadow-inner flex flex-col items-center justify-center min-h-[220px] relative overflow-hidden">
+                        <PreviewVisuals title={selectedTopic.title} />
+                      </div>
+
+                      <p className="mt-4 text-xs font-['Newsreader',serif] italic text-green-800 text-center max-w-xs">
+                        {selectedTopic.statistic}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Bottom Navigation & Action Bar */}
+                  <div className="flex items-center justify-between relative z-10 pt-8 border-t border-green-100/80 mt-8">
+                    {/* Previous & Next Topic Controls */}
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        aria-label="Previous learning topic"
+                        onClick={() =>
+                          setActiveIndex((prev) => (prev > 0 ? prev - 1 : topics.length - 1))
+                        }
+                        className="px-4 py-2 rounded-full border border-green-200/80 text-xs font-['Geist',sans-serif] text-green-800 hover:text-green-950 hover:bg-green-50 transition-all cursor-pointer flex items-center gap-1.5 group"
+                      >
+                        <span className="transform group-hover:-translate-x-0.5 transition-transform">←</span>
+                        <span>Previous</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        aria-label="Next learning topic"
+                        onClick={() =>
+                          setActiveIndex((prev) => (prev < topics.length - 1 ? prev + 1 : 0))
+                        }
+                        className="px-4 py-2 rounded-full border border-green-200/80 text-xs font-['Geist',sans-serif] text-green-800 hover:text-green-950 hover:bg-green-50 transition-all cursor-pointer flex items-center gap-1.5 group"
+                      >
+                        <span>Next</span>
+                        <span className="transform group-hover:translate-x-0.5 transition-transform">→</span>
+                      </button>
+                    </div>
+
+                    {/* Primary Module CTA Button */}
+                    <button
+                      type="button"
+                      aria-label={`Explore full ${selectedTopic.title} module`}
+                      onClick={() => setIsOverlayOpen(true)}
+                      className="group font-['Geist',sans-serif] inline-flex items-center gap-2.5 bg-green-950 hover:bg-[#16A34A] text-white px-8 py-4 rounded-full text-xs uppercase tracking-[0.2em] font-semibold transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer active:scale-95 whitespace-nowrap"
+                    >
+                      <span>Explore Full Module</span>
+                      <span className="transform group-hover:translate-x-1 transition-transform">→</span>
+                    </button>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
         </div>
 
         {/* --- NATIVE BOTTOM SHEET SELECTOR (Mobile Only) --- */}
@@ -699,16 +808,17 @@ export default function TawfiqLearningHub() {
                     const isActive = i === activeIndex;
                     return (
                       <button
+                        type="button"
                         key={topic.title}
+                        aria-label={`Select topic: ${topic.title}`}
                         onClick={() => {
                           setActiveIndex(i);
                           setIsBottomSheetOpen(false);
                         }}
-                        className={`w-full flex items-center justify-between p-4 rounded-2xl transition-colors active:bg-green-100 ${
-                          isActive
+                        className={`w-full flex items-center justify-between p-4 rounded-2xl transition-colors active:bg-green-100 ${isActive
                             ? "bg-green-100/50 border border-green-200/50"
                             : "bg-transparent"
-                        }`}
+                          }`}
                       >
                         <div className="flex items-center gap-4 text-left">
                           <span
@@ -718,9 +828,8 @@ export default function TawfiqLearningHub() {
                             {topic.arabic}
                           </span>
                           <span
-                            className={`font-['Newsreader',serif] font-light text-xl ${
-                              isActive ? "text-[#16A34A]" : "text-green-800"
-                            }`}
+                            className={`font-['Newsreader',serif] font-light text-xl ${isActive ? "text-[#16A34A]" : "text-green-800"
+                              }`}
                           >
                             {topic.title}
                           </span>
@@ -753,7 +862,8 @@ export default function TawfiqLearningHub() {
               <div className="sm:hidden sticky top-0 z-50 bg-[#F0FDF4]/90 backdrop-blur-md border-b border-green-200/50 px-4 py-4 flex items-center">
                 <button
                   onClick={closeModule}
-                  className="text-green-600 font-['Geist',sans-serif] text-sm tracking-wide font-medium flex items-center gap-1 active:opacity-60"
+                  aria-label="Close learning module"
+                  className="text-green-800 font-['Geist',sans-serif] text-sm tracking-wide font-medium flex items-center gap-1 active:opacity-60"
                 >
                   <ChevronDown className="rotate-90" />
                   Back

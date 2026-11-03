@@ -341,7 +341,7 @@ export default function Transformation({
               }
             `}</style>
 
-            <button className="tawfiq-pearl group" onClick={() => setShowScanner(true)}>
+            <button type="button" aria-label="Try Tawfiq - Open App Scanner" className="tawfiq-pearl group" onClick={() => setShowScanner(true)}>
               <div className="wrap flex items-center justify-center px-10 py-5 sm:px-14 sm:py-6">
                 <div className="content-container relative z-20 flex items-center justify-center text-[18px] sm:text-[20px] font-medium tracking-tight whitespace-nowrap text-white font-['Geist',sans-serif]">
                   
@@ -401,7 +401,8 @@ export default function Transformation({
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2, duration: 0.5 }}
               onClick={() => setShowScanner(false)}
-              className="absolute top-8 left-6 sm:top-12 sm:left-12 text-green-600 hover:text-green-950 tracking-[0.2em] uppercase text-[10px] sm:text-xs font-semibold py-2 transition-colors cursor-pointer group flex items-center gap-2"
+              aria-label="Close scanner and return to site"
+              className="absolute top-8 left-6 sm:top-12 sm:left-12 text-green-800 hover:text-green-950 tracking-[0.2em] uppercase text-[10px] sm:text-xs font-semibold py-2 transition-colors cursor-pointer group flex items-center gap-2"
             >
               <span className="transform group-hover:-translate-x-1 transition-transform duration-300">
                 ←

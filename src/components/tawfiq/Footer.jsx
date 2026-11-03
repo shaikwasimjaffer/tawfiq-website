@@ -5,16 +5,15 @@ import { Link } from "react-router-dom";
 const BismillahButton = ({
   onClick,
   className = "",
-  iconSize = 18,
-  textSize = "text-xl md:text-2xl",
 }) => (
   <button
     onClick={onClick}
     type="button"
-    className={`group inline-flex items-center gap-3 cursor-pointer outline-none bg-transparent border-none p-0 ${className}`}
+    aria-label="Begin journey with Tawfiq"
+    className={`group inline-flex items-center gap-3 cursor-pointer outline-none bg-green-950 hover:bg-[#16A34A] text-white px-7 py-3.5 rounded-full text-xs font-['Geist',sans-serif] tracking-[0.2em] uppercase font-semibold transition-all duration-300 shadow-md ${className}`}
   >
-    <span className="w-0 group-hover:w-6 h-px bg-green-950 transition-all duration-500" />
-    <span className="w-0 group-hover:w-6 h-px bg-green-950 transition-all duration-500" />
+    <span>Begin With Bismillah</span>
+    <span className="transform group-hover:translate-x-1 transition-transform">→</span>
   </button>
 );
 
@@ -81,7 +80,7 @@ export default function Footer({ onOpenScanner, showContact, setShowContact }) {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-12 mb-32 text-left">
           {footerCategories.map((category, idx) => (
             <div key={idx} className="flex flex-col">
-              <h3 className="text-[13px] font-semibold tracking-[0.15em] text-green-700/80 uppercase mb-6">
+              <h3 className="text-[13px] font-semibold tracking-[0.15em] text-green-800 uppercase mb-6">
                 {category.title}
               </h3>
               <ul className="flex flex-col gap-3">
@@ -89,8 +88,10 @@ export default function Footer({ onOpenScanner, showContact, setShowContact }) {
                   <li key={linkIdx}>
                     {link.onClick ? (
                       <button
+                        type="button"
                         onClick={link.onClick}
-                        className="text-[15px] text-green-900 hover:text-green-700 transition-colors duration-300"
+                        aria-label={`Open ${link.name}`}
+                        className="text-[15px] text-green-900 hover:text-green-700 transition-colors duration-300 cursor-pointer text-left"
                       >
                         {link.name}
                       </button>
@@ -139,11 +140,20 @@ export default function Footer({ onOpenScanner, showContact, setShowContact }) {
               setTimeout(() => setIsRevealed(true), 3000);
             }}
             onClick={handleScrollToTop}
+            role="button"
+            tabIndex={0}
+            aria-label="Back to top of page"
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                handleScrollToTop();
+              }
+            }}
             className="w-full relative flex flex-col items-center justify-center py-4 cursor-pointer group"
             style={{ perspective: "2000px" }}
           >
             {/* Invisible spacer to maintain layout height while absolute elements animate */}
-            <h2 className="invisible font-serif uppercase font-normal leading-[0.8] tracking-[-0.04em] text-[21vw] select-none whitespace-nowrap">
+            <h2 aria-hidden="true" className="invisible font-serif uppercase font-normal leading-[0.8] tracking-[-0.04em] text-[21vw] select-none whitespace-nowrap">
               TAWFIQ
             </h2>
 
@@ -169,6 +179,7 @@ export default function Footer({ onOpenScanner, showContact, setShowContact }) {
 
               {/* Back Face: Arabic */}
               <h2
+                aria-hidden="true"
                 className="absolute font-normal leading-[0.8] text-green-950 text-[21vw] select-none whitespace-nowrap"
                 style={{
                   backfaceVisibility: "hidden",

@@ -317,7 +317,7 @@ export default function Qaza() {
                       <h3 className="font-['Newsreader',serif] font-medium text-[clamp(2.5rem,4vw,3.5rem)] text-green-950 mb-6 tracking-[-0.02em] leading-[1.1]">
                         Estimate Your Missed Prayers
                       </h3>
-                      <p className="font-['Manrope'] text-[clamp(1.125rem,2vw,1.25rem)] text-green-600 leading-[1.7] mb-12 max-w-2xl">
+                      <p className="font-['Manrope'] text-[clamp(1.125rem,2vw,1.25rem)] text-green-800 leading-[1.7] mb-12 max-w-2xl">
                         Answer a few questions to build an accurate starting point.
                       </p>
 
@@ -406,7 +406,7 @@ export default function Qaza() {
                               onChange={(e) => setCurrentAge(Number(e.target.value))}
                               className="w-full accent-[#16A34A] bg-green-200 h-2 rounded-lg cursor-pointer"
                             />
-                            <div className="flex justify-between text-[clamp(0.875rem,1.5vw,1rem)] text-green-500 font-['Manrope'] mt-2 tracking-wider font-semibold">
+                            <div className="flex justify-between text-[clamp(0.875rem,1.5vw,1rem)] text-green-800 font-['Manrope'] mt-2 tracking-wider font-semibold">
                               <span>0</span>
                               <span>90</span>
                             </div>
@@ -431,7 +431,7 @@ export default function Qaza() {
                               onChange={(e) => setPubertyAge(Number(e.target.value))}
                               className="w-full accent-[#16A34A] bg-green-200 h-2 rounded-lg cursor-pointer"
                             />
-                            <div className="flex justify-between text-[clamp(0.875rem,1.5vw,1rem)] text-green-500 font-['Manrope'] mt-2 tracking-wider font-semibold">
+                            <div className="flex justify-between text-[clamp(0.875rem,1.5vw,1rem)] text-green-800 font-['Manrope'] mt-2 tracking-wider font-semibold">
                               <span>0</span>
                               <span>{Math.max(1, currentAge)}</span>
                             </div>
@@ -512,7 +512,7 @@ export default function Qaza() {
                                       onChange={(e) => setPrayingAge(Number(e.target.value))}
                                       className="w-full accent-[#16A34A] bg-green-200 h-2 rounded-lg cursor-pointer"
                                     />
-                                    <div className="flex justify-between text-[clamp(0.875rem,1.5vw,1rem)] text-green-500 font-['Manrope'] mt-2 tracking-wider font-semibold">
+                                    <div className="flex justify-between text-[clamp(0.875rem,1.5vw,1rem)] text-green-800 font-['Manrope'] mt-2 tracking-wider font-semibold">
                                       <span>{pubertyAge}</span>
                                       <span>{Math.max(pubertyAge + 1, currentAge)}</span>
                                     </div>
@@ -529,6 +529,9 @@ export default function Qaza() {
                                 Calculation Method
                               </label>
                               <button
+                                type="button"
+                                aria-expanded={showScholarInfo}
+                                aria-label="Learn more about scholar calculation methods"
                                 onClick={() => setShowScholarInfo(!showScholarInfo)}
                                 className="text-[clamp(0.875rem,1.5vw,1rem)] uppercase tracking-widest font-['Manrope'] text-[#16A34A] hover:text-green-950 underline underline-offset-2 font-semibold cursor-pointer"
                               >
@@ -593,7 +596,7 @@ export default function Qaza() {
                       <h3 className="font-['Newsreader',serif] font-medium text-[clamp(2.5rem,4vw,3.5rem)] text-green-950 mb-6 tracking-[-0.02em] leading-[1.1]">
                         Detail Your Journey
                       </h3>
-                      <p className="font-['Manrope'] text-[clamp(1.125rem,2vw,1.25rem)] text-green-600 leading-[1.7] mb-12 max-w-2xl">
+                      <p className="font-['Manrope'] text-[clamp(1.125rem,2vw,1.25rem)] text-green-800 leading-[1.7] mb-12 max-w-2xl">
                         Break down the years between {pubertyAge} and {prayingAge} to reflect when your habits changed.
                       </p>
 
@@ -602,8 +605,10 @@ export default function Qaza() {
                           <div key={phase.id} className="p-6 md:p-8 border border-green-200 bg-white/50 relative">
                             {phases.length > 1 && (
                               <button
+                                type="button"
+                                aria-label={`Delete prayer phase ${index + 1}`}
                                 onClick={() => handleDeletePhase(index)}
-                                className="absolute top-6 right-6 text-green-500 hover:text-red-500 transition-colors"
+                                className="absolute top-6 right-6 text-green-700 hover:text-red-600 transition-colors cursor-pointer"
                               >
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                   <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -693,7 +698,7 @@ export default function Qaza() {
                       <h3 className="font-['Newsreader',serif] font-medium text-[clamp(2.5rem,4vw,3.5rem)] text-green-950 mb-6 tracking-[-0.02em] leading-[1.1]">
                         Pace & Refinement
                       </h3>
-                      <p className="font-['Manrope'] text-[clamp(1.125rem,2vw,1.25rem)] text-green-600 leading-[1.7] mb-12 max-w-2xl">
+                      <p className="font-['Manrope'] text-[clamp(1.125rem,2vw,1.25rem)] text-green-800 leading-[1.7] mb-12 max-w-2xl">
                         Finalize your plan by setting your daily recovery pace and any manual adjustments.
                       </p>
 
@@ -702,7 +707,7 @@ export default function Qaza() {
                           <label className="block font-['Manrope'] font-medium text-[clamp(1rem,2vw,1.125rem)] text-green-950 mb-3">
                             Manual Adjustment (Optional)
                           </label>
-                          <p className="text-[clamp(0.875rem,1.5vw,1rem)] text-green-600 mb-4">
+                          <p className="text-[clamp(0.875rem,1.5vw,1rem)] text-green-800 mb-4">
                             Add or subtract specific prayers if you have previously made some up.
                           </p>
                           <input
@@ -718,7 +723,7 @@ export default function Qaza() {
                           <label className="block font-['Manrope'] font-medium text-[clamp(1rem,2vw,1.125rem)] text-green-950 mb-3">
                             Daily Pace
                           </label>
-                          <p className="text-[clamp(0.875rem,1.5vw,1rem)] text-green-600 mb-4">
+                          <p className="text-[clamp(0.875rem,1.5vw,1rem)] text-green-800 mb-4">
                             How many Qaza prayers do you plan to make up each day?
                           </p>
                           <div className="grid grid-cols-4 gap-3 mb-4">
@@ -776,7 +781,7 @@ export default function Qaza() {
                 className="w-full max-w-4xl mx-auto text-center"
               >
                 <div className="space-y-12 py-16">
-                  <p className="text-xs md:text-sm font-['Geist',sans-serif] tracking-[0.25em] uppercase text-green-600 font-semibold">
+                  <p className="text-xs md:text-sm font-['Geist',sans-serif] tracking-[0.25em] uppercase text-green-800 font-semibold font-semibold">
                     The Journey
                   </p>
 
@@ -836,7 +841,7 @@ export default function Qaza() {
             transition={{ duration: 1, delay: 0.2 }}
             className="flex flex-col items-center space-y-4"
           >
-            <p className="font-['Manrope'] text-[clamp(1.1rem,1.5vw,1.25rem)] md:text-[clamp(1.25rem,2vw,1.5rem)] text-green-600 leading-[1.7] font-light max-w-xl mb-4">
+            <p className="font-['Manrope'] text-[clamp(1.1rem,1.5vw,1.25rem)] md:text-[clamp(1.25rem,2vw,1.5rem)] text-green-800 leading-[1.7] font-light max-w-xl mb-4">
               Recover your Qaza with clarity, structure, and consistency.
             </p>
 

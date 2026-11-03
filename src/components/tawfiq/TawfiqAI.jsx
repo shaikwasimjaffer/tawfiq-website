@@ -286,7 +286,7 @@ export default function LandingPageDemo() {
                 >
                   {/* Reading Mode Selector */}
                   <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 border-b border-green-100 pb-6">
-                    <span className="text-[10px] uppercase tracking-widest text-green-500 font-semibold shrink-0 font-['Geist',sans-serif]">
+                    <span className="text-[10px] uppercase tracking-widest text-green-800 font-semibold shrink-0 font-['Geist',sans-serif]">
                       Read this as
                     </span>
                     <div className="flex flex-wrap gap-1 bg-green-100/60 p-1 rounded-2xl sm:rounded-full w-full sm:w-auto">
@@ -297,7 +297,7 @@ export default function LandingPageDemo() {
                           className={`flex-1 sm:flex-none px-3 sm:px-4 py-1.5 rounded-xl sm:rounded-full text-[10px] sm:text-xs font-['Geist',sans-serif] uppercase tracking-wider font-semibold transition-all ${
                             mode === m
                               ? "bg-white text-green-950 shadow-sm"
-                              : "text-green-600 hover:text-green-800"
+                              : "text-green-800 hover:text-green-950"
                           }`}
                         >
                           {mode === m ? "●" : "○"} {m}
@@ -456,7 +456,7 @@ const SubtleThinkingItem = ({ title, activeSubtitle, doneSubtitle, step, targetS
           <motion.span
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="text-green-600 font-medium text-base"
+            className="text-green-800 font-medium text-base"
           >
             ✓
           </motion.span>

@@ -344,12 +344,12 @@ export default function Hero() {
                   className="cursor-pointer inline-block pointer-events-auto px-4 py-2"
           >
             {/* Dynamic Arabic text */}
-            <h2
+            <p
               dir="rtl"
               className="font-serif text-[3.2rem] sm:text-[5.5rem] md:text-[7.2rem] lg:text-[8.5rem] text-green-950 font-normal tracking-wide leading-none select-none drop-shadow-sm transition-all duration-300"
             >
               {greeting.arabic}
-            </h2>
+            </p>
 
             {/* Dynamic English translation */}
             <p className="mt-4 sm:mt-6 font-['Newsreader',serif] font-light italic text-xl sm:text-3xl md:text-4xl text-green-800/80 tracking-wider transition-all duration-300">
@@ -488,7 +488,7 @@ export default function Hero() {
               <p className="mt-3 sm:mt-6 inline-block font-['Newsreader',serif] font-light italic text-3xl sm:text-4xl md:text-5xl text-[#16A34A] tracking-wide transition-all duration-300">
                 In the name of Allah, the Most Gracious, the Most Merciful.
               </p>
-              <span className="mt-6 sm:mt-8 block font-['Geist',sans-serif] text-[10px] sm:text-[12px] uppercase tracking-[0.35em] text-green-600 font-medium">
+              <span className="mt-6 sm:mt-8 block font-['Geist',sans-serif] text-[10px] sm:text-[12px] uppercase tracking-[0.35em] text-green-800 font-medium">
                 Every meaningful journey begins here.
               </span>
             </motion.div>
