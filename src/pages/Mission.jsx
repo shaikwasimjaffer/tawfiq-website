@@ -8,6 +8,7 @@ export default function Mission() {
     <SEO
       title="Tawfiq Mission - Islamic Prayer Tracker Purpose"
       description="Discover the mission of Tawfiq: to facilitate a deeper connection with Allah through innovative Islamic technology founded by Shaik Wasim Jaffer."
+      canonical="https://tawfiq.in/mission"
     >
     <motion.div
       initial={{ x: "100%", boxShadow: "-30px 0 50px rgba(28, 25, 23, 0.15)" }}

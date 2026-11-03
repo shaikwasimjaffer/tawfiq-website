@@ -23,30 +23,30 @@ export default function Footer({ onOpenScanner, showContact, setShowContact }) {
       title: "GET STARTED",
       links: [
         { name: "Open Tawfiq", path: "/" },
-        { name: "Prayer Tracker", path: "/prayer-tracker" },
-        { name: "Qaza Manager", path: "/qaza-manager" },
-        { name: "Qibla", path: "/qibla" },
-        { name: "Download App", path: "/download" },
+        { name: "Prayer Tracker", path: "/#qaza" },
+        { name: "Qaza Manager", path: "/#qaza" },
+        { name: "Qibla", path: "/#academy" },
+        { name: "Download App", path: "https://originaltawfiq.vercel.app" },
       ],
     },
     {
       title: "WORSHIP",
       links: [
-        { name: "Salah", path: "/salah" },
-        { name: "Qaza", path: "/qaza" },
-        { name: "Dhikr", path: "/dhikr" },
-        { name: "Qur'an", path: "/quran" },
-        { name: "Duas", path: "/duas" },
+        { name: "Salah", path: "/#qaza" },
+        { name: "Qaza", path: "/#qaza" },
+        { name: "Dhikr", path: "/#academy" },
+        { name: "Qur'an", path: "/#quran" },
+        { name: "Duas", path: "/#academy" },
       ],
     },
     {
       title: "LEARN",
       links: [
-        { name: "Tafsir", path: "/tafsir" },
-        { name: "Hadith", path: "/hadith" },
-        { name: "Tajweed", path: "/tajweed" },
-        { name: "Islamic History", path: "/islamic-history" },
-        { name: "99 Names of Allah", path: "/names-of-allah" },
+        { name: "Tafsir", path: "/#quran" },
+        { name: "Hadith", path: "/#academy" },
+        { name: "Tajweed", path: "/#quran" },
+        { name: "Islamic History", path: "/#academy" },
+        { name: "99 Names of Allah", path: "/#academy" },
       ],
     },
     {
@@ -54,8 +54,9 @@ export default function Footer({ onOpenScanner, showContact, setShowContact }) {
       links: [
         { name: "About", path: "/about" },
         { name: "Our Mission", path: "/mission" },
-        { name: "Changelog", path: "/changelog" },
-        { name: "GitHub", path: "https://github.com" },
+        { name: "Privacy Policy", path: "/privacy" },
+        { name: "Terms of Service", path: "/terms" },
+        { name: "GitHub", path: "https://github.com/shaikwasimjaffer/tawfiq-website" },
         { name: "Contact", path: "/contact", onClick: () => setShowContact(true) },
       ],
     },
@@ -96,11 +97,18 @@ export default function Footer({ onOpenScanner, showContact, setShowContact }) {
                         {link.name}
                       </button>
                     ) : (
-                      link.path.startsWith("http") || link.name === "Our Mission" ? (
+                      link.path.startsWith("http") ? (
                         <a
                           href={link.path}
                           target="_blank"
                           rel="noopener noreferrer"
+                          className="text-[15px] text-green-900 hover:text-green-700 transition-colors duration-300"
+                        >
+                          {link.name}
+                        </a>
+                      ) : link.path.startsWith("/#") ? (
+                        <a
+                          href={link.path}
                           className="text-[15px] text-green-900 hover:text-green-700 transition-colors duration-300"
                         >
                           {link.name}

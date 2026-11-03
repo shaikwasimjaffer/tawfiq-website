@@ -8,6 +8,7 @@ export default function About() {
     <SEO
       title="About Tawfiq - Islamic Prayer Tracker App"
       description="Learn about Tawfiq, the #1 Islamic prayer tracker app founded by Shaik Wasim Jaffer. Discover our story, mission, and how we help Muslims worldwide stay consistent in worship."
+      canonical="https://tawfiq.in/about"
     >
     {/* THE FIX: Changed to a fixed overlay (fixed top-0 left-0 w-full h-[100dvh]).
         This forces the component to be exactly the size of the screen and scroll internally. */}

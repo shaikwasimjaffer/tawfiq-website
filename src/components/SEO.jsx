@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 const SEO = ({
   title,
   description,
+  canonical,
   keywords = [],
   structuredData = null,
   children
@@ -22,11 +23,24 @@ const SEO = ({
       document.head.appendChild(meta);
     }
 
+    // Set canonical URL
+    if (canonical) {
+      let canonicalLink = document.querySelector('link[rel="canonical"]');
+      if (canonicalLink) {
+        canonicalLink.setAttribute("href", canonical);
+      } else {
+        const link = document.createElement("link");
+        link.rel = "canonical";
+        link.href = canonical;
+        document.head.appendChild(link);
+      }
+    }
+
     // Set meta keywords
     const keywordsMeta = document.querySelector('meta[name="keywords"]');
     if (keywordsMeta) {
       keywordsMeta.setAttribute("content", keywords.join(", "));
-    } else {
+    } else if (keywords.length > 0) {
       const meta = document.createElement("meta");
       meta.name = "keywords";
       meta.content = keywords.join(", ");
@@ -35,7 +49,6 @@ const SEO = ({
 
     // Add JSON-LD structured data if provided
     if (structuredData) {
-      // Remove any existing JSON-LD from this component to avoid duplicates
       const existing = document.getElementById("seo-jsonld");
       if (existing) {
         existing.remove();
@@ -47,20 +60,9 @@ const SEO = ({
       script.textContent = JSON.stringify(structuredData);
       document.head.appendChild(script);
     }
+  }, [title, description, canonical, keywords, structuredData]);
 
-    // Cleanup on unmount
-    return () => {
-      // We could restore original tags, but for simplicity we leave them.
-      // In a more complex app, we'd store originals and restore.
-    };
-  }, [title, description, keywords, structuredData]);
-
-  // Render children so the page content is displayed
-  return children ? (
-    <>
-      {children}
-    </>
-  ) : null;
+  return children ? <>{children}</> : null;
 };
 
 export default SEO;
