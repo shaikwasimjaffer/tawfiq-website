@@ -33,6 +33,34 @@ const pages = [
           }
         },
         {
+          "@type": "Organization",
+          "@id": "https://www.tawfiq.in/#organization",
+          "name": "Tawfiq",
+          "url": "https://www.tawfiq.in/",
+          "logo": {
+            "@type": "ImageObject",
+            "@id": "https://www.tawfiq.in/#logo",
+            "url": "https://www.tawfiq.in/tawfiq.png",
+            "caption": "Tawfiq Islamic Prayer Companion"
+          },
+          "founder": {
+            "@id": "https://www.tawfiq.in/#founder"
+          }
+        },
+        {
+          "@type": "Person",
+          "@id": "https://www.tawfiq.in/#founder",
+          "name": "Shaik Wasim Jaffer",
+          "jobTitle": "Founder of Tawfiq",
+          "worksFor": {
+            "@id": "https://www.tawfiq.in/#organization"
+          },
+          "sameAs": [
+            "https://www.linkedin.com/in/shaik-wasim-jaffer-b8157140a/",
+            "https://github.com/shaikwasimjaffer"
+          ]
+        },
+        {
           "@type": "BreadcrumbList",
           "@id": "https://www.tawfiq.in/about#breadcrumb",
           "itemListElement": [

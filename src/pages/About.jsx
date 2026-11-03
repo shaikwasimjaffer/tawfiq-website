@@ -23,6 +23,34 @@ const structuredData = {
       }
     },
     {
+      "@type": "Organization",
+      "@id": "https://www.tawfiq.in/#organization",
+      "name": "Tawfiq",
+      "url": "https://www.tawfiq.in/",
+      "logo": {
+        "@type": "ImageObject",
+        "@id": "https://www.tawfiq.in/#logo",
+        "url": "https://www.tawfiq.in/tawfiq.png",
+        "caption": "Tawfiq Islamic Prayer Companion"
+      },
+      "founder": {
+        "@id": "https://www.tawfiq.in/#founder"
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://www.tawfiq.in/#founder",
+      "name": "Shaik Wasim Jaffer",
+      "jobTitle": "Founder of Tawfiq",
+      "worksFor": {
+        "@id": "https://www.tawfiq.in/#organization"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/in/shaik-wasim-jaffer-b8157140a/",
+        "https://github.com/shaikwasimjaffer"
+      ]
+    },
+    {
       "@type": "BreadcrumbList",
       "@id": "https://www.tawfiq.in/about#breadcrumb",
       "itemListElement": [
@@ -123,6 +151,64 @@ export default function About() {
             Companion offers guidance rooted in established scholarship, while
             our breathing verses section promotes mindfulness and tranquility.
           </p>
+
+          <h2 className="font-serif text-xl md:text-2xl text-stone-800 pt-3 md:pt-4">
+            The Story Behind Tawfiq
+          </h2>
+          <p>
+            Tawfiq was created by Shaik Wasim Jaffer with a simple intention: to
+            make useful Islamic tools accessible to people for free. For many
+            Muslims, managing daily worship often meant navigating fragmented
+            apps—one for prayer times, another for finding the Qibla, a
+            spreadsheet or notebook for missed prayers, and separate tools for
+            reading the Quran. Shaik Wasim wanted to build a single, calm space
+            where believers could care for their religious routines without
+            friction, commercial interruptions, or subscription fees.
+          </p>
+          <p>
+            The platform brings together essential daily utilities in one
+            cohesive experience: an algorithmic{" "}
+            <Link
+              to="/#qaza"
+              className="text-stone-900 underline underline-offset-2 hover:text-[#16A34A] transition-colors"
+            >
+              Qaza Prayer Calculator
+            </Link>{" "}
+            to help people calculate and gently clear their missed prayer debt
+            without guilt, a Salah Tracker to build steady daily consistency, a
+            reliable Qibla Finder, and direct access to{" "}
+            <Link
+              to="/#quran"
+              className="text-stone-900 underline underline-offset-2 hover:text-[#16A34A] transition-colors"
+            >
+              The Quran
+            </Link>{" "}
+            as part of their everyday spiritual routine.
+          </p>
+          <p>
+            Among these tools,{" "}
+            <Link
+              to="/#tawfiq-ai"
+              className="text-stone-900 underline underline-offset-2 hover:text-[#16A34A] transition-colors font-medium"
+            >
+              Tawfiq AI
+            </Link>{" "}
+            holds a particularly meaningful place. Rather than functioning as a
+            generic chatbot, its purpose is to make Islamic learning more
+            accessible and approachable. It allows anyone—whether a lifelong
+            practicing Muslim seeking scholarly context across different
+            Madhhabs or someone returning to prayer after years away—to explore
+            Islamic knowledge, ask sincere questions, and find authentic
+            answers without having to pay for access to the feature.
+          </p>
+          <blockquote className="border-l-2 border-[#16A34A] pl-4 py-1 italic font-serif text-stone-700 text-[15px] md:text-base my-2">
+            &ldquo;I wanted to build something that people could use for free,
+            something that brings essential Islamic tools together and makes it
+            easier for them to stay connected with their faith.&rdquo;
+            <span className="block not-italic font-sans text-xs text-stone-500 mt-1.5">
+              — Shaik Wasim Jaffer, Founder of Tawfiq
+            </span>
+          </blockquote>
 
           <h2 className="font-serif text-xl md:text-2xl text-stone-800 pt-3 md:pt-4">
             Commitment to Excellence
