@@ -55,70 +55,49 @@
       content="https://www.tawfiq.in/og-image.jpg"
     />
 
-    <!-- Google Site Name & Search Structured Data -->
+    <!-- Unified Tawfiq Knowledge Graph (Organization, Person, WebSite, WebApplication, FAQPage) -->
     <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "Tawfiq",
-        "alternateName": ["www.tawfiq.in", "tawfiq.in", "Tawfiq App"],
-        "url": "https://www.tawfiq.in/",
-        "inLanguage": "en",
-        "description": "Islamic prayer companion for tracking Salah, managing Qaza prayers, reading Quran, and building consistency in worship."
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "AboutPage",
+      "@id": "https://www.tawfiq.in/about#webpage",
+      "url": "https://www.tawfiq.in/about",
+      "name": "About Tawfiq - Islamic Prayer Tracker App",
+      "description": "Learn about Tawfiq, the #1 Islamic prayer tracker app founded by Shaik Wasim Jaffer. Discover our story, mission, and how we help Muslims worldwide stay consistent in worship.",
+      "isPartOf": {
+        "@id": "https://www.tawfiq.in/#website"
+      },
+      "about": {
+        "@id": "https://www.tawfiq.in/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.tawfiq.in/about#breadcrumb"
       }
-    </script>
-
-    <!-- Tawfiq Web Application -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "Tawfiq",
-        "url": "https://www.tawfiq.in/",
-        "applicationCategory": "LifestyleApplication",
-        "operatingSystem": "All",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.tawfiq.in/about#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.tawfiq.in/"
         },
-        "description": "Tawfiq is an Islamic prayer companion for tracking Salah, managing Qaza prayers, reading Quran, performing Dhikr, and finding the Qibla."
-      }
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "About",
+          "item": "https://www.tawfiq.in/about"
+        }
+      ]
+    }
+  ]
+}
     </script>
-
-    <!-- Tawfiq Organization + Founder -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@graph": [
-          {
-            "@type": "Organization",
-            "@id": "https://www.tawfiq.in/#organization",
-            "name": "Tawfiq",
-            "url": "https://www.tawfiq.in/",
-            "logo": "https://www.tawfiq.in/tawfiq.png",
-            "description": "Tawfiq is an Islamic prayer companion for tracking Salah, managing Qaza prayers, reading Quran, performing Dhikr, and finding the Qibla.",
-            "founder": {
-              "@id": "https://www.tawfiq.in/#founder"
-            }
-          },
-          {
-            "@type": "Person",
-            "@id": "https://www.tawfiq.in/#founder",
-            "name": "Shaik Wasim Jaffer",
-            "jobTitle": "Founder of Tawfiq",
-            "worksFor": {
-              "@id": "https://www.tawfiq.in/#organization"
-            },
-            "sameAs": [
-              "https://www.linkedin.com/in/shaik-wasim-jaffer-b8157140a/",
-              "https://github.com/shaikwasimjaffer"
-            ]
-          }
-        ]
-      }
-    </script>
-    <script type="module" crossorigin src="/assets/index-DSE1iwJv.js"></script>
+    <script type="module" crossorigin src="/assets/index-B15-0Uzb.js"></script>
     <link rel="modulepreload" crossorigin href="/assets/vendor-react-D2BT5pIS.js">
     <link rel="modulepreload" crossorigin href="/assets/vendor-framer-CCGNc1Zr.js">
     <link rel="stylesheet" crossorigin href="/assets/index-CZTLWjK0.css">
