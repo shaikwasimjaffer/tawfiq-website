@@ -461,6 +461,39 @@ export default function TawfiqLearningHub() {
   const [isLocked, setIsLocked] = useState(false);
   const [isReturning, setIsReturning] = useState(false);
 
+  // Direct topic selection via URL hash (e.g. #academy-hadith, #academy-qibla, #academy-dhikr)
+  useEffect(() => {
+    const topicSlugMap = {
+      "salah": 0,
+      "wudu": 1,
+      "adhan": 2,
+      "hadith": 3,
+      "ramadan": 4,
+      "zakat": 5,
+      "dhikr": 6,
+      "qibla": 7,
+      "hajj": 8,
+      "quran": 9,
+      "names-of-allah": 10,
+      "99-names": 10,
+      "calendar": 11,
+    };
+
+    const handleHash = () => {
+      const hash = window.location.hash.toLowerCase();
+      if (hash.startsWith("#academy-")) {
+        const slug = hash.replace("#academy-", "");
+        if (topicSlugMap[slug] !== undefined) {
+          setActiveIndex(topicSlugMap[slug]);
+        }
+      }
+    };
+
+    handleHash();
+    window.addEventListener("hashchange", handleHash);
+    return () => window.removeEventListener("hashchange", handleHash);
+  }, []);
+
   const hoverTimer = useRef(null);
   const isSpinning = useRef(false);
 
@@ -618,6 +651,7 @@ export default function TawfiqLearningHub() {
                   <button
                     type="button"
                     key={topic.title}
+                    id={`academy-${topic.title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
                     aria-label={`Select topic: ${topic.title}`}
                     onClick={() => setActiveIndex(i)}
                     className={`relative px-4 py-2 rounded-full text-xs font-['Geist',sans-serif] tracking-wide transition-all duration-300 cursor-pointer flex items-center gap-2 ${

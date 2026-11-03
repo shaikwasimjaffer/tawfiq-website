@@ -98,6 +98,17 @@ export default function Privacy() {
             You can export or delete your data at any time. Your spiritual
             journey is yours alone, and we respect your right to manage it.
           </p>
+          <p>
+            For more information about your rights and responsibilities when
+            using Tawfiq, please read our{" "}
+            <Link
+              to="/terms"
+              className="text-stone-900 underline underline-offset-2 hover:text-[#16A34A] transition-colors"
+            >
+              Terms of Service
+            </Link>
+            .
+          </p>
         </div>
 
         <Link

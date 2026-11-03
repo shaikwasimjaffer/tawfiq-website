@@ -84,7 +84,13 @@ export default function Mission() {
             We are guided by principles of mindfulness, consistency, and
             compassionate self-reflection. Every feature we develop aims to
             remove barriers to worship while honoring the sincerity of the
-            spiritual journey.
+            spiritual journey.{" "}
+            <Link
+              to="/about"
+              className="text-stone-900 underline underline-offset-2 hover:text-[#16A34A] transition-colors"
+            >
+              Discover the story behind Tawfiq.
+            </Link>
           </p>
 
           <h2 className="font-serif text-xl md:text-2xl text-stone-800 pt-3 md:pt-4">

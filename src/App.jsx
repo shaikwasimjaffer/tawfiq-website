@@ -8,9 +8,12 @@ const Mission = lazy(() => import("./pages/Mission"));
 const About = lazy(() => import("./pages/About"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
+import ScrollToTop from "./components/ScrollToTop";
+
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Suspense fallback={<div className="min-h-screen bg-[#F0FDF4]" />}>
         <Routes>
           <Route path="/" element={<Home />} />

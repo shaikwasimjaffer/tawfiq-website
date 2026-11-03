@@ -776,7 +776,7 @@ function FAQSection() {
   };
 
   return (
-    <section className="w-full bg-[#F0FDF4] py-24 px-4 sm:px-6 lg:px-8 font-['Geist',sans-serif]">
+    <section id="faq" className="w-full bg-[#F0FDF4] py-24 px-4 sm:px-6 lg:px-8 font-['Geist',sans-serif]">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-start">
         <div className="lg:col-span-4">
           <div className="relative inline-block">

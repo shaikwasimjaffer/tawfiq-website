@@ -89,14 +89,35 @@ export default function About() {
             maintaining spiritual discipline in today's fast-paced world, Tawfiq
             began as a simple prayer tracker and has grown into a comprehensive
             worship companion. Every feature is crafted with care, informed by
-            user feedback and Islamic principles.
+            user feedback and Islamic principles. Learn more about our
+            overarching purpose in{" "}
+            <Link
+              to="/mission"
+              className="text-stone-900 underline underline-offset-2 hover:text-[#16A34A] transition-colors"
+            >
+              Our Mission
+            </Link>
+            .
           </p>
 
           <h2 className="font-serif text-xl md:text-2xl text-stone-800 pt-3 md:pt-4">
             What We Offer
           </h2>
           <p>
-            From prayer tracking and Qaza management to Quran reading progress
+            From{" "}
+            <Link
+              to="/#qaza"
+              className="text-stone-900 underline underline-offset-2 hover:text-[#16A34A] transition-colors"
+            >
+              prayer tracking and Qaza management
+            </Link>{" "}
+            to{" "}
+            <Link
+              to="/#quran"
+              className="text-stone-900 underline underline-offset-2 hover:text-[#16A34A] transition-colors"
+            >
+              Quran reading progress
+            </Link>{" "}
             and dhikr counters, Tawfiq provides tools that make it easier to
             focus on what matters most—your connection with Allah. Our AI
             Companion offers guidance rooted in established scholarship, while

@@ -22,31 +22,31 @@ export default function Footer({ onOpenScanner, showContact, setShowContact }) {
     {
       title: "GET STARTED",
       links: [
-        { name: "Open Tawfiq", path: "/" },
+        { name: "Tawfiq Home", path: "/" },
         { name: "Prayer Tracker", path: "/#qaza" },
-        { name: "Qaza Manager", path: "/#qaza" },
-        { name: "Qibla", path: "/#academy" },
+        { name: "Qaza Manager", path: "/#qaza-calculator" },
+        { name: "Qibla", path: "/#academy-qibla" },
         { name: "Download App", path: "https://originaltawfiq.vercel.app" },
       ],
     },
     {
       title: "WORSHIP",
       links: [
-        { name: "Salah", path: "/#qaza" },
+        { name: "Salah", path: "/#academy-salah" },
         { name: "Qaza", path: "/#qaza" },
-        { name: "Dhikr", path: "/#academy" },
+        { name: "Dhikr", path: "/#academy-dhikr" },
         { name: "Qur'an", path: "/#quran" },
-        { name: "Duas", path: "/#academy" },
+        { name: "Duas", path: "/#academy-dhikr" },
       ],
     },
     {
       title: "LEARN",
       links: [
-        { name: "Tafsir", path: "/#quran" },
-        { name: "Hadith", path: "/#academy" },
-        { name: "Tajweed", path: "/#quran" },
+        { name: "Tafsir", path: "/#quran-tafsir" },
+        { name: "Hadith", path: "/#academy-hadith" },
+        { name: "Tajweed", path: "/#quran-tajweed" },
         { name: "Islamic History", path: "/#academy" },
-        { name: "99 Names of Allah", path: "/#academy" },
+        { name: "99 Names of Allah", path: "/#academy-names-of-allah" },
       ],
     },
     {

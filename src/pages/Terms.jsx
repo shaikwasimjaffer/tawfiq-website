@@ -93,6 +93,16 @@ export default function Terms() {
               account credentials. Tawfiq does not sell your personal data or
               prayer history to third parties.
             </p>
+            <p>
+              Learn how we handle and safeguard your personal information in our{" "}
+              <Link
+                to="/privacy"
+                className="text-stone-900 underline underline-offset-2 hover:text-[#16A34A] transition-colors"
+              >
+                Privacy Policy
+              </Link>
+              .
+            </p>
 
             <h2 className="font-serif text-xl md:text-2xl text-stone-800 pt-3 md:pt-4">
               Service Availability

@@ -222,6 +222,25 @@ export default function Quran() {
     };
   }, [selectedVerseForPanel]);
 
+  // Handle direct hash navigation to Tafsir and Tajweed
+  useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash.toLowerCase();
+      if (hash === "#quran-tafsir") {
+        setActiveTab("reading");
+        if (ayahs && ayahs.length > 0) {
+          setSelectedVerseForPanel(ayahs[0]);
+        }
+      } else if (hash === "#quran-tajweed") {
+        setActiveTab("reading");
+      }
+    };
+
+    handleHash();
+    window.addEventListener("hashchange", handleHash);
+    return () => window.removeEventListener("hashchange", handleHash);
+  }, []);
+
   const handleEnded = () => {
     if (current < ayahs.length) {
       setProgress(0);

@@ -41,7 +41,7 @@ export default function Transformation({
 
   return (
     <>
-      <section className="bg-[#F0FDF4] overflow-hidden py-20">
+      <section id="before-after" className="bg-[#F0FDF4] overflow-hidden py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl sm:text-5xl lg:text-6xl font-['Newsreader',serif] font-light text-green-950 tracking-tight leading-tight text-center mb-10">
             See what changes when you have <span className="text-[#16A34A]">Tawfiq</span>
