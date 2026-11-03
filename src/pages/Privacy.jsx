@@ -8,7 +8,7 @@ export default function Privacy() {
     <SEO
       title="Tawfiq Privacy Policy - Islamic Prayer Tracker"
       description="Read Tawfiq's privacy policy detailing how we protect your spiritual data, prayer records, and personal information. Founded by Shaik Wasim Jaffer."
-      canonical="https://tawfiq.in/privacy"
+      canonical="https://www.tawfiq.in/privacy"
     >
     <motion.div
       initial={{ x: "100%", boxShadow: "-30px 0 50px rgba(28, 25, 23, 0.15)" }}

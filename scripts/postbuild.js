@@ -12,28 +12,51 @@ const pages = [
     title: "About Tawfiq - Islamic Prayer Tracker App",
     description:
       "Learn about Tawfiq, the #1 Islamic prayer tracker app founded by Shaik Wasim Jaffer. Discover our story, mission, and how we help Muslims worldwide stay consistent in worship.",
-    canonical: "https://tawfiq.in/about",
+    canonical: "https://www.tawfiq.in/about",
   },
   {
     path: "mission",
     title: "Tawfiq Mission - Islamic Prayer Tracker Purpose",
     description:
       "Discover the mission of Tawfiq: to facilitate a deeper connection with Allah through innovative Islamic technology founded by Shaik Wasim Jaffer.",
-    canonical: "https://tawfiq.in/mission",
+    canonical: "https://www.tawfiq.in/mission",
   },
   {
     path: "privacy",
     title: "Tawfiq Privacy Policy - Islamic Prayer Tracker",
     description:
       "Read Tawfiq's privacy policy detailing how we protect your spiritual data, prayer records, and personal information. Founded by Shaik Wasim Jaffer.",
-    canonical: "https://tawfiq.in/privacy",
+    canonical: "https://www.tawfiq.in/privacy",
   },
   {
     path: "terms",
     title: "Tawfiq Terms of Service - Islamic Prayer Tracker",
     description:
       "Read the terms of service for Tawfiq, the Islamic prayer companion application.",
-    canonical: "https://tawfiq.in/terms",
+    canonical: "https://www.tawfiq.in/terms",
+  },
+];
+
+const redirects = [
+  {
+    path: "download",
+    title: "Download Tawfiq - Islamic Prayer Tracker",
+    destination: "https://www.tawfiq.in/",
+  },
+  {
+    path: "quran",
+    title: "Tawfiq Qur'an - Interactive Reader & Audio",
+    destination: "https://www.tawfiq.in/#quran",
+  },
+  {
+    path: "tafsir",
+    title: "Tawfiq Tafsir - In-Depth Verse Explanations",
+    destination: "https://www.tawfiq.in/#quran",
+  },
+  {
+    path: "prayer-tracker",
+    title: "Tawfiq Prayer Tracker & Qaza Manager",
+    destination: "https://www.tawfiq.in/#qaza",
   },
 ];
 
@@ -46,7 +69,7 @@ function generateStaticRoutes() {
 
   const baseHtml = fs.readFileSync(indexPath, "utf-8");
 
-  // 1. Generate 404.html fallback for GitHub Pages
+  // 1. Generate 404.html fallback for GitHub Pages SPA routing
   const notFoundPath = path.join(distDir, "404.html");
   fs.writeFileSync(notFoundPath, baseHtml);
   console.log("✅ Generated dist/404.html (SPA Fallback)");
@@ -108,14 +131,38 @@ function generateStaticRoutes() {
     console.log(`✅ Generated static entry for: /${page.path}`);
   }
 
-  // 3. Ensure CNAME exists in dist
-  const cnameDist = path.join(distDir, "CNAME");
-  if (!fs.existsSync(cnameDist)) {
-    fs.writeFileSync(cnameDist, "tawfiq.in\n");
-    console.log("✅ Added dist/CNAME (tawfiq.in)");
+  // 3. Generate static redirect pages for legacy/moved routes
+  for (const redir of redirects) {
+    const redirectHtml = `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content="0; url=${redir.destination}" />
+    <link rel="canonical" href="${redir.destination}" />
+    <title>${redir.title}</title>
+    <script>
+      window.location.replace("${redir.destination}");
+    </script>
+  </head>
+  <body>
+    <p>Redirecting to <a href="${redir.destination}">${redir.destination}</a>...</p>
+  </body>
+</html>
+`;
+    const redirDir = path.join(distDir, redir.path);
+    fs.mkdirSync(redirDir, { recursive: true });
+    fs.writeFileSync(path.join(redirDir, "index.html"), redirectHtml);
+    fs.writeFileSync(path.join(distDir, `${redir.path}.html`), redirectHtml);
+
+    console.log(`✅ Generated static redirect for: /${redir.path} -> ${redir.destination}`);
   }
 
-  // 4. Verify robots.txt and sitemap.xml in dist
+  // 4. Ensure CNAME exists in dist with www.tawfiq.in
+  const cnameDist = path.join(distDir, "CNAME");
+  fs.writeFileSync(cnameDist, "www.tawfiq.in\n");
+  console.log("✅ Set dist/CNAME (www.tawfiq.in)");
+
+  // 5. Verify robots.txt and sitemap.xml in dist
   if (fs.existsSync(path.join(distDir, "robots.txt"))) {
     console.log("✅ Verified dist/robots.txt");
   } else {

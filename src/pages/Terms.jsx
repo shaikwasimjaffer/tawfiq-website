@@ -8,7 +8,7 @@ export default function Terms() {
     <SEO
       title="Tawfiq Terms of Service - Islamic Prayer Tracker"
       description="Read the terms of service for Tawfiq, the Islamic prayer companion application."
-      canonical="https://tawfiq.in/terms"
+      canonical="https://www.tawfiq.in/terms"
     >
       <motion.div
         initial={{ x: "100%", boxShadow: "-30px 0 50px rgba(28, 25, 23, 0.15)" }}

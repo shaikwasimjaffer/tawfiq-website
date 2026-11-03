@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import Home from "./pages/Home";
 const Privacy = lazy(() => import("./pages/Privacy"));
@@ -18,6 +18,13 @@ export default function App() {
           <Route path="/terms" element={<Terms />} />
           <Route path="/mission" element={<Mission />} />
           <Route path="/about" element={<About />} />
+
+          {/* Legacy & moved URLs redirected to canonical destinations */}
+          <Route path="/download" element={<Navigate to="/" replace />} />
+          <Route path="/quran" element={<Navigate to="/#quran" replace />} />
+          <Route path="/tafsir" element={<Navigate to="/#quran" replace />} />
+          <Route path="/prayer-tracker" element={<Navigate to="/#qaza" replace />} />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

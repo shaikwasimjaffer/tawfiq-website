@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://tawfiq.in/sitemap.xml
+Sitemap: https://www.tawfiq.in/sitemap.xml
