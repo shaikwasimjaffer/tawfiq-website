@@ -342,6 +342,24 @@ function generateStaticRoutes() {
   } else {
     console.warn("⚠️ Warning: dist/sitemap.xml missing!");
   }
+
+  // 6. Verify IndexNow key verification file in dist
+  const indexNowKey = "b9662631ad3040458bcd277a108621e7";
+  const indexNowKeyFile = `${indexNowKey}.txt`;
+  const distKeyPath = path.join(distDir, indexNowKeyFile);
+  const publicKeyPath = path.resolve(__dirname, "../public", indexNowKeyFile);
+
+  if (!fs.existsSync(distKeyPath) && fs.existsSync(publicKeyPath)) {
+    fs.copyFileSync(publicKeyPath, distKeyPath);
+  } else if (!fs.existsSync(distKeyPath)) {
+    fs.writeFileSync(distKeyPath, indexNowKey);
+  }
+
+  if (fs.existsSync(distKeyPath)) {
+    console.log(`✅ Verified dist/${indexNowKeyFile}`);
+  } else {
+    console.warn(`⚠️ Warning: dist/${indexNowKeyFile} missing!`);
+  }
 }
 
 generateStaticRoutes();

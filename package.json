@@ -12,7 +12,9 @@
     "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
-    "ship": "node scripts/ship.js"
+    "ship": "node scripts/ship.js",
+    "indexnow": "node scripts/indexnow.js",
+    "postdeploy": "node scripts/indexnow.js"
   },
   "dependencies": {
     "@base44/sdk": "^0.8.39",
