@@ -13,6 +13,45 @@ const pages = [
     description:
       "Learn about Tawfiq, the #1 Islamic prayer tracker app founded by Shaik Wasim Jaffer. Discover our story, mission, and how we help Muslims worldwide stay consistent in worship.",
     canonical: "https://www.tawfiq.in/about",
+    structuredData: {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "AboutPage",
+          "@id": "https://www.tawfiq.in/about#webpage",
+          "url": "https://www.tawfiq.in/about",
+          "name": "About Tawfiq - Islamic Prayer Tracker App",
+          "description": "Learn about Tawfiq, the #1 Islamic prayer tracker app founded by Shaik Wasim Jaffer. Discover our story, mission, and how we help Muslims worldwide stay consistent in worship.",
+          "isPartOf": {
+            "@id": "https://www.tawfiq.in/#website"
+          },
+          "about": {
+            "@id": "https://www.tawfiq.in/#organization"
+          },
+          "breadcrumb": {
+            "@id": "https://www.tawfiq.in/about#breadcrumb"
+          }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://www.tawfiq.in/about#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://www.tawfiq.in/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "About",
+              "item": "https://www.tawfiq.in/about"
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     path: "mission",
@@ -20,6 +59,42 @@ const pages = [
     description:
       "Discover the mission of Tawfiq: to facilitate a deeper connection with Allah through innovative Islamic technology founded by Shaik Wasim Jaffer.",
     canonical: "https://www.tawfiq.in/mission",
+    structuredData: {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebPage",
+          "@id": "https://www.tawfiq.in/mission#webpage",
+          "url": "https://www.tawfiq.in/mission",
+          "name": "Tawfiq Mission - Islamic Prayer Tracker Purpose",
+          "description": "Discover the mission of Tawfiq: to facilitate a deeper connection with Allah through innovative Islamic technology founded by Shaik Wasim Jaffer.",
+          "isPartOf": {
+            "@id": "https://www.tawfiq.in/#website"
+          },
+          "breadcrumb": {
+            "@id": "https://www.tawfiq.in/mission#breadcrumb"
+          }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://www.tawfiq.in/mission#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://www.tawfiq.in/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Our Mission",
+              "item": "https://www.tawfiq.in/mission"
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     path: "privacy",
@@ -27,6 +102,42 @@ const pages = [
     description:
       "Read Tawfiq's privacy policy detailing how we protect your spiritual data, prayer records, and personal information. Founded by Shaik Wasim Jaffer.",
     canonical: "https://www.tawfiq.in/privacy",
+    structuredData: {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebPage",
+          "@id": "https://www.tawfiq.in/privacy#webpage",
+          "url": "https://www.tawfiq.in/privacy",
+          "name": "Tawfiq Privacy Policy - Islamic Prayer Tracker",
+          "description": "Read Tawfiq's privacy policy detailing how we protect your spiritual data, prayer records, and personal information. Founded by Shaik Wasim Jaffer.",
+          "isPartOf": {
+            "@id": "https://www.tawfiq.in/#website"
+          },
+          "breadcrumb": {
+            "@id": "https://www.tawfiq.in/privacy#breadcrumb"
+          }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://www.tawfiq.in/privacy#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://www.tawfiq.in/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Privacy Policy",
+              "item": "https://www.tawfiq.in/privacy"
+            }
+          ]
+        }
+      ]
+    }
   },
   {
     path: "terms",
@@ -34,6 +145,42 @@ const pages = [
     description:
       "Read the terms of service for Tawfiq, the Islamic prayer companion application.",
     canonical: "https://www.tawfiq.in/terms",
+    structuredData: {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebPage",
+          "@id": "https://www.tawfiq.in/terms#webpage",
+          "url": "https://www.tawfiq.in/terms",
+          "name": "Tawfiq Terms of Service - Islamic Prayer Tracker",
+          "description": "Read the terms of service for Tawfiq, the Islamic prayer companion application.",
+          "isPartOf": {
+            "@id": "https://www.tawfiq.in/#website"
+          },
+          "breadcrumb": {
+            "@id": "https://www.tawfiq.in/terms#breadcrumb"
+          }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://www.tawfiq.in/terms#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://www.tawfiq.in/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Terms of Service",
+              "item": "https://www.tawfiq.in/terms"
+            }
+          ]
+        }
+      ]
+    }
   },
 ];
 
@@ -69,10 +216,23 @@ function generateStaticRoutes() {
 
   const baseHtml = fs.readFileSync(indexPath, "utf-8");
 
-  // 1. Generate 404.html fallback for GitHub Pages SPA routing
+  // 1. Generate 404.html fallback for GitHub Pages SPA routing (with noindex)
   const notFoundPath = path.join(distDir, "404.html");
-  fs.writeFileSync(notFoundPath, baseHtml);
-  console.log("✅ Generated dist/404.html (SPA Fallback)");
+  let notFoundHtml = baseHtml.replace(
+    /<meta\s+name=["']robots["']\s+content=["'].*?["']\s*\/?>/s,
+    '<meta name="robots" content="noindex, follow" />'
+  );
+  notFoundHtml = notFoundHtml.replace(
+    /<link\s+rel=["']canonical["']\s+href=["'].*?["']\s*\/?>/s,
+    ""
+  );
+  // Remove structured data from 404 page
+  notFoundHtml = notFoundHtml.replace(
+    /<script\s+type=["']application\/ld\+json["']\s*>[\s\S]*?<\/script>/gi,
+    ""
+  );
+  fs.writeFileSync(notFoundPath, notFoundHtml);
+  console.log("✅ Generated dist/404.html (SPA Fallback with noindex)");
 
   // 2. Generate static HTML files for canonical routes
   for (const page of pages) {
@@ -119,6 +279,14 @@ function generateStaticRoutes() {
       /<meta\s+name=["']twitter:description["']\s+content=["'].*?["']\s*\/?>/s,
       `<meta name="twitter:description" content="${page.description}" />`
     );
+
+    // Replace JSON-LD structured data with route-specific schema
+    if (page.structuredData) {
+      customHtml = customHtml.replace(
+        /<script\s+type=["']application\/ld\+json["']>.*?<\/script>/s,
+        `<script type="application/ld+json">\n${JSON.stringify(page.structuredData, null, 2)}\n    </script>`
+      );
+    }
 
     // Write directory index: dist/{path}/index.html
     const pageDir = path.join(distDir, page.path);

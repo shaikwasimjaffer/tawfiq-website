@@ -3,12 +3,50 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import SEO from "@/components/SEO";
 
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.tawfiq.in/privacy#webpage",
+      "url": "https://www.tawfiq.in/privacy",
+      "name": "Tawfiq Privacy Policy - Islamic Prayer Tracker",
+      "description": "Read Tawfiq's privacy policy detailing how we protect your spiritual data, prayer records, and personal information. Founded by Shaik Wasim Jaffer.",
+      "isPartOf": {
+        "@id": "https://www.tawfiq.in/#website"
+      },
+      "breadcrumb": {
+        "@id": "https://www.tawfiq.in/privacy#breadcrumb"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.tawfiq.in/privacy#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.tawfiq.in/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Privacy Policy",
+          "item": "https://www.tawfiq.in/privacy"
+        }
+      ]
+    }
+  ]
+};
+
 export default function Privacy() {
   return (
     <SEO
       title="Tawfiq Privacy Policy - Islamic Prayer Tracker"
       description="Read Tawfiq's privacy policy detailing how we protect your spiritual data, prayer records, and personal information. Founded by Shaik Wasim Jaffer."
       canonical="https://www.tawfiq.in/privacy"
+      structuredData={structuredData}
     >
     <motion.div
       initial={{ x: "100%", boxShadow: "-30px 0 50px rgba(28, 25, 23, 0.15)" }}

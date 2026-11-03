@@ -3,12 +3,50 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import SEO from "@/components/SEO";
 
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.tawfiq.in/mission#webpage",
+      "url": "https://www.tawfiq.in/mission",
+      "name": "Tawfiq Mission - Islamic Prayer Tracker Purpose",
+      "description": "Discover the mission of Tawfiq: to facilitate a deeper connection with Allah through innovative Islamic technology founded by Shaik Wasim Jaffer.",
+      "isPartOf": {
+        "@id": "https://www.tawfiq.in/#website"
+      },
+      "breadcrumb": {
+        "@id": "https://www.tawfiq.in/mission#breadcrumb"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.tawfiq.in/mission#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.tawfiq.in/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Our Mission",
+          "item": "https://www.tawfiq.in/mission"
+        }
+      ]
+    }
+  ]
+};
+
 export default function Mission() {
   return (
     <SEO
       title="Tawfiq Mission - Islamic Prayer Tracker Purpose"
       description="Discover the mission of Tawfiq: to facilitate a deeper connection with Allah through innovative Islamic technology founded by Shaik Wasim Jaffer."
       canonical="https://www.tawfiq.in/mission"
+      structuredData={structuredData}
     >
     <motion.div
       initial={{ x: "100%", boxShadow: "-30px 0 50px rgba(28, 25, 23, 0.15)" }}

@@ -70,68 +70,133 @@
       content="https://www.tawfiq.in/og-image.jpg"
     />
 
-    <!-- Google Site Name & Search Structured Data -->
+    <!-- Unified Tawfiq Knowledge Graph (Organization, Person, WebSite, WebApplication, FAQPage) -->
     <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "name": "Tawfiq",
-        "alternateName": ["www.tawfiq.in", "tawfiq.in", "Tawfiq App"],
-        "url": "https://www.tawfiq.in/",
-        "inLanguage": "en",
-        "description": "Islamic prayer companion for tracking Salah, managing Qaza prayers, reading Quran, and building consistency in worship."
-      }
-    </script>
-
-    <!-- Tawfiq Web Application -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "Tawfiq",
-        "url": "https://www.tawfiq.in/",
-        "applicationCategory": "LifestyleApplication",
-        "operatingSystem": "All",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        },
-        "description": "Tawfiq is an Islamic prayer companion for tracking Salah, managing Qaza prayers, reading Quran, performing Dhikr, and finding the Qibla."
-      }
-    </script>
-
-    <!-- Tawfiq Organization + Founder -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@graph": [
-          {
-            "@type": "Organization",
-            "@id": "https://www.tawfiq.in/#organization",
-            "name": "Tawfiq",
-            "url": "https://www.tawfiq.in/",
-            "logo": "https://www.tawfiq.in/tawfiq.png",
-            "description": "Tawfiq is an Islamic prayer companion for tracking Salah, managing Qaza prayers, reading Quran, performing Dhikr, and finding the Qibla.",
-            "founder": {
-              "@id": "https://www.tawfiq.in/#founder"
-            }
-          },
-          {
-            "@type": "Person",
-            "@id": "https://www.tawfiq.in/#founder",
-            "name": "Shaik Wasim Jaffer",
-            "jobTitle": "Founder of Tawfiq",
-            "worksFor": {
-              "@id": "https://www.tawfiq.in/#organization"
+{
+      "@context": "https://schema.org",
+      "@graph": [
+            {
+                  "@type": "Organization",
+                  "@id": "https://www.tawfiq.in/#organization",
+                  "name": "Tawfiq",
+                  "url": "https://www.tawfiq.in/",
+                  "logo": {
+                        "@type": "ImageObject",
+                        "@id": "https://www.tawfiq.in/#logo",
+                        "url": "https://www.tawfiq.in/tawfiq.png",
+                        "caption": "Tawfiq Islamic Prayer Companion"
+                  },
+                  "image": "https://www.tawfiq.in/tawfiq.png",
+                  "description": "Tawfiq is an Islamic prayer companion for tracking Salah, managing Qaza prayers, reading Quran, performing Dhikr, and finding the Qibla.",
+                  "founder": {
+                        "@id": "https://www.tawfiq.in/#founder"
+                  },
+                  "sameAs": [
+                        "https://github.com/shaikwasimjaffer/tawfiq-website"
+                  ]
             },
-            "sameAs": [
-              "https://www.linkedin.com/in/shaik-wasim-jaffer-b8157140a/",
-              "https://github.com/shaikwasimjaffer"
-            ]
-          }
-        ]
-      }
+            {
+                  "@type": "Person",
+                  "@id": "https://www.tawfiq.in/#founder",
+                  "name": "Shaik Wasim Jaffer",
+                  "jobTitle": "Founder of Tawfiq",
+                  "worksFor": {
+                        "@id": "https://www.tawfiq.in/#organization"
+                  },
+                  "sameAs": [
+                        "https://www.linkedin.com/in/shaik-wasim-jaffer-b8157140a/",
+                        "https://github.com/shaikwasimjaffer"
+                  ]
+            },
+            {
+                  "@type": "WebSite",
+                  "@id": "https://www.tawfiq.in/#website",
+                  "url": "https://www.tawfiq.in/",
+                  "name": "Tawfiq",
+                  "alternateName": [
+                        "www.tawfiq.in",
+                        "tawfiq.in",
+                        "Tawfiq App"
+                  ],
+                  "description": "Islamic prayer companion for tracking Salah, managing Qaza prayers, reading Quran, and building consistency in worship.",
+                  "publisher": {
+                        "@id": "https://www.tawfiq.in/#organization"
+                  },
+                  "inLanguage": "en"
+            },
+            {
+                  "@type": "WebApplication",
+                  "@id": "https://www.tawfiq.in/#webapp",
+                  "name": "Tawfiq",
+                  "url": "https://www.tawfiq.in/",
+                  "applicationCategory": "LifestyleApplication",
+                  "operatingSystem": "All",
+                  "browserRequirements": "Requires JavaScript. Requires HTML5.",
+                  "softwareVersion": "1.0",
+                  "description": "Tawfiq is an Islamic prayer companion for tracking Salah, managing Qaza prayers, reading Quran, performing Dhikr, and finding the Qibla.",
+                  "offers": {
+                        "@type": "Offer",
+                        "price": "0",
+                        "priceCurrency": "USD"
+                  },
+                  "author": {
+                        "@id": "https://www.tawfiq.in/#organization"
+                  },
+                  "provider": {
+                        "@id": "https://www.tawfiq.in/#organization"
+                  }
+            },
+            {
+                  "@type": "FAQPage",
+                  "@id": "https://www.tawfiq.in/#faq",
+                  "isPartOf": {
+                        "@id": "https://www.tawfiq.in/#website"
+                  },
+                  "mainEntity": [
+                        {
+                              "@type": "Question",
+                              "name": "Is Tawfiq completely free to use?",
+                              "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Yes. Tawfiq is 100% free forever. There are no paywalls, no premium subscriptions, and absolutely no advertisements. It was built with sincerity for the Ummah."
+                              }
+                        },
+                        {
+                              "@type": "Question",
+                              "name": "How does the Qaza calculator estimate my missed prayers?",
+                              "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "The calculator uses your current age, your estimated age of puberty, and your past prayer habits to create a mathematical baseline. It offers different scholarly calculation modes (Conservative to Maximum) so you can choose the approach you are most comfortable with."
+                              }
+                        },
+                        {
+                              "@type": "Question",
+                              "name": "Can I track my regular daily prayers (Fard) along with my Qaza?",
+                              "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Yes! While Tawfiq specializes in helping you recover missed prayers, it is ultimately designed to help you build lasting consistency. You can track your daily obligatory (Fard) prayers right alongside your Qaza makeup sessions."
+                              }
+                        },
+                        {
+                              "@type": "Question",
+                              "name": "What happens if I fall behind on my daily Qaza goal?",
+                              "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "Nothing happens! Tawfiq does not use guilt-based streaks or penalize you for missing a day. If you fall behind, your completion horizon simply adjusts. You can always catch up the next day without feeling pressured or discouraged."
+                              }
+                        },
+                        {
+                              "@type": "Question",
+                              "name": "I feel overwhelmed by my total Qaza number. What should I do?",
+                              "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": "It is completely normal to feel overwhelmed, but remember that your sincere intention (Niyyah) to make them up is what matters most to Allah. We recommend setting a very small, manageable daily pace\u2014even just one Qaza prayer a day. Focus on the daily habit, not the total number."
+                              }
+                        }
+                  ]
+            }
+      ]
+}
     </script>
   </head>
 

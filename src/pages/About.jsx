@@ -3,12 +3,53 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import SEO from "@/components/SEO";
 
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "AboutPage",
+      "@id": "https://www.tawfiq.in/about#webpage",
+      "url": "https://www.tawfiq.in/about",
+      "name": "About Tawfiq - Islamic Prayer Tracker App",
+      "description": "Learn about Tawfiq, the #1 Islamic prayer tracker app founded by Shaik Wasim Jaffer. Discover our story, mission, and how we help Muslims worldwide stay consistent in worship.",
+      "isPartOf": {
+        "@id": "https://www.tawfiq.in/#website"
+      },
+      "about": {
+        "@id": "https://www.tawfiq.in/#organization"
+      },
+      "breadcrumb": {
+        "@id": "https://www.tawfiq.in/about#breadcrumb"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.tawfiq.in/about#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.tawfiq.in/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "About",
+          "item": "https://www.tawfiq.in/about"
+        }
+      ]
+    }
+  ]
+};
+
 export default function About() {
   return (
     <SEO
       title="About Tawfiq - Islamic Prayer Tracker App"
       description="Learn about Tawfiq, the #1 Islamic prayer tracker app founded by Shaik Wasim Jaffer. Discover our story, mission, and how we help Muslims worldwide stay consistent in worship."
       canonical="https://www.tawfiq.in/about"
+      structuredData={structuredData}
     >
     {/* THE FIX: Changed to a fixed overlay (fixed top-0 left-0 w-full h-[100dvh]).
         This forces the component to be exactly the size of the screen and scroll internally. */}

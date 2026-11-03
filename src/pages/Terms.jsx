@@ -3,12 +3,50 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import SEO from "@/components/SEO";
 
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://www.tawfiq.in/terms#webpage",
+      "url": "https://www.tawfiq.in/terms",
+      "name": "Tawfiq Terms of Service - Islamic Prayer Tracker",
+      "description": "Read the terms of service for Tawfiq, the Islamic prayer companion application.",
+      "isPartOf": {
+        "@id": "https://www.tawfiq.in/#website"
+      },
+      "breadcrumb": {
+        "@id": "https://www.tawfiq.in/terms#breadcrumb"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.tawfiq.in/terms#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.tawfiq.in/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Terms of Service",
+          "item": "https://www.tawfiq.in/terms"
+        }
+      ]
+    }
+  ]
+};
+
 export default function Terms() {
   return (
     <SEO
       title="Tawfiq Terms of Service - Islamic Prayer Tracker"
       description="Read the terms of service for Tawfiq, the Islamic prayer companion application."
       canonical="https://www.tawfiq.in/terms"
+      structuredData={structuredData}
     >
       <motion.div
         initial={{ x: "100%", boxShadow: "-30px 0 50px rgba(28, 25, 23, 0.15)" }}
