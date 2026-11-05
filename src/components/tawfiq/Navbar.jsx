@@ -363,29 +363,7 @@ export default function Navbar({
                 onClick={handleLogoClick}
                 className="group flex items-center gap-2.5 cursor-pointer"
               >
-                <motion.svg
-                  width="22"
-                  height="22"
-                  viewBox="0 0 22 22"
-                  fill="none"
-                  className="text-green-950"
-                  whileHover={{ rotate: 5, x: 2 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                >
-                  <path
-                    d="M11 2C11 2 5 6 5 12C5 16 8 19 11 19C14 19 17 16 17 12C17 6 11 2 11 2Z"
-                    stroke="currentColor"
-                    strokeWidth="1.4"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M11 5V19M8 11L11 8L14 11"
-                    stroke="currentColor"
-                    strokeWidth="1.2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </motion.svg>
+                
                 <span className="hidden md:block font-['Newsreader',serif] font-medium text-xl text-green-950 tracking-[-0.01em]">
                   Tawfiq
                 </span>
