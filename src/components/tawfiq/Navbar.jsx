@@ -226,7 +226,7 @@ export default function Navbar({
       observerOptions,
     );
 
-    const sectionsToTrack = [...navItems.map(item => item.id), "before-after", "faq", "pricing"];
+    const sectionsToTrack = [...navItems.map(item => item.id), "pricing", "faq"];
 
     sectionsToTrack.forEach((id) => {
       const element = document.getElementById(id);
@@ -299,8 +299,8 @@ export default function Navbar({
   let mobileNavText = "Tawfiq";
   if (activeItem === "faq") {
     mobileNavText = "FAQ";
-  } else if (activeItem === "before-after") {
-    mobileNavText = "Tawfiq";
+  } else if (activeItem === "pricing") {
+    mobileNavText = "Pricing";
   } else {
     mobileNavText = navItems.find((item) => item.id === activeItem)?.label || "Tawfiq";
   }

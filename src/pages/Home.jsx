@@ -6,7 +6,7 @@ const TawfiqAI = lazy(() => import("@/components/tawfiq/TawfiqAI"));
 const Quran = lazy(() => import("@/components/tawfiq/Quran"));
 const Academy = lazy(() => import("@/components/tawfiq/Academy"));
 const Qaza = lazy(() => import("@/components/tawfiq/Qaza"));
-const Transformation = lazy(() => import("@/components/tawfiq/Transformation"));
+const Pricing = lazy(() => import("@/components/tawfiq/Pricing"));
 const SurahTaha = lazy(() => import("@/components/tawfiq/SurahTaha"));
 const Footer = lazy(() => import("@/components/tawfiq/Footer"));
 import { AnimatePresence } from "framer-motion";
@@ -133,7 +133,7 @@ export default function Home() {
           <Quran />
           <Academy />
           <Qaza />
-          <Transformation />
+          <Pricing />
           <SurahTaha />
           <Footer
             showContact={showContact}
