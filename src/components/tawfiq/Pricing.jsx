@@ -22,7 +22,7 @@ export default function Pricing() {
     >
       <div className="max-w-4xl mx-auto">
         {/* Section Header: Minimal editorial headline */}
-        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12 px-2">
+        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-14 px-2">
           <h2 className="font-['Newsreader',serif] font-light text-2xl sm:text-4xl lg:text-5xl text-green-950 tracking-tight leading-tight">
             <span className="inline-block">Different platforms, different prices.</span>{" "}
             <br />
@@ -30,37 +30,43 @@ export default function Pricing() {
           </h2>
         </div>
 
-        {/* Pricing Card: Minimal, refined, editorial */}
-        <div className="w-full max-w-[440px] mx-auto">
+        {/* Pricing Card with Floating Badge */}
+        <div className="relative w-full max-w-lg md:max-w-[580px] mx-auto">
+          {/* 1. Floating Decorative Badge (Centered, 50% above card, 50% inside, single clean outline) */}
+          <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+            <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-[#DCFCE7] text-[#064E3B] border border-emerald-300 shadow-sm text-[11px] font-['Geist',sans-serif] font-semibold tracking-[0.15em] uppercase whitespace-nowrap">
+              <span className="text-[9px] text-[#064E3B]/80 leading-none" aria-hidden="true">✦</span>
+              <span>FREE FOREVER</span>
+              <span className="text-[9px] text-[#064E3B]/80 leading-none" aria-hidden="true">✦</span>
+            </div>
+          </div>
+
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="bg-[#064E3B] text-white rounded-2xl sm:rounded-[1.75rem] p-6 sm:p-8 border border-emerald-400/20 shadow-lg shadow-green-950/10 flex flex-col text-left"
+            className="relative bg-[#064E3B] text-white rounded-2xl sm:rounded-[1.75rem] p-6 sm:p-8 pt-8 sm:pt-9 border border-emerald-400/20 shadow-lg shadow-green-950/10 flex flex-col text-left"
           >
-            {/* 1. Tier Name: Restrained serif heading */}
-            <h3 className="font-['Newsreader',serif] font-light text-3xl sm:text-4xl text-white tracking-tight">
-              Free Forever
-            </h3>
+            {/* 2. Prominent Price Row: ₹0 / month using Tawfiq's website font */}
+            <div className="mt-1 mb-2">
+              <div className="flex items-baseline gap-2">
+                <span className="font-['Geist',sans-serif] font-bold text-5xl sm:text-6xl text-white tracking-tight leading-none">
+                  ₹0
+                </span>
+                <span className="text-emerald-200/80 text-sm sm:text-base font-['Geist',sans-serif] font-normal">
+                  / month
+                </span>
+              </div>
+            </div>
 
-            {/* 2. Subtitle / Narrative Description */}
-            <p className="text-sm font-['Geist',sans-serif] text-emerald-100/85 leading-relaxed font-light mt-2 mb-4">
+            {/* 3. Description: Single line on desktop (white-space: nowrap), wrapping naturally on mobile */}
+            <p className="text-xs sm:text-[13px] md:text-sm font-['Geist',sans-serif] text-emerald-100/85 font-light mt-1 mb-6 whitespace-normal md:whitespace-nowrap">
               Build consistency in Salah, manage Qaza prayers, and deepen your Islamic learning with Tawfiq.
             </p>
 
-            {/* 3. Prominent Price: ₹0 without redundant '/ forever' */}
-            <div className="my-2">
-              <div className="font-['Newsreader',serif] font-light text-5xl sm:text-6xl text-white tracking-tight leading-none">
-                ₹0
-              </div>
-              <p className="mt-1 text-xs text-emerald-200/75 font-['Geist',sans-serif] font-light">
-                No subscription. No payment required.
-              </p>
-            </div>
-
             {/* 4. Primary CTA Button: Sentence-case 'Get Started →' */}
-            <div className="mt-5 mb-6">
+            <div className="mb-6">
               <a
                 href="https://originaltawfiq.vercel.app"
                 target="_blank"
