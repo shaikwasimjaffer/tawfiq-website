@@ -18,9 +18,9 @@ export default function Pricing() {
     <section
       id="pricing"
       aria-label="Pricing and Plan"
-      className="w-full bg-[#F0FDF4] py-16 sm:py-24 px-4 sm:px-6 lg:px-8 font-['Geist',sans-serif]"
+      className="w-full bg-[#F0FDF4] py-16 sm:py-24 px-4 sm:px-6 lg:px-8 font-['Geist',sans-serif] overflow-hidden"
     >
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         {/* Section Header: Minimal editorial headline */}
         <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-14 px-2">
           <h2 className="font-['Newsreader',serif] font-light text-2xl sm:text-4xl lg:text-5xl text-green-950 tracking-tight leading-tight">
@@ -30,8 +30,8 @@ export default function Pricing() {
           </h2>
         </div>
 
-        {/* Pricing Card with Floating Badge */}
-        <div className="relative w-full max-w-lg md:max-w-[580px] mx-auto">
+        {/* Pricing Card with Floating Badge: Sized to previous compact width max-w-[440px] and shifted slightly right on desktop */}
+        <div className="relative w-full max-w-[440px] mx-auto md:translate-x-12 lg:translate-x-16 transition-transform duration-300">
           {/* 1. Floating Decorative Badge (Centered, 50% above card, 50% inside, single clean outline) */}
           <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
             <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-[#DCFCE7] text-[#064E3B] border border-emerald-300 shadow-sm text-[11px] font-['Geist',sans-serif] font-semibold tracking-[0.15em] uppercase whitespace-nowrap">
@@ -60,8 +60,8 @@ export default function Pricing() {
               </div>
             </div>
 
-            {/* 3. Description: Single line on desktop (white-space: nowrap), wrapping naturally on mobile */}
-            <p className="text-xs sm:text-[13px] md:text-sm font-['Geist',sans-serif] text-emerald-100/85 font-light mt-1 mb-6 whitespace-normal md:whitespace-nowrap">
+            {/* 3. Description: Clean natural wrap across 2 lines, preventing any horizontal overflow */}
+            <p className="text-sm font-['Geist',sans-serif] text-emerald-100/85 font-light leading-relaxed mt-1 mb-6">
               Build consistency in Salah, manage Qaza prayers, and deepen your Islamic learning with Tawfiq.
             </p>
 
