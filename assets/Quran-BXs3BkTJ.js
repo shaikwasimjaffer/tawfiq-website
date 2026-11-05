@@ -1,4 +1,4 @@
-import{j as e,m as r,A as f}from"./vendor-framer-Bli1KfNT.js";import{a as s}from"./vendor-react-YrhEvNGm.js";import{c as j,C as $}from"./index-ATVgUVsW.js";import{S as H}from"./sparkles-afm9tlJk.js";/**
+import{j as e,m as r,A as f}from"./vendor-framer-Bli1KfNT.js";import{a as s}from"./vendor-react-YrhEvNGm.js";import{c as j,C as $}from"./index-B-oAZITr.js";import{S as H}from"./sparkles-BTXKWtAJ.js";/**
  * @license lucide-react v0.475.0 - ISC
  *
  * This source code is licensed under the ISC license.
