@@ -30,8 +30,9 @@ export default function Pricing() {
           </h2>
         </div>
 
-        {/* Pricing Card with Floating Badge: Sized to previous compact width max-w-[440px] and shifted slightly right on desktop */}
-        <div className="relative w-full max-w-[440px] mx-auto md:translate-x-12 lg:translate-x-16 transition-transform duration-300">
+        {/* Pricing Card Container: Prepared for two/three cards, positioned to the right on desktop */}
+        <div className="flex justify-center md:justify-end max-w-4xl mx-auto px-4">
+          <div className="relative w-full max-w-[440px]">
           {/* 1. Floating Decorative Badge (Centered, 50% above card, 50% inside, single clean outline) */}
           <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
             <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-[#DCFCE7] text-[#064E3B] border border-emerald-300 shadow-sm text-[11px] font-['Geist',sans-serif] font-semibold tracking-[0.15em] uppercase whitespace-nowrap">
@@ -108,6 +109,7 @@ export default function Pricing() {
           </motion.div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
   );
 }
