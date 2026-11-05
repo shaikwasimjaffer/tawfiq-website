@@ -9,7 +9,7 @@ const Qaza = lazy(() => import("@/components/tawfiq/Qaza"));
 const Transformation = lazy(() => import("@/components/tawfiq/Transformation"));
 const SurahTaha = lazy(() => import("@/components/tawfiq/SurahTaha"));
 const Footer = lazy(() => import("@/components/tawfiq/Footer"));
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { Check } from "lucide-react";
 
 // EmailJS Configuration Keys
