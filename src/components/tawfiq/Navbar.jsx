@@ -86,7 +86,7 @@ export default function Navbar({
   handleContactSubmit,
 }) {
   const [scrolled, setScrolled] = useState(false);
-  const [activeItem, setActiveItem] = useState("qaza");
+  const [activeItem, setActiveItem] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [internalShowScanner, setInternalShowScanner] = useState(false);
   const showScanner = externalShowScanner !== undefined ? externalShowScanner : internalShowScanner;
@@ -183,6 +183,9 @@ export default function Navbar({
       if (!ticking) {
         window.requestAnimationFrame(() => {
           setScrolled(window.scrollY > 20);
+          if (window.scrollY < 200) {
+            setActiveItem("");
+          }
           ticking = false;
         });
         ticking = true;
@@ -241,6 +244,7 @@ export default function Navbar({
     setIsMenuOpen(false);
     setShowScanner(false);
     setShowContact(false);
+    setActiveItem("");
 
     window.scrollTo({
       top: 0,

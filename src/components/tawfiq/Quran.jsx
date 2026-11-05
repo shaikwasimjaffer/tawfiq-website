@@ -303,12 +303,12 @@ export default function Quran() {
 
       {/* Header Tabs - NOW ALWAYS VISIBLE */}
       <div className="relative z-10 max-w-4xl mx-auto px-6 md:px-10 mb-10 md:mb-12 mt-4 md:mt-8">
-        <div className="max-w-2xl mx-auto text-center mb-10 overflow-hidden">
+        <div className="max-w-4xl mx-auto text-center mb-10 sm:mb-12 flex flex-col items-center">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
-            className="font-['Newsreader',serif] font-light text-[clamp(2rem,4.5vw,3.8rem)] leading-[1.15] tracking-[-0.01em] text-green-950"
+            className="text-3xl leading-[1.2] sm:text-6xl md:text-7xl font-['Newsreader',serif] font-light text-green-950 sm:leading-[1.15] tracking-tight"
           >
             Read the way{" "}
             <span className="italic font-light text-[#16A34A]">
@@ -316,12 +316,12 @@ export default function Quran() {
             </span>
           </motion.h2>
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.2 }}
-            className="mt-6 flex flex-col items-center"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.15, ease: "easeOut" }}
+            className="mt-3 sm:mt-6 flex flex-col items-center"
           >
-            <p className="font-['Newsreader',serif] font-light text-[15px] text-green-800 leading-[1.6] max-w-lg">
+            <p className="font-['Newsreader',serif] font-light text-sm sm:text-xl text-green-700 leading-relaxed max-w-xl px-2 sm:px-0">
               Experience the living Mushaf with interactive Tafsir, word-by-word
               learning, themes, and memorization tools.
             </p>
