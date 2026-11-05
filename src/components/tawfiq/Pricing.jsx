@@ -22,10 +22,11 @@ export default function Pricing() {
     >
       <div className="max-w-4xl mx-auto">
         {/* Section Header */}
-        <div className="text-center max-w-xl mx-auto mb-10 sm:mb-12">
-          <h2 className="font-['Newsreader',serif] font-light text-3xl sm:text-5xl text-green-950 tracking-tight leading-tight">
-            Different platforms, different prices. <br />
-            <span className="italic text-[#16A34A]">Tawfiq remains free.</span>
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12 px-2">
+          <h2 className="font-['Newsreader',serif] font-light text-2xl sm:text-4xl lg:text-5xl text-green-950 tracking-tight leading-tight">
+            <span className="inline-block">Different platforms, different prices.</span>{" "}
+            <br />
+            <span className="italic text-[#16A34A] inline-block">Tawfiq remains free.</span>
           </h2>
         </div>
 
