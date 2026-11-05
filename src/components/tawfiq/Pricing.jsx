@@ -1,16 +1,16 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Check } from "lucide-react";
+import { Check, X } from "lucide-react";
 
-const includedFeatures = [
-  "Qaza prayer tracking & recovery planning",
-  "Daily Salah tracking & habit consistency",
-  "Quran reading & verse audio with Tajweed guidance",
-  "Tawfiq AI assistant for contextual Islamic learning",
-  "Guided Islamic Academy (Hadith, Tafsir & 99 Names)",
-  "Qibla compass & local prayer calculation",
-  "Ad-free experience with zero commercial interruptions",
-  "Privacy-focused data handling — no selling of worship records",
+const featuresList = [
+  { text: "Qaza prayer tracking & recovery planning", inSukoon: false },
+  { text: "Daily Salah tracking & habit consistency", inSukoon: true },
+  { text: "Quran reading & verse audio with Tajweed guidance", inSukoon: false },
+  { text: "Tawfiq AI assistant for contextual Islamic learning", inSukoon: false },
+  { text: "Guided Islamic Academy (Hadith, Tafsir & 99 Names)", inSukoon: false },
+  { text: "Qibla compass & local prayer calculation", inSukoon: true },
+  { text: "Ad-free experience with zero commercial interruptions", inSukoon: true },
+  { text: "Privacy-focused data handling — no selling of worship records", inSukoon: true },
 ];
 
 export default function Pricing() {
@@ -87,17 +87,27 @@ export default function Pricing() {
 
               {/* Feature Checklist */}
               <ul className="space-y-3" role="list">
-                {includedFeatures.map((feature, idx) => (
+                {featuresList.map((feature, idx) => (
                   <li
                     key={idx}
-                    className="flex items-start gap-2.5 text-sm text-neutral-800 font-['Geist',sans-serif] font-light leading-snug"
+                    className={`flex items-start gap-2.5 text-sm font-['Geist',sans-serif] font-light leading-snug ${
+                      feature.inSukoon ? "text-neutral-800" : "text-neutral-400"
+                    }`}
                   >
-                    <Check
-                      className="w-4 h-4 text-neutral-900 shrink-0 mt-0.5"
-                      strokeWidth={2.2}
-                      aria-hidden="true"
-                    />
-                    <span>{feature}</span>
+                    {feature.inSukoon ? (
+                      <Check
+                        className="w-4 h-4 text-neutral-900 shrink-0 mt-0.5"
+                        strokeWidth={2.2}
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <X
+                        className="w-4 h-4 text-neutral-400 shrink-0 mt-0.5"
+                        strokeWidth={2}
+                        aria-hidden="true"
+                      />
+                    )}
+                    <span>{feature.text}</span>
                   </li>
                 ))}
               </ul>
@@ -159,7 +169,7 @@ export default function Pricing() {
 
               {/* Feature Checklist */}
               <ul className="space-y-3" role="list">
-                {includedFeatures.map((feature, idx) => (
+                {featuresList.map((feature, idx) => (
                   <li
                     key={idx}
                     className="flex items-start gap-2.5 text-sm text-white/90 font-['Geist',sans-serif] font-light leading-snug"
@@ -169,7 +179,7 @@ export default function Pricing() {
                       strokeWidth={2}
                       aria-hidden="true"
                     />
-                    <span>{feature}</span>
+                    <span>{feature.text}</span>
                   </li>
                 ))}
               </ul>
