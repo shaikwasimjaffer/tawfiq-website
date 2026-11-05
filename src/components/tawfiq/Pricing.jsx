@@ -48,10 +48,10 @@ export default function Pricing() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="relative bg-white text-neutral-900 rounded-2xl sm:rounded-[1.75rem] p-6 sm:p-8 pt-8 sm:pt-9 border border-neutral-200/90 shadow-xl shadow-neutral-950/5 flex flex-col text-left h-full"
+              className="relative bg-white text-neutral-900 rounded-2xl sm:rounded-[1.75rem] p-7 sm:p-9 pt-9 sm:pt-11 pb-9 sm:pb-11 border border-neutral-200/90 shadow-xl shadow-neutral-950/5 flex flex-col text-left h-full"
             >
               {/* Prominent Price Row: ₹149 / month */}
-              <div className="mt-1 mb-2">
+              <div className="mt-1 mb-2.5">
                 <div className="flex items-baseline gap-2">
                   <span className="font-['Geist',sans-serif] font-bold text-5xl sm:text-6xl text-neutral-950 tracking-tight leading-none">
                     ₹149
@@ -63,21 +63,21 @@ export default function Pricing() {
               </div>
 
               {/* Subtitle / Description */}
-              <p className="text-sm font-['Geist',sans-serif] text-neutral-600 font-light leading-relaxed mt-1 mb-6">
+              <p className="text-sm sm:text-[14.5px] font-['Geist',sans-serif] text-neutral-600 font-light leading-relaxed mt-1 mb-8">
                 Build consistency in Salah, manage Qaza prayers, and deepen your Islamic learning with Tawfiq.
               </p>
 
               {/* Included Features Header */}
-              <h4 className="text-xs font-['Geist',sans-serif] font-medium tracking-wide text-neutral-500 mb-3.5">
+              <h4 className="text-xs font-['Geist',sans-serif] font-medium tracking-wider uppercase text-neutral-400 mb-4 sm:mb-5">
                 What’s included
               </h4>
 
               {/* Feature Checklist */}
-              <ul className="space-y-3" role="list">
+              <ul className="space-y-4 sm:space-y-4.5" role="list">
                 {featuresList.map((feature, idx) => (
                   <li
                     key={idx}
-                    className={`flex items-start gap-2.5 text-sm font-['Geist',sans-serif] font-light leading-snug ${
+                    className={`flex items-start gap-3 sm:gap-3.5 text-sm sm:text-[14.5px] font-['Geist',sans-serif] font-light leading-relaxed ${
                       feature.inSukoon ? "text-neutral-800" : "text-neutral-400"
                     }`}
                   >
@@ -117,10 +117,10 @@ export default function Pricing() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="relative bg-[#064E3B] text-white rounded-2xl sm:rounded-[1.75rem] p-6 sm:p-8 pt-8 sm:pt-9 border border-emerald-400/20 shadow-lg shadow-green-950/10 flex flex-col text-left h-full"
+              className="relative bg-[#064E3B] text-white rounded-2xl sm:rounded-[1.75rem] p-7 sm:p-9 pt-9 sm:pt-11 pb-9 sm:pb-11 border border-emerald-400/20 shadow-lg shadow-green-950/10 flex flex-col text-left h-full"
             >
               {/* Prominent Price Row: ₹0 / month */}
-              <div className="mt-1 mb-2">
+              <div className="mt-1 mb-2.5">
                 <div className="flex items-baseline gap-2">
                   <span className="font-['Geist',sans-serif] font-bold text-5xl sm:text-6xl text-white tracking-tight leading-none">
                     ₹0
@@ -132,21 +132,21 @@ export default function Pricing() {
               </div>
 
               {/* Subtitle / Description */}
-              <p className="text-sm font-['Geist',sans-serif] text-emerald-100/85 font-light leading-relaxed mt-1 mb-6">
+              <p className="text-sm sm:text-[14.5px] font-['Geist',sans-serif] text-emerald-100/85 font-light leading-relaxed mt-1 mb-8">
                 Build consistency in Salah, manage Qaza prayers, and deepen your Islamic learning with Tawfiq.
               </p>
 
               {/* Included Features Header */}
-              <h4 className="text-xs font-['Geist',sans-serif] font-medium tracking-wide text-emerald-300 mb-3.5">
+              <h4 className="text-xs font-['Geist',sans-serif] font-medium tracking-wider uppercase text-emerald-300 mb-4 sm:mb-5">
                 What’s included
               </h4>
 
               {/* Feature Checklist */}
-              <ul className="space-y-3" role="list">
+              <ul className="space-y-4 sm:space-y-4.5" role="list">
                 {featuresList.map((feature, idx) => (
                   <li
                     key={idx}
-                    className="flex items-start gap-2.5 text-sm text-white/90 font-['Geist',sans-serif] font-light leading-snug"
+                    className="flex items-start gap-3 sm:gap-3.5 text-sm sm:text-[14.5px] text-white/90 font-['Geist',sans-serif] font-light leading-relaxed"
                   >
                     <Check
                       className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5"
