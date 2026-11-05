@@ -223,7 +223,7 @@ export default function Navbar({
       observerOptions,
     );
 
-    const sectionsToTrack = [...navItems.map(item => item.id), "before-after", "faq"];
+    const sectionsToTrack = [...navItems.map(item => item.id), "before-after", "faq", "pricing"];
 
     sectionsToTrack.forEach((id) => {
       const element = document.getElementById(id);

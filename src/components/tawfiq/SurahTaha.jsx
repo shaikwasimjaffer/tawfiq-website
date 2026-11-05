@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
+import Pricing from "./Pricing";
 
 // ==========================================
 // DATA: VERSES
@@ -922,6 +923,7 @@ export default function BreathingVersesAndFAQ() {
   return (
     <>
       <FAQSection />
+      <Pricing />
       <BreathingVersesSection />
     </>
   );

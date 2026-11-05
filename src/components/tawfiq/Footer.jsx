@@ -54,6 +54,7 @@ export default function Footer({ onOpenScanner, showContact, setShowContact }) {
       links: [
         { name: "About", path: "/about" },
         { name: "Our Mission", path: "/mission" },
+        { name: "Pricing (100% Free)", path: "/#pricing" },
         { name: "Privacy Policy", path: "/privacy" },
         { name: "Terms of Service", path: "/terms" },
         { name: "GitHub", path: "https://github.com/shaikwasimjaffer/tawfiq-website" },
