@@ -39,8 +39,8 @@ export default function Pricing() {
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="bg-[#064E3B] text-white rounded-[2rem] p-7 sm:p-10 border border-emerald-400/25 shadow-xl shadow-green-950/10 flex flex-col text-left"
           >
-            {/* 1. Tier Name */}
-            <h3 className="font-['Geist',sans-serif] font-bold text-2xl sm:text-3xl text-white tracking-tight">
+            {/* 1. Tier Name: Styled with Tawfiq's signature Newsreader serif */}
+            <h3 className="font-['Newsreader',serif] font-light text-3xl sm:text-4xl text-white tracking-tight">
               Free Forever
             </h3>
 
