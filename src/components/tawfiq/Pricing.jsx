@@ -66,22 +66,16 @@ export default function Pricing() {
               Build consistency in Salah, manage Qaza prayers, and deepen your Islamic learning with Tawfiq.
             </p>
 
-            {/* 4. Primary CTA Button: Styled with gradient, highlight border, rounded-xl and elevated shadow */}
+            {/* 4. Primary CTA Button: Newsreader serif typography without arrow, styled with gradient, highlight border, rounded-xl and elevated shadow */}
             <div className="mb-6">
               <a
                 href="https://originaltawfiq.vercel.app"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Get Started with Tawfiq - Opens web application in a new tab"
-                className="group font-['Geist',sans-serif] inline-flex items-center justify-center gap-2 w-full p-4 rounded-xl bg-gradient-to-t from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white text-base font-medium shadow-lg shadow-emerald-950/30 border border-emerald-400/40 transition-all duration-300 cursor-pointer active:scale-[0.99] outline-none focus-visible:ring-2 focus-visible:ring-emerald-300"
+                className="font-['Newsreader',serif] inline-flex items-center justify-center w-full p-4 rounded-xl bg-gradient-to-t from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white text-xl sm:text-2xl font-light tracking-wide shadow-lg shadow-emerald-950/30 border border-emerald-400/40 transition-all duration-300 cursor-pointer active:scale-[0.99] outline-none focus-visible:ring-2 focus-visible:ring-emerald-300"
               >
                 <span>Get Started</span>
-                <span
-                  aria-hidden="true"
-                  className="transform group-hover:translate-x-1 transition-transform duration-300 text-base leading-none"
-                >
-                  →
-                </span>
               </a>
             </div>
 
