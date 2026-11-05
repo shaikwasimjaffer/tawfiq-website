@@ -67,19 +67,6 @@ export default function Pricing() {
                 Build consistency in Salah, manage Qaza prayers, and deepen your Islamic learning with Tawfiq.
               </p>
 
-              {/* Primary CTA Button: Black gradient with Newsreader serif typography */}
-              <div className="mb-6">
-                <a
-                  href="https://originaltawfiq.vercel.app"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Get Started with Sukoon - Opens web application in a new tab"
-                  className="font-['Newsreader',serif] inline-flex items-center justify-center w-full p-4 rounded-full bg-gradient-to-t from-neutral-950 to-neutral-800 hover:from-black hover:to-neutral-900 text-white text-xl sm:text-2xl font-light tracking-wide shadow-lg shadow-black/20 border border-neutral-700 transition-all duration-300 cursor-pointer active:scale-[0.99] outline-none focus-visible:ring-2 focus-visible:ring-neutral-400"
-                >
-                  <span>Get Started</span>
-                </a>
-              </div>
-
               {/* Included Features Header */}
               <h4 className="text-xs font-['Geist',sans-serif] font-medium tracking-wide text-neutral-500 mb-3.5">
                 What’s included
@@ -148,19 +135,6 @@ export default function Pricing() {
               <p className="text-sm font-['Geist',sans-serif] text-emerald-100/85 font-light leading-relaxed mt-1 mb-6">
                 Build consistency in Salah, manage Qaza prayers, and deepen your Islamic learning with Tawfiq.
               </p>
-
-              {/* Primary CTA Button */}
-              <div className="mb-6">
-                <a
-                  href="https://originaltawfiq.vercel.app"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Get Started with Tawfiq - Opens web application in a new tab"
-                  className="font-['Newsreader',serif] inline-flex items-center justify-center w-full p-4 rounded-full bg-gradient-to-t from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 text-white text-xl sm:text-2xl font-light tracking-wide shadow-lg shadow-emerald-950/30 border border-emerald-400/40 transition-all duration-300 cursor-pointer active:scale-[0.99] outline-none focus-visible:ring-2 focus-visible:ring-emerald-300"
-                >
-                  <span>Get Started</span>
-                </a>
-              </div>
 
               {/* Included Features Header */}
               <h4 className="text-xs font-['Geist',sans-serif] font-medium tracking-wide text-emerald-300 mb-3.5">
