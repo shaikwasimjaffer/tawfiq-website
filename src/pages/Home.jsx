@@ -4,7 +4,6 @@ import Hero from "@/components/tawfiq/Hero";
 
 const TawfiqAI = lazy(() => import("@/components/tawfiq/TawfiqAI"));
 const Quran = lazy(() => import("@/components/tawfiq/Quran"));
-const Academy = lazy(() => import("@/components/tawfiq/Academy"));
 const Qaza = lazy(() => import("@/components/tawfiq/Qaza"));
 const Pricing = lazy(() => import("@/components/tawfiq/Pricing"));
 const SurahTaha = lazy(() => import("@/components/tawfiq/SurahTaha"));
@@ -131,7 +130,6 @@ export default function Home() {
         <Suspense fallback={<div className="min-h-[400px] bg-[#F0FDF4]" />}>
           <TawfiqAI />
           <Quran />
-          <Academy />
           <Qaza />
           <Pricing />
           <SurahTaha />

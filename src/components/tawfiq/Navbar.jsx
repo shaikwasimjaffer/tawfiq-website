@@ -13,7 +13,6 @@ const EMAILJS_PUBLIC_KEY = "5iuNuXg40cmMgueNJ";
 const navItems = [
   { id: "tawfiq-ai", label: "Tawfiq AI", href: "#tawfiq-ai" },
   { id: "quran", label: "Quran", href: "#quran" },
-  { id: "academy", label: "Academy", href: "#academy" },
   { id: "qaza", label: "Qaza", href: "#qaza" },
 ];
 
