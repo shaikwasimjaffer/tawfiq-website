@@ -21,14 +21,11 @@ export default function Pricing() {
       className="w-full bg-[#F0FDF4] py-16 sm:py-24 px-4 sm:px-6 lg:px-8 font-['Geist',sans-serif]"
     >
       <div className="max-w-4xl mx-auto">
-        {/* Section Header: Styled identically to Tawfiq's existing headers */}
+        {/* Section Header */}
         <div className="text-center max-w-xl mx-auto mb-10 sm:mb-12">
-          <span className="text-[11px] font-['Geist',sans-serif] tracking-[0.25em] uppercase text-emerald-800 font-semibold block mb-3">
-            Pricing
-          </span>
           <h2 className="font-['Newsreader',serif] font-light text-3xl sm:text-5xl text-green-950 tracking-tight leading-tight">
-            Simple, transparent, <br />
-            <span className="italic text-[#16A34A]">and free for everyone.</span>
+            Different platforms, different prices. <br />
+            <span className="italic text-[#16A34A]">Tawfiq remains free.</span>
           </h2>
         </div>
 
